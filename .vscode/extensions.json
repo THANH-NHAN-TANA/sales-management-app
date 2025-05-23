@@ -1,0 +1,12 @@
+{
+    "recommendations": [
+        "ms-vscode-remote.remote-wsl",
+        "ms-vscode-remote.remote-ssh",
+        "ms-azuretools.vscode-docker",
+        "hashicorp.terraform",
+        "redhat.vscode-yaml",
+        "eamodio.gitlens",
+        "rangav.vscode-thunder-client",
+        "esbenp.prettier-vscode"
+    ]
+}
