@@ -1,0 +1,23 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ecr:*",
+                "ecs:*",
+                "elbv2:*",
+                "ec2:*",
+                "rds:*",
+                "iam:PassRole",
+                "iam:GetRole",
+                "logs:*",
+                "application-autoscaling:*",
+                "s3:*",
+                "dynamodb:*",
+                "cloudwatch:*"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
