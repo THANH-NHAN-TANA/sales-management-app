@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Sales Management Docker CI
 
 on:
   push:
@@ -7,12 +7,24 @@ on:
     branches: [ "main" ]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
-
+    
     steps:
     - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+    
+    - name: Build Docker image
+      run: |
+        docker build . --file Dockerfile --tag sales-management-app:$(date +%s)
+        docker build . --file Dockerfile --tag sales-management-app:latest
+        
+    - name: Docker image
+      run: |
+        docker run -d -p 3000:3000 --name test-container sales-management-app:latest
+        sleep 10
+        curl -f http://localhost:3000/health || exit 1
+        docker stop test-container
+        docker rm test-container
+        
+    - name: List images
+      run: docker images
