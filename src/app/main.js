@@ -5,6 +5,12 @@ const path = require("path");
 const session = require("express-session");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
+const crypto = require("crypto");
+const rateLimit = require("express-rate-limit");
+const helmet = require("helmet");
+const compression = require("compression");
+const mysql = require("mysql2/promise");
 const {
   testConnection,
   checkDatabaseStructure,
@@ -21,10 +27,43 @@ const port = process.env.PORT || 3000;
 const JWT_SECRET =
   process.env.JWT_SECRET || "your-super-secret-jwt-key-change-in-production";
 
-// Middleware
+// Security Middleware
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
+        scriptSrc: ["'self'", "https://cdnjs.cloudflare.com"],
+        fontSrc: ["'self'", "https://cdnjs.cloudflare.com"],
+        imgSrc: ["'self'", "data:", "https:"],
+        connectSrc: ["'self'"],
+      },
+    },
+  })
+);
+
+app.use(compression());
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
+
+// Rate limiting
+const authLimiter = rateLimit({
+  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutes
+  max: parseInt(process.env.RATE_LIMIT_MAX_ATTEMPTS) || 5,
+  message: { error: "Quá nhiều lần thử. Vui lòng thử lại sau 15 phút." },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+const otpLimiter = rateLimit({
+  windowMs: parseInt(process.env.OTP_RATE_LIMIT_WINDOW_MS) || 60 * 1000, // 1 minute
+  max: parseInt(process.env.OTP_RATE_LIMIT_MAX_ATTEMPTS) || 1,
+  message: { error: "Vui lòng chờ 1 phút trước khi gửi lại OTP." },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 // Session middleware for login tracking
 app.use(
@@ -33,11 +72,55 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false, // Set to true if using HTTPS
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      secure: process.env.NODE_ENV === "production", // Set to true in production with HTTPS
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
+      httpOnly: true,
+      sameSite: "lax",
     },
   })
 );
+
+// Email configuration
+let emailTransporter = null;
+if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+  try {
+    emailTransporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST || "smtp.gmail.com",
+      port: parseInt(process.env.SMTP_PORT) || 587,
+      secure: false,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+    });
+    console.log("✅ Email transporter configured");
+  } catch (error) {
+    console.error("❌ Email configuration error:", error.message);
+  }
+} else {
+  console.log("⚠️  Email not configured. OTP functionality will be disabled.");
+}
+
+// Database connection pool for OTP functionality
+let otpPool = null;
+try {
+  otpPool = mysql.createPool({
+    host: process.env.DB_HOST || "localhost",
+    port: parseInt(process.env.DB_PORT) || 3306,
+    user: process.env.DB_USER || "salesapp",
+    password: process.env.DB_PASSWORD || "SalesApp@123",
+    database: process.env.DB_NAME || "sales_management",
+    waitForConnections: true,
+    connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT) || 10,
+    queueLimit: parseInt(process.env.DB_QUEUE_LIMIT) || 0,
+  });
+  console.log("✅ OTP database pool created");
+} catch (error) {
+  console.error("❌ OTP database pool creation error:", error.message);
+}
 
 // Initialize database connection on startup
 async function initializeApp() {
@@ -50,6 +133,11 @@ async function initializeApp() {
       if (structureOk) {
         console.log("✅ Application connected to sales_management database");
         console.log("✅ Database structure verified");
+
+        // Initialize additional tables for OTP functionality
+        if (otpPool) {
+          await initializeOTPTables();
+        }
       } else {
         console.error("❌ Database structure validation failed");
         process.exit(1);
@@ -61,6 +149,126 @@ async function initializeApp() {
   } catch (error) {
     console.error("❌ Database connection error:", error.message);
     process.exit(1);
+  }
+}
+
+// Initialize OTP related tables
+async function initializeOTPTables() {
+  try {
+    const connection = await otpPool.getConnection();
+
+    // Create password_resets table for OTP
+    await connection.execute(`
+      CREATE TABLE IF NOT EXISTS password_resets (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        email VARCHAR(100) NOT NULL,
+        otp VARCHAR(6) NOT NULL,
+        token VARCHAR(255) UNIQUE NOT NULL,
+        expires_at TIMESTAMP NOT NULL,
+        used BOOLEAN DEFAULT false,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        INDEX idx_email (email),
+        INDEX idx_token (token),
+        INDEX idx_expires (expires_at)
+      )
+    `);
+
+    // Create user_sessions table for remember me functionality
+    await connection.execute(`
+      CREATE TABLE IF NOT EXISTS user_sessions (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT NOT NULL,
+        token VARCHAR(255) UNIQUE NOT NULL,
+        expires_at TIMESTAMP NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        INDEX idx_token (token),
+        INDEX idx_expires (expires_at)
+      )
+    `);
+
+    connection.release();
+    console.log("✅ OTP tables initialized successfully");
+  } catch (error) {
+    console.error("❌ Error initializing OTP tables:", error);
+    throw error;
+  }
+}
+
+// Utility functions for OTP
+function generateOTP() {
+  const length = parseInt(process.env.OTP_LENGTH) || 6;
+  return Math.floor(
+    Math.pow(10, length - 1) +
+      Math.random() * (Math.pow(10, length) - Math.pow(10, length - 1))
+  ).toString();
+}
+
+function generateToken() {
+  return crypto.randomBytes(32).toString("hex");
+}
+
+async function sendOTPEmail(email, otp, fullName = "") {
+  if (!emailTransporter) {
+    throw new Error("Email transporter not configured");
+  }
+
+  const mailOptions = {
+    from: `"${process.env.EMAIL_FROM_NAME || "Sales Management System"}" <${
+      process.env.SMTP_USER
+    }>`,
+    to: email,
+    subject: "Mã OTP khôi phục mật khẩu - Sales Management System",
+    html: `
+      <div style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; text-align: center;">
+          <h1 style="color: white; margin: 0;">${
+            process.env.APP_NAME || "Sales Management System"
+          }</h1>
+        </div>
+        <div style="background: white; padding: 30px; border-radius: 0 0 10px 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+          <h2 style="color: #333; margin-bottom: 20px;">Xin chào ${
+            fullName || "Quý khách"
+          }!</h2>
+          <p style="color: #666; font-size: 16px; line-height: 1.6;">
+            Bạn đã yêu cầu khôi phục mật khẩu cho tài khoản của mình. 
+            Vui lòng sử dụng mã OTP bên dưới để xác thực:
+          </p>
+          <div style="background: #f8f9fa; border: 2px dashed #667eea; padding: 20px; margin: 20px 0; text-align: center;">
+            <div style="font-size: 32px; font-weight: bold; color: #667eea; letter-spacing: 5px;">${otp}</div>
+          </div>
+          <p style="color: #666; font-size: 14px;">
+            <strong>Lưu ý:</strong> Mã OTP này sẽ hết hạn sau <strong>${
+              process.env.OTP_EXPIRY_MINUTES || 5
+            } phút</strong>. 
+            Vui lòng không chia sẻ mã này với bất kỳ ai.
+          </p>
+          <p style="color: #999; font-size: 12px; margin-top: 20px;">
+            Nếu bạn không yêu cầu khôi phục mật khẩu, vui lòng bỏ qua email này.
+          </p>
+        </div>
+        <div style="text-align: center; padding: 20px; color: #999; font-size: 12px;">
+          © 2025 ${
+            process.env.APP_NAME || "Sales Management System"
+          }. All rights reserved.
+        </div>
+      </div>
+    `,
+  };
+
+  return await emailTransporter.sendMail(mailOptions);
+}
+
+// Clean expired records
+async function cleanExpiredRecords() {
+  if (!otpPool) return;
+
+  try {
+    await otpPool.execute(
+      "DELETE FROM password_resets WHERE expires_at < NOW()"
+    );
+    await otpPool.execute("DELETE FROM user_sessions WHERE expires_at < NOW()");
+  } catch (error) {
+    console.error("Error cleaning expired records:", error);
   }
 }
 
@@ -110,6 +318,28 @@ const requireRole = (roles) => {
       res.status(403).json({ error: "Insufficient permissions" });
     }
   };
+};
+
+// Web authentication middleware for protected pages
+const requireWebAuth = (req, res, next) => {
+  const token =
+    req.headers.authorization?.split(" ")[1] ||
+    req.query.token ||
+    req.session.token;
+
+  if (!token) {
+    console.log(`Unauthorized access attempt to ${req.path}`);
+    return res.redirect("/login");
+  }
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) {
+      console.log(`Invalid token for ${req.path}:`, err.message);
+      return res.redirect("/login");
+    }
+    req.user = user;
+    next();
+  });
 };
 
 // Mock data for Sales Management System
@@ -251,14 +481,10 @@ const getNextId = (array) => Math.max(...array.map((item) => item.id), 0) + 1;
 
 // ===================== AUTHENTICATION ROUTES =====================
 
-// Login page
-app.get("/login", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "login.html"));
-});
-
 // Login API (connect to sales_management database - users table)
-app.post("/api/auth/login", async (req, res) => {
+app.post("/api/auth/login", authLimiter, async (req, res) => {
   try {
+    console.log("Login attempt:", req.body.username);
     const { username, password, rememberMe } = req.body;
 
     if (!username || !password) {
@@ -271,6 +497,7 @@ app.post("/api/auth/login", async (req, res) => {
     const user = await getUserByEmailOrUsername(username);
 
     if (!user) {
+      console.log("User not found:", username);
       return res
         .status(401)
         .json({ error: "Invalid email/username or password" });
@@ -278,6 +505,7 @@ app.post("/api/auth/login", async (req, res) => {
 
     // Check if account is active
     if (!user.is_active) {
+      console.log("Inactive account:", username);
       return res
         .status(401)
         .json({ error: "Account is inactive. Please contact administrator." });
@@ -286,6 +514,7 @@ app.post("/api/auth/login", async (req, res) => {
     // Check password against hashed password from database
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
+      console.log("Invalid password for user:", username);
       return res
         .status(401)
         .json({ error: "Invalid email/username or password" });
@@ -308,12 +537,32 @@ app.post("/api/auth/login", async (req, res) => {
       { expiresIn: tokenExpiry }
     );
 
+    // Save session if remember me and OTP pool available
+    if (rememberMe && otpPool) {
+      try {
+        const sessionExpiry = new Date();
+        sessionExpiry.setDate(sessionExpiry.getDate() + 30);
+
+        await otpPool.execute(
+          "INSERT INTO user_sessions (user_id, token, expires_at) VALUES (?, ?, ?)",
+          [user.id, token, sessionExpiry]
+        );
+      } catch (error) {
+        console.error("Session save error:", error);
+        // Continue without saving session
+      }
+    }
+
     // Store session
     req.session.userId = user.id;
     req.session.userRole = user.role;
+    req.session.token = token;
+
+    console.log("Login successful for user:", username);
 
     // Return success response
     res.json({
+      success: true,
       message: "Login successful",
       token,
       user: {
@@ -331,26 +580,344 @@ app.post("/api/auth/login", async (req, res) => {
 });
 
 // Token verification
-app.get("/api/auth/verify", authenticateToken, (req, res) => {
-  res.json({
-    valid: true,
-    user: {
-      id: req.user.id,
-      username: req.user.username,
-      name: req.user.name,
-      role: req.user.role,
-    },
-  });
+app.get("/api/auth/verify", authenticateToken, async (req, res) => {
+  try {
+    // Get fresh user data
+    const user = await getUserById(req.user.id);
+    if (!user || !user.is_active) {
+      return res.status(401).json({ error: "Invalid token" });
+    }
+
+    res.json({
+      success: true,
+      user: {
+        id: user.id,
+        username: user.username,
+        fullName: user.full_name,
+        firstName: user.first_name,
+        lastName: user.last_name,
+        email: user.email,
+        role: user.role,
+        gender: user.gender,
+        birthDate: user.birth_date,
+      },
+    });
+  } catch (error) {
+    console.error("Token verification error:", error);
+    res.status(403).json({ error: "Invalid or expired token" });
+  }
 });
 
 // Logout API
-app.post("/api/auth/logout", (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      return res.status(500).json({ error: "Could not log out" });
+app.post("/api/auth/logout", authenticateToken, async (req, res) => {
+  try {
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+
+    // Remove session from database if OTP pool available
+    if (token && otpPool) {
+      try {
+        await otpPool.execute("DELETE FROM user_sessions WHERE token = ?", [
+          token,
+        ]);
+      } catch (error) {
+        console.error("Session removal error:", error);
+      }
     }
-    res.json({ message: "Logged out successfully" });
-  });
+
+    // Destroy express session
+    req.session.destroy((err) => {
+      if (err) {
+        console.error("Session destroy error:", err);
+      }
+    });
+
+    res.json({ success: true, message: "Logged out successfully" });
+  } catch (error) {
+    console.error("Logout error:", error);
+    res.status(500).json({ error: "Logout failed" });
+  }
+});
+
+// Forgot Password - Send OTP
+app.post("/api/auth/forgot-password", otpLimiter, async (req, res) => {
+  if (!otpPool || !emailTransporter) {
+    return res.status(503).json({
+      error:
+        "Chức năng quên mật khẩu chưa được cấu hình. Vui lòng liên hệ quản trị viên.",
+    });
+  }
+
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ error: "Email là bắt buộc" });
+    }
+
+    // Check if user exists
+    const user = await getUserByEmailOrUsername(email);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ error: "Email không tồn tại trong hệ thống" });
+    }
+
+    if (!user.is_active) {
+      return res.status(401).json({ error: "Tài khoản đã bị vô hiệu hóa" });
+    }
+
+    // Generate OTP and token
+    const otp = generateOTP();
+    const resetToken = generateToken();
+    const expiresAt = new Date();
+    expiresAt.setMinutes(
+      expiresAt.getMinutes() + (parseInt(process.env.OTP_EXPIRY_MINUTES) || 5)
+    );
+
+    // Clean old OTPs for this email
+    await otpPool.execute("DELETE FROM password_resets WHERE email = ?", [
+      email,
+    ]);
+
+    // Save OTP to database
+    await otpPool.execute(
+      "INSERT INTO password_resets (email, otp, token, expires_at) VALUES (?, ?, ?, ?)",
+      [email, otp, resetToken, expiresAt]
+    );
+
+    // Send OTP email
+    await sendOTPEmail(email, otp, user.full_name);
+
+    res.json({
+      success: true,
+      message: "Mã OTP đã được gửi về email của bạn",
+    });
+  } catch (error) {
+    console.error("Forgot password error:", error);
+    res.status(500).json({ error: "Lỗi server. Vui lòng thử lại sau." });
+  }
+});
+
+// Verify OTP
+app.post("/api/auth/verify-otp", async (req, res) => {
+  if (!otpPool) {
+    return res.status(503).json({
+      error:
+        "Chức năng xác thực OTP chưa được cấu hình. Vui lòng liên hệ quản trị viên.",
+    });
+  }
+
+  try {
+    const { email, otp } = req.body;
+
+    if (!email || !otp) {
+      return res.status(400).json({ error: "Email và OTP là bắt buộc" });
+    }
+
+    // Find valid OTP
+    const [otpRecords] = await otpPool.execute(
+      "SELECT * FROM password_resets WHERE email = ? AND otp = ? AND used = false AND expires_at > NOW()",
+      [email, otp]
+    );
+
+    if (otpRecords.length === 0) {
+      return res.status(400).json({
+        error: "Mã OTP không đúng hoặc đã hết hạn",
+      });
+    }
+
+    const otpRecord = otpRecords[0];
+
+    res.json({
+      success: true,
+      message: "Xác thực OTP thành công",
+      token: otpRecord.token,
+    });
+  } catch (error) {
+    console.error("Verify OTP error:", error);
+    res.status(500).json({ error: "Lỗi server. Vui lòng thử lại sau." });
+  }
+});
+
+// Reset Password
+app.post("/api/auth/reset-password", async (req, res) => {
+  if (!otpPool) {
+    return res.status(503).json({
+      error:
+        "Chức năng đặt lại mật khẩu chưa được cấu hình. Vui lòng liên hệ quản trị viên.",
+    });
+  }
+
+  try {
+    const { email, otp, newPassword } = req.body;
+
+    if (!email || !otp || !newPassword) {
+      return res.status(400).json({ error: "Thiếu thông tin bắt buộc" });
+    }
+
+    // Validate password strength
+    if (newPassword.length < 8) {
+      return res
+        .status(400)
+        .json({ error: "Mật khẩu phải có ít nhất 8 ký tự" });
+    }
+
+    // Find valid OTP
+    const [otpRecords] = await otpPool.execute(
+      "SELECT * FROM password_resets WHERE email = ? AND otp = ? AND used = false AND expires_at > NOW()",
+      [email, otp]
+    );
+
+    if (otpRecords.length === 0) {
+      return res
+        .status(400)
+        .json({ error: "Mã OTP không đúng hoặc đã hết hạn" });
+    }
+
+    // Check if user exists
+    const user = await getUserByEmailOrUsername(email);
+    if (!user) {
+      return res.status(404).json({ error: "Người dùng không tồn tại" });
+    }
+
+    // Hash new password
+    const hashedPassword = await bcrypt.hash(
+      newPassword,
+      parseInt(process.env.BCRYPT_SALT_ROUNDS) || 12
+    );
+
+    // Start transaction
+    const connection = await otpPool.getConnection();
+    await connection.beginTransaction();
+
+    try {
+      // Update password using direct SQL (assuming users table structure)
+      await connection.execute(
+        "UPDATE users SET password = ?, updated_at = NOW() WHERE email = ?",
+        [hashedPassword, email]
+      );
+
+      // Mark OTP as used
+      await connection.execute(
+        "UPDATE password_resets SET used = true WHERE email = ? AND otp = ?",
+        [email, otp]
+      );
+
+      // Invalidate all user sessions (force re-login)
+      await connection.execute("DELETE FROM user_sessions WHERE user_id = ?", [
+        user.id,
+      ]);
+
+      await connection.commit();
+      connection.release();
+
+      res.json({
+        success: true,
+        message: "Đặt lại mật khẩu thành công",
+      });
+    } catch (error) {
+      await connection.rollback();
+      connection.release();
+      throw error;
+    }
+  } catch (error) {
+    console.error("Reset password error:", error);
+    res.status(500).json({ error: "Lỗi server. Vui lòng thử lại sau." });
+  }
+});
+
+// Update Profile
+app.put("/api/auth/update-profile", authenticateToken, async (req, res) => {
+  try {
+    const { oldPassword, newPassword, firstName, lastName, phone, address } =
+      req.body;
+    const userId = req.user.id;
+
+    // If changing password, verify old password
+    if (newPassword) {
+      if (!oldPassword) {
+        return res.status(400).json({ error: "Vui lòng nhập mật khẩu cũ" });
+      }
+
+      // Get current user
+      const user = await getUserById(userId);
+      if (!user) {
+        return res.status(404).json({ error: "Người dùng không tồn tại" });
+      }
+
+      const isValidOldPassword = await bcrypt.compare(
+        oldPassword,
+        user.password
+      );
+      if (!isValidOldPassword) {
+        return res.status(400).json({ error: "Mật khẩu cũ không đúng" });
+      }
+
+      // Validate new password
+      if (newPassword.length < 6) {
+        return res
+          .status(400)
+          .json({ error: "Mật khẩu mới phải có ít nhất 6 ký tự" });
+      }
+
+      // Hash new password
+      const hashedNewPassword = await bcrypt.hash(
+        newPassword,
+        parseInt(process.env.BCRYPT_SALT_ROUNDS) || 12
+      );
+
+      // Update password
+      if (otpPool) {
+        await otpPool.execute(
+          "UPDATE users SET password = ?, updated_at = NOW() WHERE id = ?",
+          [hashedNewPassword, userId]
+        );
+      }
+    }
+
+    // Update other profile fields
+    const updateFields = [];
+    const updateValues = [];
+
+    if (firstName !== undefined) {
+      updateFields.push("first_name = ?");
+      updateValues.push(firstName);
+    }
+    if (lastName !== undefined) {
+      updateFields.push("last_name = ?");
+      updateValues.push(lastName);
+    }
+    if (phone !== undefined) {
+      updateFields.push("phone = ?");
+      updateValues.push(phone);
+    }
+    if (address !== undefined) {
+      updateFields.push("address = ?");
+      updateValues.push(address);
+    }
+
+    if (updateFields.length > 0 && otpPool) {
+      updateFields.push(
+        'full_name = CONCAT(IFNULL(first_name, ""), " ", IFNULL(last_name, ""))'
+      );
+      updateFields.push("updated_at = NOW()");
+      updateValues.push(userId);
+
+      const updateQuery = `UPDATE users SET ${updateFields.join(
+        ", "
+      )} WHERE id = ?`;
+      await otpPool.execute(updateQuery, updateValues);
+    }
+
+    res.json({
+      success: true,
+      message: "Cập nhật thông tin thành công",
+    });
+  } catch (error) {
+    console.error("Update profile error:", error);
+    res.status(500).json({ error: "Lỗi server. Vui lòng thử lại sau." });
+  }
 });
 
 // Get current user info (from sales_management database - users table)
@@ -375,27 +942,165 @@ app.get("/api/auth/me", authenticateToken, async (req, res) => {
   }
 });
 
+// Dashboard Stats
+app.get("/api/dashboard/stats", authenticateToken, async (req, res) => {
+  try {
+    // Get sample stats (replace with your actual business logic)
+    const totalRevenue = orders.reduce(
+      (sum, order) => sum + order.total_amount,
+      0
+    );
+
+    const stats = {
+      products: products.length,
+      revenue: `${Math.round(totalRevenue / 1000)}k`,
+      users: customers.length,
+      charts: {
+        products: [
+          50,
+          55,
+          60,
+          58,
+          65,
+          70,
+          75,
+          72,
+          78,
+          85,
+          90,
+          95,
+          110,
+          125,
+          products.length,
+        ],
+        revenue: [
+          200,
+          250,
+          180,
+          320,
+          380,
+          350,
+          420,
+          400,
+          450,
+          500,
+          550,
+          600,
+          650,
+          720,
+          Math.round(totalRevenue / 1000),
+        ],
+        users: [
+          100,
+          110,
+          95,
+          120,
+          140,
+          135,
+          150,
+          145,
+          160,
+          180,
+          200,
+          220,
+          240,
+          260,
+          customers.length,
+        ],
+      },
+    };
+
+    res.json(stats);
+  } catch (error) {
+    console.error("Dashboard stats error:", error);
+    res.status(500).json({ error: "Lỗi server" });
+  }
+});
+
+// Transactions
+app.get("/api/transactions", authenticateToken, async (req, res) => {
+  try {
+    // Mock transaction data based on orders
+    const transactions = orders
+      .map((order) => {
+        const customer = customers.find((c) => c.id === order.customer_id);
+        return {
+          id: order.id,
+          orderId: `#${order.id.toString().padStart(4, "0")}`,
+          customerName: customer ? customer.name : "Unknown Customer",
+          phone: customer ? customer.phone : "N/A",
+          address: customer ? customer.address : "N/A",
+          amount: order.total_amount,
+          date: order.order_date,
+        };
+      })
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .slice(0, 10); // Latest 10 transactions
+
+    res.json(transactions);
+  } catch (error) {
+    console.error("Transactions error:", error);
+    res.status(500).json({ error: "Lỗi server" });
+  }
+});
+
 // ===================== WEB INTERFACE ROUTES =====================
 
-// Protected dashboard route
+// Root route - redirect based on authentication
 app.get("/", (req, res) => {
+  console.log("Root access attempt");
+
+  // Check if user has valid session token
+  const token = req.session.token || req.headers.authorization?.split(" ")[1];
+
+  if (token) {
+    // Verify token
+    jwt.verify(token, JWT_SECRET, (err, user) => {
+      if (err) {
+        console.log("Invalid token in session, redirecting to login");
+        return res.redirect("/login");
+      } else {
+        console.log("Valid token found, redirecting to dashboard");
+        return res.redirect("/dashboard");
+      }
+    });
+  } else {
+    console.log("No token found, redirecting to login");
+    res.redirect("/login");
+  }
+});
+
+// Login page - always accessible
+app.get("/login", (req, res) => {
+  console.log("Login page accessed");
+  res.sendFile(path.join(__dirname, "public", "login.html"));
+});
+
+// Dashboard - requires authentication
+app.get("/dashboard", requireWebAuth, (req, res) => {
+  console.log("Dashboard accessed by user:", req.user.username);
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+// Legacy routes for compatibility
+app.get("/dashboard.html", requireWebAuth, (req, res) => {
   res.redirect("/dashboard");
 });
 
-app.get("/dashboard", (req, res) => {
+app.get("/login.html", (req, res) => {
+  res.redirect("/login");
+});
+
+// Protected pages - all require authentication
+app.get("/products-page", requireWebAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// Serve other pages (all protected)
-app.get("/products-page", (req, res) => {
+app.get("/customers-page", requireWebAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-app.get("/customers-page", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
-
-app.get("/orders-page", (req, res) => {
+app.get("/orders-page", requireWebAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
@@ -408,7 +1113,10 @@ app.get("/health", (req, res) => {
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || "development",
     uptime: process.uptime(),
-    version: "1.0.0",
+    version: process.env.APP_VERSION || "1.0.0",
+    database: "connected",
+    email: emailTransporter ? "configured" : "not configured",
+    otp: otpPool && emailTransporter ? "enabled" : "disabled",
   });
 });
 
@@ -416,19 +1124,38 @@ app.get("/health", (req, res) => {
 app.get("/api", (req, res) => {
   res.json({
     message: "Sales Management System API",
-    version: "1.0.0",
+    version: process.env.APP_VERSION || "1.0.0",
     description:
+      process.env.APP_DESCRIPTION ||
       "Complete REST API for Sales Management with Products, Customers, and Orders",
     endpoints: {
-      products: "/api/products",
-      customers: "/api/customers",
-      orders: "/api/orders",
-      stats: "/api/stats",
-      health: "/health",
+      auth: {
+        login: "POST /api/auth/login",
+        verify: "GET /api/auth/verify",
+        logout: "POST /api/auth/logout",
+        forgotPassword: "POST /api/auth/forgot-password",
+        verifyOtp: "POST /api/auth/verify-otp",
+        resetPassword: "POST /api/auth/reset-password",
+        updateProfile: "PUT /api/auth/update-profile",
+        me: "GET /api/auth/me",
+      },
+      data: {
+        products: "GET /api/products",
+        customers: "GET /api/customers",
+        orders: "GET /api/orders",
+        stats: "GET /api/stats",
+        dashboard: "GET /api/dashboard/stats",
+        transactions: "GET /api/transactions",
+      },
+      system: {
+        health: "GET /health",
+        api: "GET /api",
+      },
     },
-    documentation: {
-      swagger: "/api/docs",
-      postman: "/api/postman",
+    authentication: "Bearer token required for protected endpoints",
+    rateLimit: {
+      auth: "5 requests per 15 minutes",
+      otp: "1 request per minute",
     },
   });
 });
@@ -462,16 +1189,12 @@ app.get("/api/products", optionalAuth, (req, res) => {
     filteredProducts = filteredProducts.filter((p) => p.stock > 0);
   }
 
-  // Return simplified format for web interface
-  if (req.headers.accept === "application/json") {
-    res.json(filteredProducts);
-  } else {
-    res.json({
-      products: filteredProducts,
-      total: filteredProducts.length,
-      filters: { category, minPrice, maxPrice, inStock },
-    });
-  }
+  // Return filtered products
+  res.json({
+    products: filteredProducts,
+    total: filteredProducts.length,
+    filters: { category, minPrice, maxPrice, inStock },
+  });
 });
 
 app.get("/api/products/:id", (req, res) => {
@@ -580,15 +1303,10 @@ app.get("/api/customers", (req, res) => {
     );
   }
 
-  // Return simplified format for web interface
-  if (req.headers.accept === "application/json") {
-    res.json(filteredCustomers);
-  } else {
-    res.json({
-      customers: filteredCustomers,
-      total: filteredCustomers.length,
-    });
-  }
+  res.json({
+    customers: filteredCustomers,
+    total: filteredCustomers.length,
+  });
 });
 
 app.get("/api/customers/:id", (req, res) => {
@@ -696,16 +1414,11 @@ app.get("/api/orders", (req, res) => {
     };
   });
 
-  // Return simplified format for web interface
-  if (req.headers.accept === "application/json") {
-    res.json(ordersWithDetails);
-  } else {
-    res.json({
-      orders: ordersWithDetails,
-      total: ordersWithDetails.length,
-      filters: { status, customer_id },
-    });
-  }
+  res.json({
+    orders: ordersWithDetails,
+    total: ordersWithDetails.length,
+    filters: { status, customer_id },
+  });
 });
 
 app.get("/api/orders/:id", (req, res) => {
@@ -867,17 +1580,6 @@ app.get("/api/stats", (req, res) => {
     0
   );
 
-  // For simple web interface format
-  if (req.headers.accept === "application/json") {
-    res.json({
-      totalProducts,
-      totalCustomers,
-      totalOrders,
-      totalRevenue: parseFloat(totalRevenue.toFixed(2)),
-    });
-    return;
-  }
-
   // Order status breakdown
   const ordersByStatus = orders.reduce((acc, order) => {
     acc[order.status] = (acc[order.status] || 0) + 1;
@@ -956,19 +1658,19 @@ app.use((err, req, res, next) => {
   });
 });
 
-// 404 handler
-app.use((req, res) => {
+// 404 handler for API routes
+app.use("/api/*", (req, res) => {
   res.status(404).json({
-    error: "Endpoint not found",
-    available_endpoints: {
-      root: "/",
-      health: "/health",
-      products: "/api/products",
-      customers: "/api/customers",
-      orders: "/api/orders",
-      stats: "/api/stats",
-    },
+    error: "API endpoint not found",
+    path: req.path,
+    method: req.method,
   });
+});
+
+// 404 handler for web routes
+app.use((req, res) => {
+  console.log("404 for path:", req.path);
+  res.status(404).sendFile(path.join(__dirname, "public", "404.html"));
 });
 
 // Start server with database initialization
@@ -983,18 +1685,57 @@ initializeApp().then(() => {
     console.log(`📝 API Documentation: http://localhost:${port}/api`);
     console.log(`🌐 Web Interface: http://localhost:${port}/`);
     console.log(`🔐 Login Page: http://localhost:${port}/login`);
+    console.log(
+      `📧 Email SMTP: ${emailTransporter ? "Configured" : "Not configured"}`
+    );
+    console.log(
+      `🔑 OTP Feature: ${otpPool && emailTransporter ? "Enabled" : "Disabled"}`
+    );
+
+    if (!emailTransporter) {
+      console.log(
+        `⚠️  Configure SMTP_USER and SMTP_PASS in .env to enable OTP emails`
+      );
+    }
+
+    console.log("\n🎯 Authentication Flow:");
+    console.log("  1. Access http://localhost:3000 → Redirects to /login");
+    console.log("  2. Login successfully → Redirects to /dashboard");
+    console.log("  3. All protected routes require valid JWT token");
   });
+
+  // Clean expired records every hour
+  if (otpPool) {
+    setInterval(cleanExpiredRecords, 60 * 60 * 1000);
+  }
 });
 
 // Graceful shutdown
 process.on("SIGTERM", () => {
   console.log("🛑 SIGTERM received. Shutting down gracefully...");
+  if (otpPool) {
+    otpPool.end();
+  }
   process.exit(0);
 });
 
 process.on("SIGINT", () => {
   console.log("🛑 SIGINT received. Shutting down gracefully...");
+  if (otpPool) {
+    otpPool.end();
+  }
   process.exit(0);
+});
+
+// Handle uncaught exceptions
+process.on("uncaughtException", (error) => {
+  console.error("Uncaught Exception:", error);
+  process.exit(1);
+});
+
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection at:", promise, "reason:", reason);
+  process.exit(1);
 });
 
 module.exports = app;
