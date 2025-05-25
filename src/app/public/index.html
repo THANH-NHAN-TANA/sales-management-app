@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MetroMini Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f5f5f5;
+        color: #333;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #00bcd4, #26c6da);
+        color: white;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .logo {
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .logo span:first-child {
+        color: #fff;
+      }
+
+      .logo span:last-child {
+        color: #1de9b6;
+      }
+
+      .nav-menu {
+        display: flex;
+        gap: 30px;
+        align-items: center;
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: background 0.3s;
+        text-decoration: none;
+        color: white;
+      }
+
+      .nav-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .nav-item.active {
+        background: rgba(255, 255, 255, 0.2);
+        font-weight: 600;
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .user-avatar {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: #00bcd4;
+      }
+
+      .settings-btn {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 4px;
+        transition: background 0.3s;
+      }
+
+      .settings-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .main-content {
+        padding: 20px;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .page-title {
+        font-size: 28px;
+        font-weight: 600;
+        margin-bottom: 25px;
+        color: #333;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+
+      .stat-card {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .stat-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(135deg, #00bcd4, #26c6da);
+      }
+
+      .stat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+      .stat-title {
+        font-size: 14px;
+        color: #666;
+        font-weight: 500;
+      }
+
+      .stat-value {
+        font-size: 32px;
+        font-weight: bold;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .stat-icon {
+        width: 40px;
+        height: 40px;
+        background: #f0f0f0;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+      }
+
+      .chart-container {
+        height: 120px;
+        margin-top: 15px;
+      }
+
+      .transactions-section {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+      }
+
+      .section-header {
+        padding: 20px;
+        border-bottom: 1px solid #eee;
+        background: #fafafa;
+      }
+
+      .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .transactions-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .transactions-table th {
+        background: #f8f9fa;
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+        color: #555;
+        border-bottom: 2px solid #eee;
+      }
+
+      .transactions-table td {
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+        color: #666;
+      }
+
+      .transactions-table tr:hover {
+        background: #f8f9fa;
+      }
+
+      .order-id {
+        font-weight: 600;
+        color: #333;
+      }
+
+      .amount {
+        font-weight: 600;
+        color: #00bcd4;
+      }
+
+      @media (max-width: 1024px) {
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .nav-menu {
+          display: none;
+        }
+
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .main-content {
+          padding: 15px;
+        }
+
+        .transactions-table {
+          font-size: 14px;
+        }
+
+        .transactions-table th,
+        .transactions-table td {
+          padding: 10px 8px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <div class="logo"><span>Metro</span><span>Mini</span></div>
+
+      <nav class="nav-menu">
+        <a href="#" class="nav-item active"> 🏠 Tổng quan </a>
+        <a href="#" class="nav-item"> 📦 Sản phẩm </a>
+        <a href="#" class="nav-item"> 📷 Camera </a>
+        <a href="#" class="nav-item"> 📋 Đơn hàng </a>
+        <a href="#" class="nav-item"> 👥 Khách hàng </a>
+        <a href="#" class="nav-item"> 📊 Thống kê </a>
+      </nav>
+
+      <div class="user-info">
+        <span>Nguyễn Thành Nhân</span>
+        <div class="user-avatar">N</div>
+        <button class="settings-btn">⚙️</button>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <h1 class="page-title">Tổng quan</h1>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-title">Sản phẩm bán ra</span>
+            <div class="stat-icon">📦</div>
+          </div>
+          <div class="stat-value">134</div>
+          <div class="chart-container">
+            <canvas id="chart1"></canvas>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-title">Doanh thu</span>
+            <div class="stat-icon">💰</div>
+          </div>
+          <div class="stat-value">780k</div>
+          <div class="chart-container">
+            <canvas id="chart2"></canvas>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-title">Tổng số người dùng</span>
+            <div class="stat-icon">👥</div>
+          </div>
+          <div class="stat-value">275</div>
+          <div class="chart-container">
+            <canvas id="chart3"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="transactions-section">
+        <div class="section-header">
+          <h2 class="section-title">Lịch sử giao dịch</h2>
+        </div>
+
+        <table class="transactions-table">
+          <thead>
+            <tr>
+              <th>Mã đơn hàng</th>
+              <th>Khách hàng</th>
+              <th>Số điện thoại</th>
+              <th>Địa chỉ</th>
+              <th>Tổng tiền</th>
+              <th>Ngày mua</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="order-id">#1104</td>
+              <td>Nguyễn Văn A</td>
+              <td>0123456789</td>
+              <td>TP.HCM</td>
+              <td class="amount">454.000</td>
+              <td>10/03/2025</td>
+            </tr>
+            <tr>
+              <td class="order-id">#1103</td>
+              <td>Nguyễn Văn A</td>
+              <td>0123456789</td>
+              <td>TP.HCM</td>
+              <td class="amount">454.000</td>
+              <td>10/03/2025</td>
+            </tr>
+            <tr>
+              <td class="order-id">#1102</td>
+              <td>Nguyễn Văn A</td>
+              <td>0123456789</td>
+              <td>TP.HCM</td>
+              <td class="amount">454.000</td>
+              <td>10/03/2025</td>
+            </tr>
+            <tr>
+              <td class="order-id">#1101</td>
+              <td>Nguyễn Văn A</td>
+              <td>0123456789</td>
+              <td>TP.HCM</td>
+              <td class="amount">454.000</td>
+              <td>10/03/2025</td>
+            </tr>
+            <tr>
+              <td class="order-id">#1100</td>
+              <td>Nguyễn Văn A</td>
+              <td>0123456789</td>
+              <td>TP.HCM</td>
+              <td class="amount">454.000</td>
+              <td>10/03/2025</td>
+            </tr>
+            <tr>
+              <td class="order-id">#1099</td>
+              <td>Nguyễn Văn A</td>
+              <td>0123456789</td>
+              <td>TP.HCM</td>
+              <td class="amount">454.000</td>
+              <td>10/03/2025</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <script>
+      // Data for charts
+      const chartData1 = [
+        65, 70, 80, 75, 85, 90, 95, 88, 92, 98, 105, 110, 125, 130, 134,
+      ];
+      const chartData2 = [
+        400, 420, 380, 450, 480, 460, 520, 500, 540, 580, 620, 680, 720, 760,
+        780,
+      ];
+      const chartData3 = [
+        150, 155, 145, 160, 170, 165, 180, 175, 185, 195, 210, 225, 240, 260,
+        275,
+      ];
+
+      const chartLabels = Array.from({ length: 15 }, (_, i) => i + 1);
+
+      // Chart configuration
+      const chartConfig = {
+        type: "line",
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false,
+            },
+          },
+          scales: {
+            x: {
+              display: false,
+            },
+            y: {
+              display: false,
+            },
+          },
+          elements: {
+            point: {
+              radius: 2,
+              hoverRadius: 4,
+            },
+            line: {
+              borderWidth: 2,
+              tension: 0.4,
+            },
+          },
+          interaction: {
+            intersect: false,
+          },
+        },
+      };
+
+      // Initialize charts
+      function createChart(canvasId, data) {
+        const ctx = document.getElementById(canvasId).getContext("2d");
+        return new Chart(ctx, {
+          ...chartConfig,
+          data: {
+            labels: chartLabels,
+            datasets: [
+              {
+                data: data,
+                borderColor: "#00BCD4",
+                backgroundColor: "rgba(0, 188, 212, 0.1)",
+                fill: true,
+              },
+            ],
+          },
+        });
+      }
+
+      // Create all charts
+      createChart("chart1", chartData1);
+      createChart("chart2", chartData2);
+      createChart("chart3", chartData3);
+
+      // Navigation interaction
+      document.querySelectorAll(".nav-item").forEach((item) => {
+        item.addEventListener("click", (e) => {
+          e.preventDefault();
+          document
+            .querySelectorAll(".nav-item")
+            .forEach((i) => i.classList.remove("active"));
+          item.classList.add("active");
+        });
+      });
+    </script>
+  </body>
+</html>
