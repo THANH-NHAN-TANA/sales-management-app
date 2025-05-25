@@ -80,72 +80,6 @@
         font-size: 1rem;
       }
 
-      /* Step indicator */
-      .step-indicator {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 2rem;
-        gap: 1rem;
-      }
-
-      .step {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 600;
-        font-size: 0.9rem;
-        transition: all 0.3s ease;
-        background: #e1e8ed;
-        color: #7f8c8d;
-      }
-
-      .step.active {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        transform: scale(1.1);
-      }
-
-      .step.completed {
-        background: #27ae60;
-        color: white;
-      }
-
-      .step-connector {
-        width: 30px;
-        height: 2px;
-        background: #e1e8ed;
-        margin-top: 19px;
-        transition: all 0.3s ease;
-      }
-
-      .step-connector.active {
-        background: #667eea;
-      }
-
-      /* Form sections */
-      .form-section {
-        display: none;
-        animation: fadeIn 0.5s ease-in-out;
-      }
-
-      .form-section.active {
-        display: block;
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
       .form-group {
         margin-bottom: 1.5rem;
         position: relative;
@@ -213,7 +147,7 @@
 
       .form-options {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;
         align-items: center;
         margin-bottom: 1.5rem;
         font-size: 0.9rem;
@@ -231,19 +165,6 @@
         height: 16px;
         accent-color: #667eea;
         cursor: pointer;
-      }
-
-      .forgot-password {
-        color: #667eea;
-        text-decoration: none;
-        font-weight: 500;
-        transition: color 0.3s ease;
-        cursor: pointer;
-      }
-
-      .forgot-password:hover {
-        color: #764ba2;
-        text-decoration: underline;
       }
 
       .btn {
@@ -275,34 +196,6 @@
         opacity: 0.7;
         cursor: not-allowed;
         transform: none;
-      }
-
-      .btn-secondary {
-        background: #95a5a6;
-        margin-right: 1rem;
-        width: calc(50% - 0.5rem);
-        margin-bottom: 0;
-      }
-
-      .btn-secondary:hover:not(:disabled) {
-        background: #7f8c8d;
-        box-shadow: 0 4px 15px rgba(149, 165, 166, 0.4);
-      }
-
-      .btn-primary {
-        width: calc(50% - 0.5rem);
-        margin-bottom: 0;
-      }
-
-      .btn-group {
-        display: flex;
-        gap: 1rem;
-        margin-top: 1.5rem;
-      }
-
-      .btn-group .btn {
-        flex: 1;
-        margin-bottom: 0;
       }
 
       .loading {
@@ -380,129 +273,6 @@
         border: 1px solid #ffeaa7;
       }
 
-      /* OTP Input */
-      .otp-container {
-        display: flex;
-        justify-content: space-between;
-        gap: 0.5rem;
-        margin: 1.5rem 0;
-      }
-
-      .otp-input {
-        width: 50px;
-        height: 50px;
-        text-align: center;
-        font-size: 1.5rem;
-        font-weight: bold;
-        border: 2px solid #e1e8ed;
-        border-radius: 8px;
-        background: #f8f9fa;
-        transition: all 0.3s ease;
-      }
-
-      .otp-input:focus {
-        outline: none;
-        border-color: #667eea;
-        background: white;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-      }
-
-      .otp-timer {
-        text-align: center;
-        margin: 1rem 0;
-        font-size: 0.9rem;
-        color: #7f8c8d;
-      }
-
-      .resend-otp {
-        color: #667eea;
-        cursor: pointer;
-        text-decoration: underline;
-        font-weight: 500;
-      }
-
-      .resend-otp:hover {
-        color: #764ba2;
-      }
-
-      .resend-otp.disabled {
-        color: #95a5a6;
-        cursor: not-allowed;
-        text-decoration: none;
-      }
-
-      /* Back button */
-      .back-btn {
-        position: absolute;
-        top: 1rem;
-        left: 1rem;
-        background: none;
-        border: none;
-        color: #7f8c8d;
-        font-size: 1.2rem;
-        cursor: pointer;
-        padding: 0.5rem;
-        border-radius: 50%;
-        transition: all 0.3s ease;
-      }
-
-      .back-btn:hover {
-        background: #f8f9fa;
-        color: #667eea;
-      }
-
-      /* Password strength indicator */
-      .password-strength {
-        margin-top: 0.5rem;
-        height: 4px;
-        background: #e1e8ed;
-        border-radius: 2px;
-        overflow: hidden;
-      }
-
-      .password-strength-bar {
-        height: 100%;
-        width: 0%;
-        transition: all 0.3s ease;
-        border-radius: 2px;
-      }
-
-      .password-strength.weak .password-strength-bar {
-        width: 33%;
-        background: #e74c3c;
-      }
-
-      .password-strength.medium .password-strength-bar {
-        width: 66%;
-        background: #f39c12;
-      }
-
-      .password-strength.strong .password-strength-bar {
-        width: 100%;
-        background: #27ae60;
-      }
-
-      .password-requirements {
-        margin-top: 0.5rem;
-        font-size: 0.8rem;
-        color: #7f8c8d;
-      }
-
-      .requirement {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin: 0.2rem 0;
-      }
-
-      .requirement.met {
-        color: #27ae60;
-      }
-
-      .requirement.met i {
-        color: #27ae60;
-      }
-
       /* Responsive Design */
       @media (max-width: 480px) {
         body {
@@ -517,681 +287,110 @@
         .login-header h1 {
           font-size: 1.5rem;
         }
-
-        .form-options {
-          flex-direction: column;
-          gap: 1rem;
-          align-items: flex-start;
-        }
-
-        .otp-input {
-          width: 45px;
-          height: 45px;
-          font-size: 1.3rem;
-        }
-
-        .btn-group {
-          flex-direction: column;
-        }
-
-        .btn-secondary,
-        .btn-primary {
-          width: 100%;
-        }
       }
     </style>
   </head>
   <body>
     <div class="login-container">
-      <button
-        class="back-btn"
-        id="backBtn"
-        style="display: none"
-        onclick="goBack()"
-      >
-        <i class="fas fa-arrow-left"></i>
-      </button>
-
       <div class="login-header">
         <div class="logo">
           <i class="fas fa-chart-line"></i>
         </div>
-        <h1 id="formTitle">Đăng nhập</h1>
-        <p id="formSubtitle">Hệ thống Quản lý Bán hàng</p>
-      </div>
-
-      <!-- Step Indicator -->
-      <div class="step-indicator" id="stepIndicator" style="display: none">
-        <div class="step active" id="step1">1</div>
-        <div class="step-connector" id="connector1"></div>
-        <div class="step" id="step2">2</div>
-        <div class="step-connector" id="connector2"></div>
-        <div class="step" id="step3">3</div>
+        <h1>Đăng nhập</h1>
+        <p>Hệ thống Quản lý Bán hàng</p>
       </div>
 
       <div id="alert" class="alert"></div>
 
-      <!-- Login Form -->
-      <div class="form-section active" id="loginSection">
-        <form id="loginForm">
-          <div class="form-group">
-            <label for="username">
-              <i
-                class="fas fa-user"
-                style="margin-right: 0.5rem; color: #667eea"
-              ></i>
-              Tên đăng nhập hoặc Email
-            </label>
-            <div class="input-group">
-              <input
-                type="text"
-                id="username"
-                name="username"
-                required
-                placeholder="Nhập tên đăng nhập hoặc email"
-                autocomplete="username"
-              />
-              <i class="fas fa-envelope icon"></i>
-            </div>
+      <!-- Simple Login Form -->
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="username">
+            <i
+              class="fas fa-user"
+              style="margin-right: 0.5rem; color: #667eea"
+            ></i>
+            Tên đăng nhập hoặc Email
+          </label>
+          <div class="input-group">
+            <input
+              type="text"
+              id="username"
+              name="username"
+              required
+              placeholder="Nhập tên đăng nhập hoặc email"
+              autocomplete="username"
+            />
+            <i class="fas fa-envelope icon"></i>
           </div>
+        </div>
 
-          <div class="form-group">
-            <label for="password">
-              <i
-                class="fas fa-lock"
-                style="margin-right: 0.5rem; color: #667eea"
-              ></i>
-              Mật khẩu
-            </label>
-            <div class="input-group">
-              <input
-                type="password"
-                id="password"
-                name="password"
-                required
-                placeholder="Nhập mật khẩu"
-                autocomplete="current-password"
-              />
-              <i class="fas fa-key icon"></i>
-              <i class="fas fa-eye password-toggle" id="togglePassword"></i>
-            </div>
+        <div class="form-group">
+          <label for="password">
+            <i
+              class="fas fa-lock"
+              style="margin-right: 0.5rem; color: #667eea"
+            ></i>
+            Mật khẩu
+          </label>
+          <div class="input-group">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              placeholder="Nhập mật khẩu"
+              autocomplete="current-password"
+            />
+            <i class="fas fa-key icon"></i>
+            <i class="fas fa-eye password-toggle" id="togglePassword"></i>
           </div>
+        </div>
 
-          <div class="form-options">
-            <label class="remember-me">
-              <input type="checkbox" id="rememberMe" name="rememberMe" />
-              <span>
-                <i
-                  class="fas fa-check-circle"
-                  style="color: #4caf50; margin-right: 0.3rem"
-                ></i>
-                Ghi nhớ đăng nhập
-              </span>
-            </label>
-            <a
-              href="#"
-              class="forgot-password"
-              onclick="showForgotPasswordForm(); return false;"
-            >
+        <div class="form-options">
+          <label class="remember-me">
+            <input type="checkbox" id="rememberMe" name="rememberMe" />
+            <span>
               <i
-                class="fas fa-question-circle"
-                style="margin-right: 0.3rem"
+                class="fas fa-check-circle"
+                style="color: #4caf50; margin-right: 0.3rem"
               ></i>
-              Quên mật khẩu?
-            </a>
-          </div>
-
-          <button type="submit" class="btn" id="loginBtn">
-            <div class="loading">
-              <div class="spinner"></div>
-            </div>
-            <span class="text">
-              <i class="fas fa-sign-in-alt" style="margin-right: 0.5rem"></i>
-              Đăng nhập
+              Ghi nhớ đăng nhập
             </span>
-          </button>
-        </form>
-      </div>
+          </label>
+        </div>
 
-      <!-- Forgot Password Form -->
-      <div class="form-section" id="forgotPasswordSection">
-        <form id="forgotPasswordForm">
-          <div class="form-group">
-            <label for="forgotEmail">
-              <i
-                class="fas fa-envelope"
-                style="margin-right: 0.5rem; color: #667eea"
-              ></i>
-              Email khôi phục
-            </label>
-            <div class="input-group">
-              <input
-                type="email"
-                id="forgotEmail"
-                name="forgotEmail"
-                required
-                placeholder="Nhập email của bạn"
-                autocomplete="email"
-              />
-              <i class="fas fa-envelope icon"></i>
-            </div>
+        <button type="submit" class="btn" id="loginBtn">
+          <div class="loading">
+            <div class="spinner"></div>
           </div>
-
-          <div class="btn-group">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              onclick="showLoginForm()"
-            >
-              <i class="fas fa-arrow-left" style="margin-right: 0.5rem"></i>
-              Quay lại
-            </button>
-            <button type="submit" class="btn btn-primary" id="sendOtpBtn">
-              <div class="loading">
-                <div class="spinner"></div>
-              </div>
-              <span class="text">
-                <i class="fas fa-paper-plane" style="margin-right: 0.5rem"></i>
-                Gửi OTP
-              </span>
-            </button>
-          </div>
-        </form>
-      </div>
-
-      <!-- OTP Verification Form -->
-      <div class="form-section" id="otpSection">
-        <form id="otpForm">
-          <div class="form-group">
-            <label>
-              <i
-                class="fas fa-shield-alt"
-                style="margin-right: 0.5rem; color: #667eea"
-              ></i>
-              Nhập mã OTP
-            </label>
-            <p style="font-size: 0.9rem; color: #7f8c8d; margin-bottom: 1rem">
-              Mã xác thực đã được gửi đến email của bạn
-            </p>
-            <div class="otp-container">
-              <input
-                type="text"
-                class="otp-input"
-                maxlength="1"
-                data-index="0"
-              />
-              <input
-                type="text"
-                class="otp-input"
-                maxlength="1"
-                data-index="1"
-              />
-              <input
-                type="text"
-                class="otp-input"
-                maxlength="1"
-                data-index="2"
-              />
-              <input
-                type="text"
-                class="otp-input"
-                maxlength="1"
-                data-index="3"
-              />
-              <input
-                type="text"
-                class="otp-input"
-                maxlength="1"
-                data-index="4"
-              />
-              <input
-                type="text"
-                class="otp-input"
-                maxlength="1"
-                data-index="5"
-              />
-            </div>
-            <div class="otp-timer">
-              <span id="otpTimer"
-                >Mã OTP sẽ hết hạn sau: <strong>05:00</strong></span
-              >
-              <br />
-              <span
-                class="resend-otp disabled"
-                id="resendOtp"
-                onclick="resendOTP()"
-              >
-                Gửi lại mã OTP
-              </span>
-            </div>
-          </div>
-
-          <div class="btn-group">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              onclick="showForgotPasswordForm()"
-            >
-              <i class="fas fa-arrow-left" style="margin-right: 0.5rem"></i>
-              Quay lại
-            </button>
-            <button type="submit" class="btn btn-primary" id="verifyOtpBtn">
-              <div class="loading">
-                <div class="spinner"></div>
-              </div>
-              <span class="text">
-                <i class="fas fa-check" style="margin-right: 0.5rem"></i>
-                Xác thực
-              </span>
-            </button>
-          </div>
-        </form>
-      </div>
-
-      <!-- Reset Password Form -->
-      <div class="form-section" id="resetPasswordSection">
-        <form id="resetPasswordForm">
-          <div class="form-group">
-            <label for="newPassword">
-              <i
-                class="fas fa-lock"
-                style="margin-right: 0.5rem; color: #667eea"
-              ></i>
-              Mật khẩu mới
-            </label>
-            <div class="input-group">
-              <input
-                type="password"
-                id="newPassword"
-                name="newPassword"
-                required
-                placeholder="Nhập mật khẩu mới"
-                autocomplete="new-password"
-              />
-              <i class="fas fa-key icon"></i>
-              <i class="fas fa-eye password-toggle" id="toggleNewPassword"></i>
-            </div>
-            <div class="password-strength" id="passwordStrength">
-              <div class="password-strength-bar"></div>
-            </div>
-            <div class="password-requirements">
-              <div class="requirement" id="lengthReq">
-                <i class="fas fa-times"></i>
-                <span>Ít nhất 8 ký tự</span>
-              </div>
-              <div class="requirement" id="upperReq">
-                <i class="fas fa-times"></i>
-                <span>Có chữ hoa</span>
-              </div>
-              <div class="requirement" id="lowerReq">
-                <i class="fas fa-times"></i>
-                <span>Có chữ thường</span>
-              </div>
-              <div class="requirement" id="numberReq">
-                <i class="fas fa-times"></i>
-                <span>Có số</span>
-              </div>
-              <div class="requirement" id="specialReq">
-                <i class="fas fa-times"></i>
-                <span>Có ký tự đặc biệt</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="confirmNewPassword">
-              <i
-                class="fas fa-lock"
-                style="margin-right: 0.5rem; color: #667eea"
-              ></i>
-              Xác nhận mật khẩu
-            </label>
-            <div class="input-group">
-              <input
-                type="password"
-                id="confirmNewPassword"
-                name="confirmNewPassword"
-                required
-                placeholder="Nhập lại mật khẩu mới"
-                autocomplete="new-password"
-              />
-              <i class="fas fa-key icon"></i>
-              <i
-                class="fas fa-eye password-toggle"
-                id="toggleConfirmPassword"
-              ></i>
-            </div>
-          </div>
-
-          <div class="btn-group">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              onclick="showOtpForm()"
-            >
-              <i class="fas fa-arrow-left" style="margin-right: 0.5rem"></i>
-              Quay lại
-            </button>
-            <button type="submit" class="btn btn-primary" id="resetPasswordBtn">
-              <div class="loading">
-                <div class="spinner"></div>
-              </div>
-              <span class="text">
-                <i class="fas fa-save" style="margin-right: 0.5rem"></i>
-                Đặt lại mật khẩu
-              </span>
-            </button>
-          </div>
-        </form>
-      </div>
+          <span class="text">
+            <i class="fas fa-sign-in-alt" style="margin-right: 0.5rem"></i>
+            Đăng nhập
+          </span>
+        </button>
+      </form>
     </div>
 
     <script>
-      // Global variables
-      let currentStep = "login";
-      let userEmail = "";
-      let otpToken = "";
-      let otpTimer = null;
-      let otpTimeLeft = 300; // 5 minutes
-
-      console.log("🚀 Login System Initializing...");
-
-      // Form navigation functions
-      function showLoginForm() {
-        console.log("Showing login form");
-        hideAllSections();
-        document.getElementById("loginSection").classList.add("active");
-        document.getElementById("stepIndicator").style.display = "none";
-        document.getElementById("backBtn").style.display = "none";
-        document.getElementById("formTitle").textContent = "Đăng nhập";
-        document.getElementById("formSubtitle").textContent =
-          "Hệ thống Quản lý Bán hàng";
-        currentStep = "login";
-        hideAlert();
-        // Focus on username field
-        setTimeout(() => {
-          document.getElementById("username").focus();
-        }, 100);
-      }
-
-      function showForgotPasswordForm() {
-        console.log("Showing forgot password form");
-        hideAllSections();
-        document
-          .getElementById("forgotPasswordSection")
-          .classList.add("active");
-        document.getElementById("stepIndicator").style.display = "flex";
-        document.getElementById("backBtn").style.display = "block";
-        document.getElementById("formTitle").textContent = "Quên mật khẩu";
-        document.getElementById("formSubtitle").textContent =
-          "Nhập email để nhận mã OTP";
-        updateStepIndicator(1);
-        currentStep = "forgot";
-        hideAlert();
-        // Focus on email field
-        setTimeout(() => {
-          document.getElementById("forgotEmail").focus();
-        }, 100);
-      }
-
-      function showOtpForm() {
-        console.log("Showing OTP form");
-        hideAllSections();
-        document.getElementById("otpSection").classList.add("active");
-        document.getElementById("formTitle").textContent = "Xác thực OTP";
-        document.getElementById("formSubtitle").textContent =
-          "Nhập mã OTP đã gửi về email";
-        updateStepIndicator(2);
-        currentStep = "otp";
-        hideAlert();
-        // Focus on first OTP input
-        setTimeout(() => {
-          document.querySelector(".otp-input").focus();
-        }, 100);
-      }
-
-      function showResetPasswordForm() {
-        console.log("Showing reset password form");
-        hideAllSections();
-        document.getElementById("resetPasswordSection").classList.add("active");
-        document.getElementById("formTitle").textContent = "Đặt lại mật khẩu";
-        document.getElementById("formSubtitle").textContent =
-          "Tạo mật khẩu mới cho tài khoản";
-        updateStepIndicator(3);
-        currentStep = "reset";
-        hideAlert();
-        // Focus on new password field
-        setTimeout(() => {
-          document.getElementById("newPassword").focus();
-        }, 100);
-      }
-
-      function hideAllSections() {
-        document.querySelectorAll(".form-section").forEach((section) => {
-          section.classList.remove("active");
-        });
-      }
-
-      function updateStepIndicator(activeStep) {
-        const steps = document.querySelectorAll(".step");
-        const connectors = document.querySelectorAll(".step-connector");
-
-        steps.forEach((step, index) => {
-          step.classList.remove("active", "completed");
-          if (index + 1 < activeStep) {
-            step.classList.add("completed");
-          } else if (index + 1 === activeStep) {
-            step.classList.add("active");
-          }
-        });
-
-        connectors.forEach((connector, index) => {
-          connector.classList.remove("active");
-          if (index + 1 < activeStep) {
-            connector.classList.add("active");
-          }
-        });
-      }
-
-      function goBack() {
-        console.log("Going back from step:", currentStep);
-        switch (currentStep) {
-          case "forgot":
-            showLoginForm();
-            break;
-          case "otp":
-            showForgotPasswordForm();
-            break;
-          case "reset":
-            showOtpForm();
-            break;
-          default:
-            showLoginForm();
-        }
-      }
+      console.log("🚀 Simple Login System Loading...");
 
       // Password toggle functionality
-      function setupPasswordToggle(toggleId, inputId) {
-        const toggle = document.getElementById(toggleId);
-        const input = document.getElementById(inputId);
+      const togglePassword = document.getElementById("togglePassword");
+      const passwordInput = document.getElementById("password");
 
-        if (toggle && input) {
-          toggle.addEventListener("click", function () {
-            if (input.type === "password") {
-              input.type = "text";
-              this.classList.remove("fa-eye");
-              this.classList.add("fa-eye-slash");
-            } else {
-              input.type = "password";
-              this.classList.remove("fa-eye-slash");
-              this.classList.add("fa-eye");
-            }
-          });
-        }
-      }
-
-      // Password strength checker
-      function checkPasswordStrength(password) {
-        const requirements = {
-          length: password.length >= 8,
-          upper: /[A-Z]/.test(password),
-          lower: /[a-z]/.test(password),
-          number: /\d/.test(password),
-          special: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password),
-        };
-
-        const score = Object.values(requirements).filter(Boolean).length;
-
-        updateRequirements(requirements);
-        updateStrengthBar(score);
-
-        return score >= 4;
-      }
-
-      function updateRequirements(requirements) {
-        const reqElements = {
-          length: document.getElementById("lengthReq"),
-          upper: document.getElementById("upperReq"),
-          lower: document.getElementById("lowerReq"),
-          number: document.getElementById("numberReq"),
-          special: document.getElementById("specialReq"),
-        };
-
-        Object.keys(requirements).forEach((key) => {
-          const element = reqElements[key];
-          if (element) {
-            const icon = element.querySelector("i");
-
-            if (requirements[key]) {
-              element.classList.add("met");
-              icon.classList.remove("fa-times");
-              icon.classList.add("fa-check");
-            } else {
-              element.classList.remove("met");
-              icon.classList.remove("fa-check");
-              icon.classList.add("fa-times");
-            }
+      if (togglePassword && passwordInput) {
+        togglePassword.addEventListener("click", function () {
+          if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            this.classList.remove("fa-eye");
+            this.classList.add("fa-eye-slash");
+          } else {
+            passwordInput.type = "password";
+            this.classList.remove("fa-eye-slash");
+            this.classList.add("fa-eye");
           }
         });
-      }
-
-      function updateStrengthBar(score) {
-        const strengthElement = document.getElementById("passwordStrength");
-        if (strengthElement) {
-          strengthElement.className = "password-strength";
-
-          if (score >= 4) {
-            strengthElement.classList.add("strong");
-          } else if (score >= 3) {
-            strengthElement.classList.add("medium");
-          } else if (score >= 1) {
-            strengthElement.classList.add("weak");
-          }
-        }
-      }
-
-      // OTP Input functionality
-      function setupOtpInputs() {
-        const otpInputs = document.querySelectorAll(".otp-input");
-
-        otpInputs.forEach((input, index) => {
-          input.addEventListener("input", function (e) {
-            const value = e.target.value.replace(/[^0-9]/g, "");
-            e.target.value = value;
-
-            if (value && index < otpInputs.length - 1) {
-              otpInputs[index + 1].focus();
-            }
-          });
-
-          input.addEventListener("keydown", function (e) {
-            if (e.key === "Backspace" && !e.target.value && index > 0) {
-              otpInputs[index - 1].focus();
-            }
-          });
-
-          input.addEventListener("paste", function (e) {
-            e.preventDefault();
-            const pastedData = e.clipboardData
-              .getData("text")
-              .replace(/[^0-9]/g, "");
-            const digits = pastedData.split("").slice(0, 6);
-
-            digits.forEach((digit, i) => {
-              if (otpInputs[i]) {
-                otpInputs[i].value = digit;
-              }
-            });
-
-            if (digits.length === 6) {
-              otpInputs[5].focus();
-            }
-          });
-        });
-      }
-
-      // OTP Timer
-      function startOtpTimer() {
-        console.log("Starting OTP timer");
-        otpTimeLeft = 300; // 5 minutes
-        const timerElement = document.getElementById("otpTimer");
-        const resendElement = document.getElementById("resendOtp");
-
-        if (resendElement) {
-          resendElement.classList.add("disabled");
-        }
-
-        otpTimer = setInterval(() => {
-          otpTimeLeft--;
-
-          const minutes = Math.floor(otpTimeLeft / 60);
-          const seconds = otpTimeLeft % 60;
-
-          if (timerElement) {
-            timerElement.innerHTML = `Mã OTP sẽ hết hạn sau: <strong>${minutes
-              .toString()
-              .padStart(2, "0")}:${seconds
-              .toString()
-              .padStart(2, "0")}</strong>`;
-          }
-
-          if (otpTimeLeft <= 0) {
-            clearInterval(otpTimer);
-            if (timerElement) {
-              timerElement.innerHTML = "Mã OTP đã hết hạn";
-            }
-            if (resendElement) {
-              resendElement.classList.remove("disabled");
-              resendElement.textContent = "Gửi lại mã OTP";
-            }
-          }
-        }, 1000);
-      }
-
-      function stopOtpTimer() {
-        if (otpTimer) {
-          clearInterval(otpTimer);
-          otpTimer = null;
-        }
-      }
-
-      // Get OTP value
-      function getOtpValue() {
-        const otpInputs = document.querySelectorAll(".otp-input");
-        return Array.from(otpInputs)
-          .map((input) => input.value)
-          .join("");
-      }
-
-      // Clear OTP inputs
-      function clearOtpInputs() {
-        document.querySelectorAll(".otp-input").forEach((input) => {
-          input.value = "";
-        });
-        const firstInput = document.querySelector(".otp-input");
-        if (firstInput) {
-          firstInput.focus();
-        }
       }
 
       // Alert functions
@@ -1221,7 +420,7 @@
         alert.style.display = "none";
       }
 
-      // API calls with improved error handling
+      // Login API call
       async function loginUser(username, password, rememberMe) {
         try {
           console.log("Attempting login for user:", username);
@@ -1250,120 +449,10 @@
         }
       }
 
-      async function sendOtp(email) {
-        try {
-          console.log("Sending OTP to:", email);
-
-          const response = await fetch("/api/auth/forgot-password", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-            body: JSON.stringify({ email }),
-          });
-
-          const data = await response.json();
-          console.log("Send OTP response:", response.status, data);
-
-          if (!response.ok) {
-            throw new Error(data.error || `Lỗi server: ${response.status}`);
-          }
-
-          return data;
-        } catch (error) {
-          console.error("Send OTP API error:", error);
-          throw error;
-        }
-      }
-
-      async function verifyOtp(email, otp) {
-        try {
-          console.log("Verifying OTP for:", email);
-
-          const response = await fetch("/api/auth/verify-otp", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-            body: JSON.stringify({ email, otp }),
-          });
-
-          const data = await response.json();
-          console.log("Verify OTP response:", response.status, data);
-
-          if (!response.ok) {
-            throw new Error(data.error || `Lỗi server: ${response.status}`);
-          }
-
-          return data;
-        } catch (error) {
-          console.error("Verify OTP API error:", error);
-          throw error;
-        }
-      }
-
-      async function resetPassword(email, otp, newPassword) {
-        try {
-          console.log("Resetting password for:", email);
-
-          const response = await fetch("/api/auth/reset-password", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-            body: JSON.stringify({ email, otp, newPassword }),
-          });
-
-          const data = await response.json();
-          console.log("Reset password response:", response.status, data);
-
-          if (!response.ok) {
-            throw new Error(data.error || `Lỗi server: ${response.status}`);
-          }
-
-          return data;
-        } catch (error) {
-          console.error("Reset password API error:", error);
-          throw error;
-        }
-      }
-
-      async function resendOTP() {
-        const resendElement = document.getElementById("resendOtp");
-
-        if (!resendElement || resendElement.classList.contains("disabled")) {
-          return;
-        }
-
-        try {
-          resendElement.textContent = "Đang gửi...";
-          const result = await sendOtp(userEmail);
-
-          if (result.success) {
-            showAlert("Mã OTP mới đã được gửi về email của bạn", "success");
-            clearOtpInputs();
-            startOtpTimer();
-          } else {
-            showAlert(result.error || "Lỗi gửi lại OTP", "error");
-          }
-        } catch (error) {
-          console.error("Resend OTP error:", error);
-          showAlert(error.message || "Lỗi kết nối. Vui lòng thử lại!", "error");
-        } finally {
-          if (resendElement && !resendElement.classList.contains("disabled")) {
-            resendElement.textContent = "Gửi lại mã OTP";
-          }
-        }
-      }
-
-      // Form submissions with enhanced error handling
+      // Form submission
       document.addEventListener("DOMContentLoaded", function () {
-        console.log("DOM loaded, setting up form handlers");
+        console.log("DOM loaded, setting up login form");
 
-        // Login form handler
         const loginForm = document.getElementById("loginForm");
         if (loginForm) {
           loginForm.addEventListener("submit", async function (e) {
@@ -1421,207 +510,14 @@
           });
         }
 
-        // Forgot password form handler
-        const forgotPasswordForm =
-          document.getElementById("forgotPasswordForm");
-        if (forgotPasswordForm) {
-          forgotPasswordForm.addEventListener("submit", async function (e) {
-            e.preventDefault();
-            console.log("Forgot password form submitted");
-
-            const sendOtpBtn = document.getElementById("sendOtpBtn");
-            const email = document.getElementById("forgotEmail").value.trim();
-
-            if (!email) {
-              showAlert("Vui lòng nhập email", "error");
-              return;
-            }
-
-            if (!isValidEmail(email)) {
-              showAlert("Email không hợp lệ", "error");
-              return;
-            }
-
-            sendOtpBtn.classList.add("loading");
-            sendOtpBtn.disabled = true;
-
-            try {
-              const result = await sendOtp(email);
-
-              if (result.success) {
-                userEmail = email;
-                showAlert("Mã OTP đã được gửi về email của bạn", "success");
-                setTimeout(() => {
-                  showOtpForm();
-                  startOtpTimer();
-                }, 1500);
-              } else {
-                showAlert(result.error || "Lỗi gửi OTP", "error");
-              }
-            } catch (error) {
-              console.error("Send OTP error:", error);
-              let errorMessage = "Lỗi kết nối. Vui lòng thử lại!";
-
-              if (error.message.includes("503")) {
-                errorMessage = "Chức năng quên mật khẩu chưa được cấu hình";
-              } else if (error.message.includes("404")) {
-                errorMessage = "Email không tồn tại trong hệ thống";
-              } else if (error.message.includes("429")) {
-                errorMessage = "Quá nhiều yêu cầu. Vui lòng chờ 1 phút";
-              }
-
-              showAlert(errorMessage, "error");
-            } finally {
-              sendOtpBtn.classList.remove("loading");
-              sendOtpBtn.disabled = false;
-            }
-          });
-        }
-
-        // OTP form handler
-        const otpForm = document.getElementById("otpForm");
-        if (otpForm) {
-          otpForm.addEventListener("submit", async function (e) {
-            e.preventDefault();
-            console.log("OTP form submitted");
-
-            const verifyOtpBtn = document.getElementById("verifyOtpBtn");
-            const otp = getOtpValue();
-
-            if (otp.length !== 6) {
-              showAlert("Vui lòng nhập đầy đủ mã OTP 6 số", "error");
-              return;
-            }
-
-            verifyOtpBtn.classList.add("loading");
-            verifyOtpBtn.disabled = true;
-
-            try {
-              const result = await verifyOtp(userEmail, otp);
-
-              if (result.success) {
-                otpToken = result.token;
-                showAlert("Xác thực OTP thành công!", "success");
-                stopOtpTimer();
-                setTimeout(() => {
-                  showResetPasswordForm();
-                }, 1500);
-              } else {
-                showAlert(result.error || "Mã OTP không đúng", "error");
-                clearOtpInputs();
-              }
-            } catch (error) {
-              console.error("Verify OTP error:", error);
-              showAlert(
-                error.message || "Lỗi xác thực OTP. Vui lòng thử lại!",
-                "error"
-              );
-              clearOtpInputs();
-            } finally {
-              verifyOtpBtn.classList.remove("loading");
-              verifyOtpBtn.disabled = false;
-            }
-          });
-        }
-
-        // Reset password form handler
-        const resetPasswordForm = document.getElementById("resetPasswordForm");
-        if (resetPasswordForm) {
-          resetPasswordForm.addEventListener("submit", async function (e) {
-            e.preventDefault();
-            console.log("Reset password form submitted");
-
-            const resetPasswordBtn =
-              document.getElementById("resetPasswordBtn");
-            const newPassword = document.getElementById("newPassword").value;
-            const confirmPassword =
-              document.getElementById("confirmNewPassword").value;
-
-            // Validate passwords
-            if (!checkPasswordStrength(newPassword)) {
-              showAlert(
-                "Mật khẩu không đủ mạnh. Vui lòng kiểm tra các yêu cầu",
-                "error"
-              );
-              return;
-            }
-
-            if (newPassword !== confirmPassword) {
-              showAlert("Mật khẩu xác nhận không khớp", "error");
-              return;
-            }
-
-            resetPasswordBtn.classList.add("loading");
-            resetPasswordBtn.disabled = true;
-
-            try {
-              const result = await resetPassword(
-                userEmail,
-                getOtpValue(),
-                newPassword
-              );
-
-              if (result.success) {
-                showAlert(
-                  "Đặt lại mật khẩu thành công! Đang chuyển về trang đăng nhập...",
-                  "success"
-                );
-                setTimeout(() => {
-                  // Reset all forms and go back to login
-                  document.getElementById("forgotEmail").value = "";
-                  document.getElementById("newPassword").value = "";
-                  document.getElementById("confirmNewPassword").value = "";
-                  clearOtpInputs();
-                  userEmail = "";
-                  otpToken = "";
-                  showLoginForm();
-                }, 2000);
-              } else {
-                showAlert(result.error || "Lỗi đặt lại mật khẩu", "error");
-              }
-            } catch (error) {
-              console.error("Reset password error:", error);
-              showAlert(
-                error.message || "Lỗi đặt lại mật khẩu. Vui lòng thử lại!",
-                "error"
-              );
-            } finally {
-              resetPasswordBtn.classList.remove("loading");
-              resetPasswordBtn.disabled = false;
-            }
-          });
-        }
-
-        // Setup password toggles
-        setupPasswordToggle("togglePassword", "password");
-        setupPasswordToggle("toggleNewPassword", "newPassword");
-        setupPasswordToggle("toggleConfirmPassword", "confirmNewPassword");
-
-        // Setup OTP inputs
-        setupOtpInputs();
-
-        // Password strength real-time check
-        const newPasswordInput = document.getElementById("newPassword");
-        if (newPasswordInput) {
-          newPasswordInput.addEventListener("input", function (e) {
-            checkPasswordStrength(e.target.value);
-          });
-        }
-
         // Focus on username field initially
         const usernameInput = document.getElementById("username");
         if (usernameInput) {
           usernameInput.focus();
         }
 
-        console.log("✅ All form handlers setup complete");
+        console.log("✅ Simple login form setup complete");
       });
-
-      // Utility functions
-      function isValidEmail(email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-      }
 
       // Check if user is already logged in
       window.addEventListener("load", function () {
@@ -1642,11 +538,9 @@
             .then((response) => {
               if (response.ok) {
                 console.log("Token valid, redirecting to dashboard");
-                // Redirect to dashboard if token is valid
                 window.location.href = "/dashboard";
               } else {
                 console.log("Token invalid, removing");
-                // Remove invalid token
                 localStorage.removeItem("authToken");
               }
             })
@@ -1673,7 +567,7 @@
           );
         });
 
-      console.log("✅ Enhanced Login System Initialized");
+      console.log("✅ Simple Login System Initialized");
     </script>
   </body>
 </html>

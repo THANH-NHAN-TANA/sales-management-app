@@ -1,0 +1,433 @@
+{
+  "totalTables": 7,
+  "tables": {
+    "customers": {
+      "columns": 8,
+      "records": 0,
+      "structure": [
+        {
+          "name": "id",
+          "type": "int",
+          "null": "NO",
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "name",
+          "type": "varchar(255)",
+          "null": "NO",
+          "key": "MUL",
+          "default": null
+        },
+        {
+          "name": "email",
+          "type": "varchar(100)",
+          "null": "YES",
+          "key": "UNI",
+          "default": null
+        },
+        {
+          "name": "phone",
+          "type": "varchar(20)",
+          "null": "YES",
+          "key": "MUL",
+          "default": null
+        },
+        {
+          "name": "address",
+          "type": "text",
+          "null": "YES",
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "is_active",
+          "type": "tinyint(1)",
+          "null": "YES",
+          "key": "MUL",
+          "default": "1"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "null": "YES",
+          "key": "",
+          "default": "CURRENT_TIMESTAMP"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "null": "YES",
+          "key": "",
+          "default": "CURRENT_TIMESTAMP"
+        }
+      ]
+    },
+    "order_items": {
+      "columns": 7,
+      "records": 0,
+      "structure": [
+        {
+          "name": "id",
+          "type": "int",
+          "null": "NO",
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "order_id",
+          "type": "int",
+          "null": "NO",
+          "key": "MUL",
+          "default": null
+        },
+        {
+          "name": "product_id",
+          "type": "int",
+          "null": "YES",
+          "key": "MUL",
+          "default": null
+        },
+        {
+          "name": "quantity",
+          "type": "int",
+          "null": "NO",
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "unit_price",
+          "type": "decimal(10,2)",
+          "null": "NO",
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "total_price",
+          "type": "decimal(10,2)",
+          "null": "YES",
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "null": "YES",
+          "key": "",
+          "default": "CURRENT_TIMESTAMP"
+        }
+      ]
+    },
+    "orders": {
+      "columns": 8,
+      "records": 0,
+      "structure": [
+        {
+          "name": "id",
+          "type": "int",
+          "null": "NO",
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "customer_id",
+          "type": "int",
+          "null": "YES",
+          "key": "MUL",
+          "default": null
+        },
+        {
+          "name": "user_id",
+          "type": "int",
+          "null": "YES",
+          "key": "MUL",
+          "default": null
+        },
+        {
+          "name": "total_amount",
+          "type": "decimal(10,2)",
+          "null": "NO",
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "status",
+          "type": "enum('pending','processing','shipped','delivered','cancelled')",
+          "null": "YES",
+          "key": "MUL",
+          "default": "pending"
+        },
+        {
+          "name": "order_date",
+          "type": "timestamp",
+          "null": "YES",
+          "key": "MUL",
+          "default": "CURRENT_TIMESTAMP"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "null": "YES",
+          "key": "",
+          "default": "CURRENT_TIMESTAMP"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "null": "YES",
+          "key": "",
+          "default": "CURRENT_TIMESTAMP"
+        }
+      ]
+    },
+    "password_resets": {
+      "columns": 7,
+      "records": 0,
+      "structure": [
+        {
+          "name": "id",
+          "type": "int",
+          "null": "NO",
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "email",
+          "type": "varchar(100)",
+          "null": "NO",
+          "key": "MUL",
+          "default": null
+        },
+        {
+          "name": "otp",
+          "type": "varchar(6)",
+          "null": "NO",
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "token",
+          "type": "varchar(255)",
+          "null": "NO",
+          "key": "UNI",
+          "default": null
+        },
+        {
+          "name": "expires_at",
+          "type": "timestamp",
+          "null": "NO",
+          "key": "MUL",
+          "default": null
+        },
+        {
+          "name": "used",
+          "type": "tinyint(1)",
+          "null": "YES",
+          "key": "",
+          "default": "0"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "null": "YES",
+          "key": "",
+          "default": "CURRENT_TIMESTAMP"
+        }
+      ]
+    },
+    "products": {
+      "columns": 10,
+      "records": 0,
+      "structure": [
+        {
+          "name": "id",
+          "type": "int",
+          "null": "NO",
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "name",
+          "type": "varchar(255)",
+          "null": "NO",
+          "key": "MUL",
+          "default": null
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "null": "YES",
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "price",
+          "type": "decimal(10,2)",
+          "null": "NO",
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "stock",
+          "type": "int",
+          "null": "YES",
+          "key": "",
+          "default": "0"
+        },
+        {
+          "name": "category",
+          "type": "varchar(100)",
+          "null": "YES",
+          "key": "MUL",
+          "default": null
+        },
+        {
+          "name": "sku",
+          "type": "varchar(100)",
+          "null": "YES",
+          "key": "UNI",
+          "default": null
+        },
+        {
+          "name": "is_active",
+          "type": "tinyint(1)",
+          "null": "YES",
+          "key": "MUL",
+          "default": "1"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "null": "YES",
+          "key": "",
+          "default": "CURRENT_TIMESTAMP"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "null": "YES",
+          "key": "",
+          "default": "CURRENT_TIMESTAMP"
+        }
+      ]
+    },
+    "user_sessions": {
+      "columns": 5,
+      "records": 0,
+      "structure": [
+        {
+          "name": "id",
+          "type": "int",
+          "null": "NO",
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "user_id",
+          "type": "int",
+          "null": "NO",
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "token",
+          "type": "varchar(255)",
+          "null": "NO",
+          "key": "UNI",
+          "default": null
+        },
+        {
+          "name": "expires_at",
+          "type": "timestamp",
+          "null": "NO",
+          "key": "MUL",
+          "default": null
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "null": "YES",
+          "key": "",
+          "default": "CURRENT_TIMESTAMP"
+        }
+      ]
+    },
+    "users": {
+      "columns": 9,
+      "records": 3,
+      "structure": [
+        {
+          "name": "id",
+          "type": "int",
+          "null": "NO",
+          "key": "PRI",
+          "default": null
+        },
+        {
+          "name": "username",
+          "type": "varchar(50)",
+          "null": "NO",
+          "key": "UNI",
+          "default": null
+        },
+        {
+          "name": "email",
+          "type": "varchar(100)",
+          "null": "NO",
+          "key": "UNI",
+          "default": null
+        },
+        {
+          "name": "password",
+          "type": "varchar(255)",
+          "null": "NO",
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "role",
+          "type": "enum('admin','manager','employee')",
+          "null": "YES",
+          "key": "",
+          "default": "employee"
+        },
+        {
+          "name": "full_name",
+          "type": "varchar(100)",
+          "null": "YES",
+          "key": "",
+          "default": null
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "null": "YES",
+          "key": "",
+          "default": "CURRENT_TIMESTAMP"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "null": "YES",
+          "key": "",
+          "default": "CURRENT_TIMESTAMP"
+        },
+        {
+          "name": "is_active",
+          "type": "tinyint(1)",
+          "null": "YES",
+          "key": "",
+          "default": "1"
+        }
+      ]
+    }
+  },
+  "recommendations": [
+    "✅ Found customers table: customers - ready for customer management",
+    "✅ Found orders table: order_items - ready for order management",
+    "✅ Found orders table: orders - ready for order management",
+    "✅ Found products table: products - ready for product management",
+    "⚠️  Table user_sessions might be for users but missing email/password columns",
+    "✅ Found authentication table: users - ready for login system"
+  ]
+}

@@ -1,71 +1,77 @@
-const {
-  testConnection,
-  checkDatabaseStructure,
-  getUserByEmailOrUsername,
-} = require("./config/database");
+#!/usr/bin/env node
 
-async function runTests() {
-  console.log("🧪 Running Database Connection Tests...\n");
+// Test Connection Script
+// Chạy: node test-connection.js
 
-  // Test 1: Database Connection
-  console.log("Test 1: Database Connection");
-  const connected = await testConnection();
-
-  if (!connected) {
-    console.log(
-      "❌ Connection test failed. Please check your .env configuration."
-    );
-    process.exit(1);
-  }
-
-  // Test 2: Database Structure
-  console.log("\nTest 2: Database Structure");
-  const structureOk = await checkDatabaseStructure();
-
-  if (!structureOk) {
-    console.log("❌ Database structure test failed.");
-    process.exit(1);
-  }
-
-  // Test 3: User Query Test
-  console.log("\nTest 3: User Query Test");
+async function testDatabaseConnection() {
   try {
-    // Test with the emails from your database
-    const testEmails = ["nguyenthanhnhan4638@gmail.com", "t2349724@gmail.com"];
+    console.log('🧪 TESTING DATABASE CONNECTION WITH SALESAPP USER');
+    console.log('='.repeat(55));
+    console.log('');
 
-    for (const email of testEmails) {
-      console.log(`\nTesting user: ${email}`);
-      const user = await getUserByEmailOrUsername(email);
-      if (user) {
-        console.log(`✅ Found user: ${user.email} (ID: ${user.id})`);
-        console.log(`   Username: ${user.username}`);
-        console.log(`   Role: ${user.role}`);
-        console.log(`   Full Name: ${user.full_name || "Not set"}`);
-        console.log(`   Active: ${user.is_active ? "Yes" : "No"}`);
-      } else {
-        console.log(`❌ User not found: ${email}`);
-      }
+    // Test import config
+    console.log('📁 Testing config import...');
+    const { testConnection, checkDatabaseStructure } = require('./config/database');
+    console.log('✅ Config imported successfully');
+    console.log('');
+
+    // Test connection
+    console.log('🔗 Testing database connection...');
+    const connected = await testConnection();
+    
+    if (!connected) {
+      console.log('❌ Connection failed - cannot proceed');
+      process.exit(1);
     }
+
+    console.log('');
+
+    // Test database structure
+    console.log('🏗️  Testing database structure...');
+    const structure = await checkDatabaseStructure();
+    
+    console.log('');
+
+    if (connected && structure) {
+      console.log('🎉 ALL TESTS PASSED!');
+      console.log('✅ Database connection working');
+      console.log('✅ Database structure verified');
+      console.log('✅ Ready to run: npm start');
+    } else if (connected) {
+      console.log('⚠️  CONNECTION OK but some tables missing');
+      console.log('💡 App can still run but may have limited functionality');
+      console.log('✅ You can try: npm start');
+    } else {
+      console.log('❌ Connection failed - check your configuration');
+    }
+
+    console.log('');
+    console.log('🔑 AFTER npm start, login with:');
+    console.log('   Username: admin');
+    console.log('   Password: 123456');
+    console.log('   URL: http://localhost:3000/login');
+
   } catch (error) {
-    console.error("❌ User query test failed:", error.message);
+    console.log('');
+    console.log('❌ TEST FAILED:', error.message);
+    
+    if (error.code === 'MODULE_NOT_FOUND') {
+      console.log('');
+      console.log('🔧 SOLUTION:');
+      console.log('1. Create config directory: mkdir config');
+      console.log('2. Create config/database.js file');
+      console.log('3. Make sure .env file exists');
+    } else {
+      console.log('');
+      console.log('🔧 Check your:');
+      console.log('- .env file configuration');
+      console.log('- MySQL server is running');
+      console.log('- User salesapp exists and has permissions');
+    }
+    
     process.exit(1);
   }
-
-  console.log("\n🎉 All tests passed! Your database is ready to use.");
-  console.log("\n📋 Next steps:");
-  console.log("1. Make sure you know the password for one of the users");
-  console.log("2. Run: npm start");
-  console.log("3. Go to: http://localhost:3000/login");
-  console.log("4. Login with email/username and password");
-
-  // Exit successfully
-  process.exit(0);
 }
 
-// Handle unhandled promise rejections
-process.on("unhandledRejection", (error) => {
-  console.error("❌ Unhandled promise rejection:", error.message);
-  process.exit(1);
-});
-
-runTests();
+// Run test
+testDatabaseConnection();

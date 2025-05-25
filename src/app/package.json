@@ -1,17 +1,19 @@
 {
   "name": "sales-management-app",
   "version": "1.0.0",
-  "description": "Sales Management System with Web Interface and automated CI/CD pipeline",
+  "description": "Sales Management System with Web Interface and MySQL Database",
   "main": "main.js",
   "scripts": {
     "start": "node main.js",
     "dev": "nodemon main.js",
+    "setup": "node setup.js",
+    "test-db": "node test-db.js",
+    "reset-db": "node setup.js --reset",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "build": "echo \"Build completed\"",
-    "setup": "npm install && node setup.js",
     "migrate": "node scripts/migrate.js",
     "seed": "node scripts/seed.js",
     "docker:build": "docker build -t sales-management-app .",
@@ -22,7 +24,9 @@
     "pm2:stop": "pm2 stop ecosystem.config.js",
     "pm2:restart": "pm2 restart ecosystem.config.js",
     "logs": "pm2 logs",
-    "health": "curl http://localhost:3000/health"
+    "health": "curl http://localhost:3000/health",
+    "install-deps": "npm install",
+    "full-setup": "npm run install-deps && npm run setup && npm run test-db"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -60,11 +64,6 @@
     "web-interface",
     "nodejs",
     "mysql",
-    "docker",
-    "aws",
-    "ecs",
-    "cicd",
-    "jenkins",
     "authentication",
     "otp",
     "password-reset",
@@ -78,12 +77,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/THANH-NHAN-TANA/sales-management-app.git"
+    "url": "https://github.com/your-username/sales-management-app.git"
   },
-  "bugs": {
-    "url": "https://github.com/THANH-NHAN-TANA/sales-management-app/issues"
-  },
-  "homepage": "https://github.com/THANH-NHAN-TANA/sales-management-app#readme",
   "jest": {
     "testEnvironment": "node",
     "collectCoverageFrom": [
