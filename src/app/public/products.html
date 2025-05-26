@@ -1,0 +1,1833 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sản phẩm - Sales Management System</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate icon" href="/favicon.ico" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f5f7fa;
+        color: #333;
+        line-height: 1.6;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .logo {
+        font-size: 24px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .logo i {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 10px;
+        border-radius: 10px;
+        font-size: 22px;
+      }
+
+      .nav-menu {
+        display: flex;
+        gap: 25px;
+        align-items: center;
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        padding: 10px 15px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        color: white;
+        font-weight: 500;
+        position: relative;
+      }
+
+      .nav-item:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-1px);
+      }
+
+      .nav-item.active {
+        background: rgba(255, 255, 255, 0.25);
+        font-weight: 600;
+      }
+
+      .nav-item.active::after {
+        content: "";
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 6px;
+        height: 6px;
+        background: white;
+        border-radius: 50%;
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        position: relative;
+      }
+
+      .user-name {
+        font-weight: 600;
+        font-size: 15px;
+      }
+
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #fff, #f0f0f0);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: #667eea;
+        font-size: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .user-avatar:hover {
+        transform: scale(1.05);
+        border-color: rgba(255, 255, 255, 0.5);
+      }
+
+      .settings-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .settings-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: rotate(90deg);
+      }
+
+      .dropdown-menu {
+        position: absolute;
+        top: 120%;
+        right: 0;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        min-width: 220px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-15px);
+        transition: all 0.4s ease;
+        z-index: 1000;
+        overflow: hidden;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      .dropdown-menu.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px 20px;
+        color: #333;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        border: none;
+        background: none;
+        width: 100%;
+        text-align: left;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .dropdown-item:hover {
+        background: #f8f9fa;
+      }
+
+      .dropdown-item:first-child {
+        border-bottom: 1px solid #eee;
+      }
+
+      .dropdown-item:first-child:hover {
+        background: rgba(102, 126, 234, 0.1);
+        color: #667eea;
+      }
+
+      .dropdown-item:last-child:hover {
+        background: rgba(244, 67, 54, 0.1);
+        color: #f44336;
+      }
+
+      .dropdown-icon {
+        font-size: 16px;
+        width: 20px;
+        text-align: center;
+      }
+
+      /* Main Content */
+      .main-content {
+        padding: 30px;
+        max-width: 1400px;
+        margin: 0 auto;
+        min-height: calc(100vh - 80px);
+      }
+
+      .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+      }
+
+      .page-title {
+        font-size: 32px;
+        font-weight: 700;
+        color: #2c3e50;
+      }
+
+      .page-subtitle {
+        color: #7f8c8d;
+        font-size: 16px;
+        margin-top: 5px;
+      }
+
+      .add-product-btn {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .add-product-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+      }
+
+      .products-section {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 6px 30px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+      }
+
+      .section-header {
+        padding: 25px 30px;
+        border-bottom: 1px solid #eee;
+        background: linear-gradient(135deg, #f8f9fa, #ffffff);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .section-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #2c3e50;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .search-filters {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+      }
+
+      .search-input {
+        padding: 10px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 14px;
+        width: 250px;
+        transition: all 0.3s ease;
+      }
+
+      .search-input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .filter-select {
+        padding: 10px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 14px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .filter-select:focus {
+        outline: none;
+        border-color: #667eea;
+      }
+
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 25px;
+        padding: 30px;
+      }
+
+      .product-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        overflow: hidden;
+        border: 1px solid #f0f0f0;
+      }
+
+      .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      .product-image {
+        height: 200px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 48px;
+        color: white;
+        position: relative;
+      }
+
+      .product-details {
+        padding: 20px;
+      }
+
+      .product-name {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 8px;
+      }
+
+      .product-category {
+        color: #7f8c8d;
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
+
+      .product-price {
+        font-size: 20px;
+        font-weight: 700;
+        color: #27ae60;
+        margin-bottom: 12px;
+      }
+
+      .product-stock {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 15px;
+      }
+
+      .stock-badge {
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .stock-in {
+        background: #d4edda;
+        color: #155724;
+      }
+
+      .stock-low {
+        background: #fff3cd;
+        color: #856404;
+      }
+
+      .stock-out {
+        background: #f8d7da;
+        color: #721c24;
+      }
+
+      .product-actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      .action-btn {
+        flex: 1;
+        padding: 8px;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+      }
+
+      .btn-edit {
+        background: #17a2b8;
+        color: white;
+      }
+
+      .btn-edit:hover {
+        background: #138496;
+      }
+
+      .btn-delete {
+        background: #dc3545;
+        color: white;
+      }
+
+      .btn-delete:hover {
+        background: #c82333;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 60px 40px;
+        color: #7f8c8d;
+      }
+
+      .empty-state i {
+        font-size: 64px;
+        margin-bottom: 20px;
+        color: #bdc3c7;
+      }
+
+      .empty-state h3 {
+        font-size: 24px;
+        margin-bottom: 10px;
+        color: #95a5a6;
+      }
+
+      .empty-state p {
+        font-size: 16px;
+      }
+
+      /* Loading and notification styles */
+      .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 4000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(3px);
+      }
+
+      .loading-overlay.show {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #667eea;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 20px;
+      }
+
+      .loading-text {
+        color: #667eea;
+        font-weight: 600;
+        font-size: 16px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .notification {
+        position: fixed;
+        top: 25px;
+        right: 25px;
+        padding: 18px 24px;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        z-index: 3000;
+        animation: slideInRight 0.4s ease;
+        max-width: 350px;
+        font-weight: 500;
+      }
+
+      .notification.success {
+        background: #d4edda;
+        color: #155724;
+        border-left: 4px solid #28a745;
+      }
+
+      .notification.error {
+        background: #f8d7da;
+        color: #721c24;
+        border-left: 4px solid #dc3545;
+      }
+
+      .notification.warning {
+        background: #fff3cd;
+        color: #856404;
+        border-left: 4px solid #ffc107;
+      }
+
+      @keyframes slideInRight {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      /* Modal styles */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s ease;
+        backdrop-filter: blur(5px);
+      }
+
+      .modal-overlay.show {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .modal-content {
+        background: white;
+        border-radius: 16px;
+        padding: 35px;
+        max-width: 500px;
+        width: 90%;
+        max-height: 85vh;
+        overflow-y: auto;
+        transform: scale(0.8);
+        transition: transform 0.4s ease;
+        position: relative;
+      }
+
+      .modal-overlay.show .modal-content {
+        transform: scale(1);
+      }
+
+      .modal-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #f0f0f0;
+      }
+
+      .modal-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #2c3e50;
+        margin: 0;
+      }
+
+      .modal-icon {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        width: 45px;
+        height: 45px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+      }
+
+      .close-modal {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: none;
+        border: none;
+        font-size: 24px;
+        color: #999;
+        cursor: pointer;
+        width: 35px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+      }
+
+      .close-modal:hover {
+        background: #f0f0f0;
+        color: #666;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-label {
+        display: block;
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 14px 16px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 14px;
+        background: #f9f9f9;
+        color: #333;
+        transition: all 0.3s ease;
+        font-family: inherit;
+      }
+
+      .form-input:focus {
+        outline: none;
+        border-color: #667eea;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .form-select {
+        width: 100%;
+        padding: 14px 16px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 14px;
+        background: white;
+        color: #333;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .form-select:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .modal-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: flex-end;
+        margin-top: 30px;
+        padding-top: 25px;
+        border-top: 1px solid #eee;
+      }
+
+      .btn {
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+      }
+
+      .btn-secondary {
+        background: #f5f5f5;
+        color: #666;
+        border: 1px solid #ddd;
+      }
+
+      .btn-secondary:hover {
+        background: #e9e9e9;
+      }
+
+      .btn-danger {
+        background: #dc3545;
+        color: white;
+      }
+
+      .btn-danger:hover {
+        background: #c82333;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(220, 53, 69, 0.3);
+      }
+
+      /* Delete confirmation modal */
+      .delete-modal .modal-content {
+        max-width: 400px;
+        text-align: center;
+      }
+
+      .delete-icon {
+        background: #dc3545;
+        color: white;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        margin: 0 auto 20px;
+      }
+
+      .delete-message {
+        font-size: 16px;
+        color: #666;
+        margin-bottom: 10px;
+      }
+
+      .delete-product-name {
+        font-weight: 700;
+        color: #2c3e50;
+        font-size: 18px;
+        margin-bottom: 25px;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .nav-menu {
+          display: none;
+        }
+
+        .main-content {
+          padding: 20px 15px;
+        }
+
+        .page-header {
+          flex-direction: column;
+          gap: 20px;
+          align-items: flex-start;
+        }
+
+        .search-filters {
+          flex-direction: column;
+          width: 100%;
+        }
+
+        .search-input {
+          width: 100%;
+        }
+
+        .products-grid {
+          grid-template-columns: 1fr;
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="spinner"></div>
+      <div class="loading-text">Đang tải dữ liệu...</div>
+    </div>
+
+    <header class="header">
+      <div class="logo">
+        <i class="fas fa-chart-line"></i>
+        <span>Sales Management System</span>
+      </div>
+
+      <nav class="nav-menu">
+        <a href="/dashboard" class="nav-item" data-page="dashboard">
+          <i class="fas fa-home"></i>
+          Tổng quan
+        </a>
+        <a href="/products-page" class="nav-item active" data-page="products">
+          <i class="fas fa-box"></i>
+          Sản phẩm
+        </a>
+        <a href="/customers-page" class="nav-item" data-page="customers">
+          <i class="fas fa-users"></i>
+          Khách hàng
+        </a>
+        <a href="/orders-page" class="nav-item" data-page="orders">
+          <i class="fas fa-shopping-cart"></i>
+          Đơn hàng
+        </a>
+        <a href="/statistics-page" class="nav-item" data-page="statistics">
+          <i class="fas fa-chart-bar"></i>
+          Thống Kê
+        </a>
+      </nav>
+
+      <div class="user-info">
+        <span class="user-name" id="userName">Đang tải...</span>
+        <div class="user-avatar" id="userAvatar" title="Thông tin cá nhân">
+          ?
+        </div>
+        <button class="settings-btn" id="settingsBtn" title="Cài đặt">
+          <i class="fas fa-cog"></i>
+        </button>
+        <div class="dropdown-menu" id="dropdownMenu">
+          <button class="dropdown-item" id="profileBtn">
+            <i class="fas fa-user dropdown-icon"></i>
+            Thông tin cá nhân
+          </button>
+          <button class="dropdown-item" id="logoutBtn">
+            <i class="fas fa-sign-out-alt dropdown-icon"></i>
+            Đăng xuất
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Quản lý sản phẩm</h1>
+          <p class="page-subtitle">Quản lý danh sách sản phẩm trong hệ thống</p>
+        </div>
+        <button class="add-product-btn" id="addProductBtn">
+          <i class="fas fa-plus"></i>
+          Thêm sản phẩm
+        </button>
+      </div>
+
+      <div class="products-section">
+        <div class="section-header">
+          <h2 class="section-title">
+            <i class="fas fa-box"></i>
+            Danh sách sản phẩm
+          </h2>
+          <div class="search-filters">
+            <input
+              type="text"
+              class="search-input"
+              id="searchInput"
+              placeholder="Tìm kiếm sản phẩm..."
+            />
+            <select class="filter-select" id="categoryFilter">
+              <option value="">Tất cả danh mục</option>
+              <option value="ca01">Rau củ</option>
+              <option value="ca02">Trái cây</option>
+              <option value="ca03">Đồ uống</option>
+              <option value="ca04">Đồ ăn nhẹ</option>
+              <option value="ca05">Gia vị</option>
+              <option value="ca06">Vệ sinh</option>
+              <option value="ca07">Hàng tạp hóa</option>
+            </select>
+            <select class="filter-select" id="stockFilter">
+              <option value="">Tất cả trạng thái</option>
+              <option value="instock">Còn hàng</option>
+              <option value="lowstock">Sắp hết</option>
+              <option value="outstock">Hết hàng</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="products-grid" id="productsGrid">
+          <!-- Products will be loaded here -->
+        </div>
+      </div>
+    </main>
+
+    <!-- Add/Edit Product Modal -->
+    <div class="modal-overlay" id="productModal">
+      <div class="modal-content">
+        <button class="close-modal" id="closeProductModal" title="Đóng">
+          ×
+        </button>
+
+        <div class="modal-header">
+          <div class="modal-icon">
+            <i class="fas fa-box" id="modalIcon"></i>
+          </div>
+          <h2 class="modal-title" id="modalTitle">Thêm sản phẩm mới</h2>
+        </div>
+
+        <form id="productForm">
+          <div class="form-group">
+            <label class="form-label">Tên sản phẩm *</label>
+            <input
+              type="text"
+              class="form-input"
+              id="productName"
+              placeholder="Nhập tên sản phẩm"
+              required
+            />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Giá bán *</label>
+              <input
+                type="number"
+                class="form-input"
+                id="productPrice"
+                placeholder="0.00"
+                step="0.01"
+                min="0"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Số lượng *</label>
+              <input
+                type="number"
+                class="form-input"
+                id="productStock"
+                placeholder="0"
+                min="0"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Danh mục *</label>
+            <select class="form-select" id="productCategory" required>
+              <option value="">Chọn danh mục</option>
+              <option value="ca01">Rau củ</option>
+              <option value="ca02">Trái cây</option>
+              <option value="ca03">Đồ uống</option>
+              <option value="ca04">Đồ ăn nhẹ</option>
+              <option value="ca05">Gia vị</option>
+              <option value="ca06">Vệ sinh</option>
+              <option value="ca07">Hàng tạp hóa</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Hình ảnh (URL)</label>
+            <input
+              type="url"
+              class="form-input"
+              id="productImageUrl"
+              placeholder="https://example.com/image.jpg"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Mô tả</label>
+            <textarea
+              class="form-input"
+              id="productDescription"
+              placeholder="Mô tả sản phẩm (tùy chọn)"
+              rows="3"
+              style="resize: vertical"
+            ></textarea>
+          </div>
+
+          <div class="modal-buttons">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              id="cancelProductBtn"
+            >
+              <i class="fas fa-times"></i>
+              Hủy
+            </button>
+            <button type="submit" class="btn btn-primary" id="saveProductBtn">
+              <i class="fas fa-save"></i>
+              <span id="saveButtonText">Thêm sản phẩm</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay delete-modal" id="deleteModal">
+      <div class="modal-content">
+        <button class="close-modal" id="closeDeleteModal" title="Đóng">
+          ×
+        </button>
+
+        <div class="delete-icon">
+          <i class="fas fa-trash"></i>
+        </div>
+
+        <h2 class="modal-title">Xác nhận xóa sản phẩm</h2>
+
+        <p class="delete-message">Bạn có chắc chắn muốn xóa sản phẩm:</p>
+        <div class="delete-product-name" id="deleteProductName"></div>
+
+        <p class="delete-message" style="color: #dc3545; font-weight: 600">
+          Hành động này không thể hoàn tác!
+        </p>
+
+        <div class="modal-buttons">
+          <button type="button" class="btn btn-secondary" id="cancelDeleteBtn">
+            <i class="fas fa-times"></i>
+            Hủy
+          </button>
+          <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+            <i class="fas fa-trash"></i>
+            Xóa sản phẩm
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      console.log("🚀 Products Page Loading...");
+
+      // ===================== GLOBAL VARIABLES =====================
+      let currentUser = null;
+      let authToken = localStorage.getItem("authToken");
+      let products = [];
+      let filteredProducts = [];
+      let editingProductId = null; // Track if we're editing or adding
+      let productToDelete = null; // Track product to be deleted
+
+      // ===================== AUTHENTICATION =====================
+      async function checkAuth() {
+        if (!authToken) {
+          console.log("❌ No auth token found");
+          redirectToLogin();
+          return false;
+        }
+
+        try {
+          showLoading("Đang xác thực...");
+          console.log("🔍 Verifying authentication token");
+
+          const response = await fetch("/api/auth/verify", {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          });
+
+          if (response.ok) {
+            const result = await response.json();
+            if (result.success && result.user) {
+              currentUser = result.user;
+              updateUserInfo(result.user);
+              console.log("✅ Authentication verified for:", result.user.name);
+              return true;
+            } else {
+              throw new Error("Invalid response format");
+            }
+          } else {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || `HTTP ${response.status}`);
+          }
+        } catch (error) {
+          console.error("❌ Auth verification failed:", error);
+          localStorage.removeItem("authToken");
+          localStorage.removeItem("user");
+          authToken = null;
+          showNotification("Phiên đăng nhập đã hết hạn", "error");
+          setTimeout(() => {
+            redirectToLogin();
+          }, 1500);
+          return false;
+        } finally {
+          hideLoading();
+        }
+      }
+
+      function redirectToLogin() {
+        console.log("🔄 Redirecting to login page");
+        window.location.href = "/login";
+      }
+
+      function updateUserInfo(user) {
+        const userName = document.getElementById("userName");
+        const userAvatar = document.getElementById("userAvatar");
+
+        let displayName = user.fullName || user.name || user.username || "User";
+
+        userName.textContent = displayName;
+        userAvatar.textContent = displayName.charAt(0).toUpperCase();
+        userAvatar.title = displayName;
+      }
+
+      // ===================== PRODUCTS DATA =====================
+      async function loadProducts() {
+        try {
+          showLoading("Đang tải sản phẩm...");
+
+          const response = await fetch("/api/products", {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (response.ok) {
+            const result = await response.json();
+            products = result.products || [];
+            filteredProducts = [...products];
+            displayProducts(filteredProducts);
+            console.log("✅ Products loaded:", products.length);
+          } else {
+            throw new Error("Failed to load products");
+          }
+        } catch (error) {
+          console.error("❌ Load products error:", error);
+          showNotification("Không thể tải danh sách sản phẩm", "error");
+          displayEmptyState();
+        } finally {
+          hideLoading();
+        }
+      }
+
+      // ===================== DISPLAY FUNCTIONS =====================
+      function displayProducts(productsToShow) {
+        const productsGrid = document.getElementById("productsGrid");
+
+        if (productsToShow.length === 0) {
+          displayEmptyState();
+          return;
+        }
+
+        productsGrid.innerHTML = productsToShow
+          .map((product) => createProductCard(product))
+          .join("");
+
+        console.log(`✅ Displayed ${productsToShow.length} products`);
+      }
+
+      function createProductCard(product) {
+        const stockStatus = getStockStatus(product.stock);
+        const productImage =
+          product.image_url ||
+          "https://via.placeholder.com/300x200?text=No+Image";
+        const categoryIcon = getCategoryIcon(
+          product.category_id || product.category
+        );
+
+        return `
+          <div class="product-card" data-id="${product.id}">
+            <div class="product-image" style="background: none; padding: 0;">
+              <img src="${productImage}" alt="${product.name}" 
+                   style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px 12px 0 0;"
+                   onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+              <div style="display: none; width: 100%; height: 100%; background: linear-gradient(135deg, #667eea, #764ba2); align-items: center; justify-content: center; font-size: 48px; color: white;">
+                <i class="${categoryIcon}"></i>
+              </div>
+            </div>
+            <div class="product-details">
+              <h3 class="product-name">${product.name}</h3>
+              <p class="product-category">${
+                product.category_name || product.category
+              }</p>
+              <div class="product-price">${formatVNDPrice(product.price)}</div>
+              <div class="product-stock">
+                <span class="stock-badge ${stockStatus.class}">
+                  ${stockStatus.text}
+                </span>
+                <span>${product.stock} trong kho</span>
+              </div>
+              <div class="product-actions">
+                <button class="action-btn btn-edit" data-product-id="${
+                  product.id
+                }" data-action="edit">
+                  <i class="fas fa-edit"></i>
+                  Sửa
+                </button>
+                <button class="action-btn btn-delete" data-product-id="${
+                  product.id
+                }" data-action="delete">
+                  <i class="fas fa-trash"></i>
+                  Xóa
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      function getCategoryIcon(categoryId) {
+        const icons = {
+          ca01: "fas fa-carrot", // Rau củ
+          ca02: "fas fa-apple-alt", // Trái cây
+          ca03: "fas fa-coffee", // Đồ uống
+          ca04: "fas fa-cookie-bite", // Đồ ăn nhẹ
+          ca05: "fas fa-pepper-hot", // Gia vị
+          ca06: "fas fa-soap", // Vệ sinh
+          ca07: "fas fa-home", // Hàng tạp hóa
+          // Fallback for old categories
+          Electronics: "fas fa-mobile-alt",
+          Computers: "fas fa-laptop",
+          Audio: "fas fa-headphones",
+          Tablets: "fas fa-tablet-alt",
+          Wearables: "fas fa-watch",
+        };
+        return icons[categoryId] || "fas fa-box";
+      }
+
+      function formatVNDPrice(price) {
+        return new Intl.NumberFormat("vi-VN", {
+          style: "currency",
+          currency: "VND",
+        }).format(price);
+      }
+
+      function getStockStatus(stock) {
+        if (stock === 0) {
+          return { class: "stock-out", text: "Hết hàng" };
+        } else if (stock <= 10) {
+          return { class: "stock-low", text: "Sắp hết" };
+        } else {
+          return { class: "stock-in", text: "Còn hàng" };
+        }
+      }
+
+      function displayEmptyState() {
+        const productsGrid = document.getElementById("productsGrid");
+        productsGrid.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            <i class="fas fa-box-open"></i>
+            <h3>Không có sản phẩm nào</h3>
+            <p>Chưa có sản phẩm trong danh sách hoặc không tìm thấy sản phẩm phù hợp với bộ lọc.</p>
+          </div>
+        `;
+      }
+
+      // ===================== SEARCH AND FILTER =====================
+      function setupFilters() {
+        const searchInput = document.getElementById("searchInput");
+        const categoryFilter = document.getElementById("categoryFilter");
+        const stockFilter = document.getElementById("stockFilter");
+
+        searchInput.addEventListener("input", applyFilters);
+        categoryFilter.addEventListener("change", applyFilters);
+        stockFilter.addEventListener("change", applyFilters);
+      }
+
+      function applyFilters() {
+        const searchTerm = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const categoryFilter = document.getElementById("categoryFilter").value;
+        const stockFilter = document.getElementById("stockFilter").value;
+
+        filteredProducts = products.filter((product) => {
+          const matchesSearch = product.name.toLowerCase().includes(searchTerm);
+          const matchesCategory =
+            !categoryFilter ||
+            product.category_id === categoryFilter ||
+            product.category === categoryFilter;
+          const matchesStock = filterByStock(product, stockFilter);
+
+          return matchesSearch && matchesCategory && matchesStock;
+        });
+
+        displayProducts(filteredProducts);
+      }
+
+      function filterByStock(product, stockFilter) {
+        switch (stockFilter) {
+          case "instock":
+            return product.stock > 10;
+          case "lowstock":
+            return product.stock > 0 && product.stock <= 10;
+          case "outstock":
+            return product.stock === 0;
+          default:
+            return true;
+        }
+      }
+
+      // ===================== PRODUCT ACTIONS =====================
+      function addProduct() {
+        editingProductId = null;
+        document.getElementById("modalTitle").textContent = "Thêm sản phẩm mới";
+        document.getElementById("modalIcon").className = "fas fa-plus";
+        document.getElementById("saveButtonText").textContent = "Thêm sản phẩm";
+
+        // Clear form
+        document.getElementById("productForm").reset();
+
+        // Show modal
+        document.getElementById("productModal").classList.add("show");
+      }
+
+      function editProduct(id) {
+        const product = products.find((p) => p.id === id);
+        if (!product) {
+          showNotification("Không tìm thấy sản phẩm", "error");
+          return;
+        }
+
+        editingProductId = id;
+        document.getElementById("modalTitle").textContent = "Sửa sản phẩm";
+        document.getElementById("modalIcon").className = "fas fa-edit";
+        document.getElementById("saveButtonText").textContent = "Lưu thay đổi";
+
+        // Fill form with product data
+        document.getElementById("productName").value = product.name;
+        document.getElementById("productPrice").value = product.price;
+        document.getElementById("productStock").value = product.stock;
+        document.getElementById("productCategory").value =
+          product.category_id || product.category;
+        document.getElementById("productDescription").value =
+          product.description || "";
+        document.getElementById("productImageUrl").value =
+          product.image_url || "";
+
+        // Show modal
+        document.getElementById("productModal").classList.add("show");
+      }
+
+      function deleteProduct(id) {
+        const product = products.find((p) => p.id === id);
+        if (!product) {
+          showNotification("Không tìm thấy sản phẩm", "error");
+          return;
+        }
+
+        productToDelete = product;
+        document.getElementById("deleteProductName").textContent = product.name;
+        document.getElementById("deleteModal").classList.add("show");
+      }
+
+      // ===================== MODAL FUNCTIONS =====================
+      function closeProductModal() {
+        document.getElementById("productModal").classList.remove("show");
+        document.getElementById("productForm").reset();
+        // Clear image URL field specifically
+        document.getElementById("productImageUrl").value = "";
+        editingProductId = null;
+      }
+
+      function closeDeleteModal() {
+        document.getElementById("deleteModal").classList.remove("show");
+        productToDelete = null;
+      }
+
+      async function saveProduct(event) {
+        event.preventDefault();
+
+        const name = document.getElementById("productName").value.trim();
+        const price = parseFloat(document.getElementById("productPrice").value);
+        const stock = parseInt(document.getElementById("productStock").value);
+        const category_id = document.getElementById("productCategory").value;
+        const description = document
+          .getElementById("productDescription")
+          .value.trim();
+        const image_url = document
+          .getElementById("productImageUrl")
+          .value.trim();
+
+        // Validation
+        if (!name || !price || isNaN(stock) || !category_id) {
+          showNotification("Vui lòng điền đầy đủ thông tin bắt buộc", "error");
+          return;
+        }
+
+        if (price <= 0) {
+          showNotification("Giá sản phẩm phải lớn hơn 0", "error");
+          return;
+        }
+
+        if (stock < 0) {
+          showNotification("Số lượng không được âm", "error");
+          return;
+        }
+
+        const productData = {
+          name,
+          price,
+          stock,
+          category_id,
+          description: description || undefined,
+          image_url: image_url || undefined,
+        };
+
+        try {
+          showLoading(
+            editingProductId ? "Đang cập nhật..." : "Đang thêm sản phẩm..."
+          );
+
+          let response;
+          if (editingProductId) {
+            // Update existing product
+            response = await fetch(`/api/products/${editingProductId}`, {
+              method: "PUT",
+              headers: {
+                Authorization: `Bearer ${authToken}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(productData),
+            });
+          } else {
+            // Create new product
+            response = await fetch("/api/products", {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${authToken}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(productData),
+            });
+          }
+
+          const result = await response.json();
+
+          if (response.ok && result.success) {
+            showNotification(
+              editingProductId
+                ? "Cập nhật sản phẩm thành công!"
+                : "Thêm sản phẩm thành công!",
+              "success"
+            );
+            closeProductModal();
+            await loadProducts(); // Reload products list
+          } else {
+            throw new Error(result.error || "Operation failed");
+          }
+        } catch (error) {
+          console.error("❌ Save product error:", error);
+          showNotification(
+            error.message || "Có lỗi xảy ra. Vui lòng thử lại!",
+            "error"
+          );
+        } finally {
+          hideLoading();
+        }
+      }
+
+      async function confirmDelete() {
+        if (!productToDelete) return;
+
+        try {
+          showLoading("Đang xóa sản phẩm...");
+
+          const response = await fetch(`/api/products/${productToDelete.id}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+              "Content-Type": "application/json",
+            },
+          });
+
+          const result = await response.json();
+
+          if (response.ok && result.success) {
+            showNotification("Xóa sản phẩm thành công!", "success");
+            closeDeleteModal();
+            await loadProducts(); // Reload products list
+          } else {
+            throw new Error(result.error || "Delete failed");
+          }
+        } catch (error) {
+          console.error("❌ Delete product error:", error);
+          showNotification(
+            error.message || "Không thể xóa sản phẩm. Vui lòng thử lại!",
+            "error"
+          );
+        } finally {
+          hideLoading();
+        }
+      }
+
+      // ===================== LOGOUT FUNCTIONALITY =====================
+      async function logout() {
+        console.log("🚪 Logout function called");
+
+        const dropdownMenu = document.getElementById("dropdownMenu");
+        dropdownMenu.classList.remove("show");
+
+        console.log("🚪 Starting logout process...");
+
+        try {
+          showLoading("Đang đăng xuất...");
+
+          localStorage.removeItem("authToken");
+          localStorage.removeItem("user");
+          authToken = null;
+          currentUser = null;
+
+          console.log("🧹 Local data cleared");
+          hideLoading();
+          console.log("🚪 About to redirect...");
+
+          window.location.href = "/login";
+        } catch (error) {
+          console.error("❌ Logout error:", error);
+          hideLoading();
+          window.location.href = "/login";
+        }
+      }
+
+      // ===================== UTILITY FUNCTIONS =====================
+      function showLoading(message = "Đang tải...") {
+        const overlay = document.getElementById("loadingOverlay");
+        const text = overlay.querySelector(".loading-text");
+        if (text) text.textContent = message;
+        overlay.classList.add("show");
+      }
+
+      function hideLoading() {
+        const overlay = document.getElementById("loadingOverlay");
+        overlay.classList.remove("show");
+      }
+
+      function showNotification(message, type = "success", duration = 4000) {
+        const existingNotifications =
+          document.querySelectorAll(".notification");
+        existingNotifications.forEach((notification) => {
+          if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+          }
+        });
+
+        const notification = document.createElement("div");
+        notification.className = `notification ${type}`;
+
+        const icons = {
+          success: "check-circle",
+          error: "exclamation-triangle",
+          info: "info-circle",
+        };
+
+        notification.innerHTML = `
+          <i class="fas fa-${icons[type] || icons.info}"></i>
+          ${message}
+        `;
+
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.style.animation = "slideOutRight 0.4s ease forwards";
+            setTimeout(() => {
+              if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+              }
+            }, 400);
+          }
+        }, duration);
+      }
+
+      // ===================== EVENT LISTENERS =====================
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("🔧 Setting up event listeners...");
+
+        // Settings dropdown
+        const settingsBtn = document.getElementById("settingsBtn");
+        const dropdownMenu = document.getElementById("dropdownMenu");
+
+        if (settingsBtn && dropdownMenu) {
+          settingsBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            dropdownMenu.classList.toggle("show");
+          });
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener("click", (e) => {
+          if (settingsBtn && dropdownMenu) {
+            if (
+              !settingsBtn.contains(e.target) &&
+              !dropdownMenu.contains(e.target)
+            ) {
+              dropdownMenu.classList.remove("show");
+            }
+          }
+        });
+
+        // Logout button
+        const logoutBtn = document.getElementById("logoutBtn");
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log("🚪 Logout button clicked");
+            logout();
+          });
+        }
+
+        // Add product button
+        const addProductBtn = document.getElementById("addProductBtn");
+        if (addProductBtn) {
+          addProductBtn.addEventListener("click", addProduct);
+        }
+
+        // Product modal events
+        const productModal = document.getElementById("productModal");
+        const closeProductModalBtn =
+          document.getElementById("closeProductModal");
+        const cancelProductBtn = document.getElementById("cancelProductBtn");
+        const productForm = document.getElementById("productForm");
+
+        if (closeProductModalBtn) {
+          closeProductModalBtn.addEventListener("click", closeProductModal);
+        }
+
+        if (cancelProductBtn) {
+          cancelProductBtn.addEventListener("click", closeProductModal);
+        }
+
+        if (productForm) {
+          productForm.addEventListener("submit", saveProduct);
+        }
+
+        // Close modal when clicking overlay
+        if (productModal) {
+          productModal.addEventListener("click", (e) => {
+            if (e.target.classList.contains("modal-overlay")) {
+              closeProductModal();
+            }
+          });
+        }
+
+        // Delete modal events
+        const deleteModal = document.getElementById("deleteModal");
+        const closeDeleteModalBtn = document.getElementById("closeDeleteModal");
+        const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
+        const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+
+        if (closeDeleteModalBtn) {
+          closeDeleteModalBtn.addEventListener("click", closeDeleteModal);
+        }
+
+        if (cancelDeleteBtn) {
+          cancelDeleteBtn.addEventListener("click", closeDeleteModal);
+        }
+
+        if (confirmDeleteBtn) {
+          confirmDeleteBtn.addEventListener("click", confirmDelete);
+        }
+
+        // Close delete modal when clicking overlay
+        if (deleteModal) {
+          deleteModal.addEventListener("click", (e) => {
+            if (e.target.classList.contains("modal-overlay")) {
+              closeDeleteModal();
+            }
+          });
+        }
+
+        // Keyboard events
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") {
+            closeProductModal();
+            closeDeleteModal();
+          }
+        });
+
+        // Setup filters
+        setupFilters();
+
+        // Setup product action buttons using event delegation
+        setupProductActions();
+
+        console.log("✅ Event listeners setup complete");
+      });
+
+      // ===================== PRODUCT ACTIONS EVENT DELEGATION =====================
+      function setupProductActions() {
+        const productsGrid = document.getElementById("productsGrid");
+
+        if (productsGrid) {
+          productsGrid.addEventListener("click", function (e) {
+            const target = e.target.closest("button[data-action]");
+            if (!target) return;
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            const productId = parseInt(target.getAttribute("data-product-id"));
+            const action = target.getAttribute("data-action");
+
+            console.log(`🖱️ Product ${action} clicked for ID:`, productId);
+
+            if (action === "edit") {
+              editProduct(productId);
+            } else if (action === "delete") {
+              deleteProduct(productId);
+            }
+          });
+
+          console.log("✅ Product actions event delegation setup complete");
+        }
+      }
+
+      // ===================== NAVIGATION =====================
+      document.querySelectorAll(".nav-item").forEach((item) => {
+        item.addEventListener("click", (e) => {
+          e.preventDefault();
+
+          document
+            .querySelectorAll(".nav-item")
+            .forEach((nav) => nav.classList.remove("active"));
+          item.classList.add("active");
+
+          const page = item.getAttribute("data-page");
+          if (page && page !== "products") {
+            window.location.href = item.href;
+          }
+        });
+      });
+
+      // ===================== INITIALIZATION =====================
+      async function initApp() {
+        console.log("🚀 Initializing Products Page...");
+
+        try {
+          const isAuthenticated = await checkAuth();
+
+          if (isAuthenticated) {
+            console.log("✅ Authentication successful");
+            await loadProducts();
+            console.log("✅ Products page initialized successfully!");
+          } else {
+            console.log("❌ Authentication failed - redirecting to login");
+          }
+        } catch (error) {
+          console.error("❌ App initialization error:", error);
+          showNotification("Lỗi khởi tạo ứng dụng", "error");
+          setTimeout(() => {
+            redirectToLogin();
+          }, 2000);
+        }
+      }
+
+      // Start the application
+      document.addEventListener("DOMContentLoaded", initApp);
+
+      console.log("✅ Products Page Script Loaded");
+
+      // ===================== DEBUG FUNCTIONS =====================
+      // Test functions for debugging
+      window.testEditProduct = function (id = 1) {
+        console.log("🧪 Testing edit product with ID:", id);
+        editProduct(id);
+      };
+
+      window.testDeleteProduct = function (id = 1) {
+        console.log("🧪 Testing delete product with ID:", id);
+        deleteProduct(id);
+      };
+
+      window.testAddProduct = function () {
+        console.log("🧪 Testing add product");
+        addProduct();
+      };
+
+      console.log("🔧 Debug functions available:");
+      console.log("- testEditProduct(id) - Test edit product");
+      console.log("- testDeleteProduct(id) - Test delete product");
+      console.log("- testAddProduct() - Test add product");
+
+      // Auto-test if needed
+      window.debugProducts = function () {
+        console.log("🔍 Current products:", products);
+        console.log("🔍 Filtered products:", filteredProducts);
+        console.log(
+          "🔍 Products grid element:",
+          document.getElementById("productsGrid")
+        );
+
+        // Test if buttons exist
+        const editBtns = document.querySelectorAll('[data-action="edit"]');
+        const deleteBtns = document.querySelectorAll('[data-action="delete"]');
+        console.log("🔍 Edit buttons found:", editBtns.length);
+        console.log("🔍 Delete buttons found:", deleteBtns.length);
+
+        if (editBtns.length > 0) {
+          console.log("✅ Product action buttons are present");
+        } else {
+          console.log("❌ No product action buttons found");
+        }
+      };
+    </script>
+  </body>
+</html>
