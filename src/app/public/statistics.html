@@ -208,7 +208,6 @@
         text-align: center;
       }
 
-      /* Main Content */
       .main-content {
         padding: 30px;
         max-width: 1400px;
@@ -237,7 +236,6 @@
         font-size: 16px;
       }
 
-      /* Chart Section */
       .chart-section {
         background: white;
         border-radius: 16px;
@@ -301,24 +299,21 @@
         height: 300px !important;
       }
 
-      /* Điều chỉnh biểu đồ tròn */
       #productSalesChart {
-        height: 537.6px !important; /* Tăng 20% từ 448px */
+        height: 537.6px !important;
       }
 
       .chart-col h3 {
         font-size: 16px;
-        margin-bottom: 5px; /* Giảm khoảng cách dưới tiêu đề */
+        margin-bottom: 5px;
         color: #2c3e50;
       }
 
-      /* Điều chỉnh danh mục sản phẩm */
       .chart-col .chartjs-legend {
-        font-size: 14px; /* Tăng kích thước chữ danh mục */
-        margin-top: -10px; /* Kéo danh mục lên cao hơn */
+        font-size: 14px;
+        margin-top: -10px;
       }
 
-      /* Month Selector */
       .month-selector {
         display: flex;
         align-items: center;
@@ -341,7 +336,6 @@
         box-shadow: 0 0 5px rgba(74, 144, 226, 0.3);
       }
 
-      /* Summary Table */
       .summary-table {
         width: 100%;
         border-collapse: collapse;
@@ -394,7 +388,6 @@
         color: #e74c3c;
       }
 
-      /* Responsive Design */
       @media (max-width: 1200px) {
         .chart-col,
         .table-col {
@@ -407,7 +400,7 @@
         }
 
         #productSalesChart {
-          height: 420px !important; /* Tăng 20% từ 350px */
+          height: 420px !important;
         }
       }
 
@@ -455,7 +448,7 @@
         }
 
         #productSalesChart {
-          height: 369.6px !important; /* Tăng 20% từ 308px */
+          height: 369.6px !important;
         }
       }
 
@@ -486,13 +479,112 @@
         }
 
         #productSalesChart {
-          height: 336px !important; /* Tăng 20% từ 280px */
+          height: 336px !important;
+        }
+      }
+
+      .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .loading-overlay.show {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .spinner {
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-top: 4px solid #4a90e2;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+      }
+
+      .loading-text {
+        color: white;
+        margin-top: 10px;
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #fff;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        z-index: 1000;
+        animation: slideInRight 0.4s ease;
+      }
+
+      .notification.success {
+        border-left: 4px solid #28a745;
+      }
+
+      .notification.error {
+        border-left: 4px solid #dc3545;
+      }
+
+      .notification.warning {
+        border-left: 4px solid #ffc107;
+      }
+
+      .notification.info {
+        border-left: 4px solid #17a2b8;
+      }
+
+      @keyframes slideInRight {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideOutRight {
+        from {
+          transform: translateX(0);
+          opacity: 1;
+        }
+        to {
+          transform: translateX(100%);
+          opacity: 0;
         }
       }
     </style>
   </head>
   <body>
-    <!-- Loading overlay -->
     <div class="loading-overlay" id="loadingOverlay">
       <div class="spinner"></div>
       <div class="loading-text">Đang tải dữ liệu...</div>
@@ -501,33 +593,45 @@
     <header class="header">
       <div class="logo">
         <i class="fas fa-chart-line"></i>
-        <span>Sales Management System</span>
+        <span>MeTroMini Store</span>
       </div>
 
       <nav class="nav-menu">
-        <a href="/dashboard" class="nav-item" data-page="dashboard">
+        <a
+          href="/dashboard"
+          class="nav-item nav-dashboard"
+          data-page="dashboard"
+        >
           <i class="fas fa-home"></i>
           Tổng quan
         </a>
-        <a href="/products-page" class="nav-item" data-page="products">
+        <a
+          href="/products-page"
+          class="nav-item nav-products"
+          data-page="products"
+        >
           <i class="fas fa-box"></i>
           Sản phẩm
         </a>
-        <a href="/customers-page" class="nav-item" data-page="customers">
+        <a
+          href="/customers-page"
+          class="nav-item nav-customers"
+          data-page="customers"
+        >
           <i class="fas fa-users"></i>
           Khách hàng
         </a>
-        <a href="/orders-page" class="nav-item" data-page="orders">
+        <a href="/orders-page" class="nav-item nav-orders" data-page="orders">
           <i class="fas fa-shopping-cart"></i>
           Đơn hàng
         </a>
         <a
           href="/statistics-page"
-          class="nav-item active"
+          class="nav-item nav-statistics active"
           data-page="statistics"
         >
           <i class="fas fa-chart-bar"></i>
-          Thống Kê
+          Thống kê
         </a>
       </nav>
 
@@ -541,12 +645,10 @@
         </button>
         <div class="dropdown-menu" id="dropdownMenu">
           <button class="dropdown-item" id="profileBtn">
-            <i class="fas fa-user dropdown-icon"></i>
-            Thông tin cá nhân
+            <i class="fas fa-user dropdown-icon"></i> Thông tin cá nhân
           </button>
           <button class="dropdown-item" id="logoutBtn">
-            <i class="fas fa-sign-out-alt dropdown-icon"></i>
-            Đăng xuất
+            <i class="fas fa-sign-out-alt dropdown-icon"></i> Đăng xuất
           </button>
         </div>
       </div>
@@ -558,19 +660,17 @@
         <p class="page-subtitle">Tổng quan doanh thu và hiệu suất bán hàng</p>
       </div>
 
-      <!-- Biểu đồ Doanh thu (Tháng và Năm) -->
       <div class="chart-section">
         <div class="section-header">
           <h2 class="section-title">
-            <i class="fas fa-chart-bar"></i>
-            Thống Kê Doanh Thu
+            <i class="fas fa-chart-bar"></i> Thống Kê Doanh Thu
           </h2>
           <div class="month-selector">
             <label for="yearSelect">Năm:</label>
             <select id="yearSelect" class="form-select">
               <option value="2023">2023</option>
-              <option value="2024" selected>2024</option>
-              <option value="2025">2025</option>
+              <option value="2024">2024</option>
+              <option value="2025" selected>2025</option>
             </select>
             <label for="monthSelect">Tháng:</label>
             <select id="monthSelect" class="form-select">
@@ -578,8 +678,8 @@
               <option value="02">Tháng 2</option>
               <option value="03">Tháng 3</option>
               <option value="04">Tháng 4</option>
-              <option value="05" selected>Tháng 5</option>
-              <option value="06">Tháng 6</option>
+              <option value="05">Tháng 5</option>
+              <option value="06" selected>Tháng 6</option>
               <option value="07">Tháng 7</option>
               <option value="08">Tháng 8</option>
               <option value="09">Tháng 9</option>
@@ -613,14 +713,14 @@
             </div>
             <div class="table-col">
               <h3 style="font-size: 16px; margin-bottom: 10px; color: #2c3e50">
-                Tổng Kết Doanh Thu Năm
+                Thống Kê Doanh Thu Tháng
               </h3>
               <table class="summary-table">
                 <thead>
                   <tr>
                     <th>Tháng</th>
                     <th>Doanh Thu</th>
-                    <th>Tỷ Lệ (%)</th>
+                    <th>Tăng/Giảm (%)</th>
                   </tr>
                 </thead>
                 <tbody id="summaryTableBody">
@@ -642,188 +742,52 @@
     <script>
       console.log("🚀 Statistics Page Loading...");
 
-      // ===================== GLOBAL VARIABLES =====================
+      // Global variables
       let currentUser = null;
-      let authToken = localStorage.getItem("token");
+      let authToken =
+        localStorage.getItem("authToken") ||
+        sessionStorage.getItem("authToken");
       let monthlyRevenueChart = null;
       let yearlyRevenueChart = null;
       let productSalesChart = null;
-      const currentYear = 2025;
-      let currentSelectedYear = "2024"; // Mặc định là 2024 để hiển thị 12 tháng
-      let currentSelectedMonth = "05";
+      let currentSelectedYear = "2025";
+      let currentSelectedMonth = "06";
 
-      // Mock data for 2024 and 2025 (up to May)
-      const mockYearlyData = {
-        2024: Array.from({ length: 12 }, (_, i) => ({
-          month: `2024-${String(i + 1).padStart(2, "0")}-01`,
-          revenue: 500000 + i * 200000, // Tăng dần từ 500k đến 2.7M
-        })),
-        2025: Array.from({ length: 5 }, (_, i) => ({
-          month: `2025-${String(i + 1).padStart(2, "0")}-01`,
-          revenue: 3000000 + i * 500000, // Tăng dần từ 3M đến 4.5M
-        })),
-      };
+      // API Base URL
+      const API_BASE_URL = "/api";
 
-      // Hàm tạo dữ liệu hàng ngày cho một tháng
-      function generateDailyData(year, month, daysInMonth, baseRevenue, range) {
-        return Array.from({ length: daysInMonth }, (_, i) => ({
-          day: `${year}-${month}-${String(i + 1).padStart(2, "0")}`,
-          revenue: baseRevenue + Math.floor(Math.random() * range),
-        }));
-      }
-
-      // Dữ liệu hàng ngày cho 12 tháng năm 2024 và 5 tháng năm 2025
-      const mockMonthlyData = {
-        "2024-01": generateDailyData("2024", "01", 31, 10000, 90000), // 10k - 100k
-        "2024-02": generateDailyData("2024", "02", 29, 15000, 95000), // 15k - 110k
-        "2024-03": generateDailyData("2024", "03", 31, 20000, 100000), // 20k - 120k
-        "2024-04": generateDailyData("2024", "04", 30, 25000, 105000), // 25k - 130k
-        "2024-05": generateDailyData("2024", "05", 31, 30000, 110000), // 30k - 140k
-        "2024-06": generateDailyData("2024", "06", 30, 35000, 115000), // 35k - 150k
-        "2024-07": generateDailyData("2024", "07", 31, 40000, 120000), // 40k - 160k
-        "2024-08": generateDailyData("2024", "08", 31, 45000, 125000), // 45k - 170k
-        "2024-09": generateDailyData("2024", "09", 30, 50000, 130000), // 50k - 180k
-        "2024-10": generateDailyData("2024", "10", 31, 55000, 135000), // 55k - 190k
-        "2024-11": generateDailyData("2024", "11", 30, 60000, 140000), // 60k - 200k
-        "2024-12": generateDailyData("2024", "12", 31, 65000, 145000), // 65k - 210k
-        "2025-01": generateDailyData("2025", "01", 31, 70000, 150000), // 70k - 220k
-        "2025-02": generateDailyData("2025", "02", 28, 75000, 155000), // 75k - 230k
-        "2025-03": generateDailyData("2025", "03", 31, 80000, 160000), // 80k - 240k
-        "2025-04": generateDailyData("2025", "04", 30, 85000, 165000), // 85k - 250k
-        "2025-05": generateDailyData("2025", "05", 27, 90000, 170000), // 90k - 260k (tính đến 27/5)
-      };
-
-      // Hàm tạo dữ liệu số lượng bán ra cho một tháng
-      function generateProductSalesData(baseValues) {
-        return [
-          {
-            category: "Rau củ",
-            quantity: baseValues[0] + Math.floor(Math.random() * 105),
-          },
-          {
-            category: "Đồ uống",
-            quantity: baseValues[1] + Math.floor(Math.random() * 63),
-          },
-          {
-            category: "Gia vị",
-            quantity: baseValues[2] + Math.floor(Math.random() * 42),
-          },
-          {
-            category: "Vệ sinh",
-            quantity: baseValues[3] + Math.floor(Math.random() * 84),
-          },
-          {
-            category: "Trái cây",
-            quantity: baseValues[4] + Math.floor(Math.random() * 126),
-          },
-          {
-            category: "Đồ ăn vặt",
-            quantity: baseValues[5] + Math.floor(Math.random() * 52.5),
-          },
-        ];
-      }
-
-      // Dữ liệu số lượng bán ra cho 12 tháng năm 2024 và 5 tháng năm 2025 (tăng 50% từ 40% trước)
-      const mockProductSalesData = {
-        "2024-01": generateProductSalesData([105, 63, 42, 84, 126, 52.5]), // Tăng 50% từ [70, 42, 28, 56, 84, 35]
-        "2024-02": generateProductSalesData([
-          115.5, 73.5, 46.5, 94.5, 136.5, 58.5,
-        ]),
-        "2024-03": generateProductSalesData([126, 84, 51, 105, 147, 63]),
-        "2024-04": generateProductSalesData([
-          136.5, 94.5, 54, 115.5, 157.5, 67.5,
-        ]),
-        "2024-05": generateProductSalesData([147, 105, 58.5, 126, 168, 73.5]),
-        "2024-06": generateProductSalesData([
-          157.5, 115.5, 63, 136.5, 178.5, 79.5,
-        ]),
-        "2024-07": generateProductSalesData([168, 126, 67.5, 147, 189, 84]),
-        "2024-08": generateProductSalesData([
-          178.5, 136.5, 72, 157.5, 199.5, 88.5,
-        ]),
-        "2024-09": generateProductSalesData([189, 147, 75, 168, 210, 94.5]),
-        "2024-10": generateProductSalesData([
-          199.5, 157.5, 79.5, 178.5, 220.5, 100.5,
-        ]),
-        "2024-11": generateProductSalesData([210, 168, 84, 189, 231, 105]),
-        "2024-12": generateProductSalesData([
-          220.5, 178.5, 88.5, 199.5, 241.5, 109.5,
-        ]),
-        "2025-01": generateProductSalesData([231, 189, 94.5, 210, 252, 115.5]),
-        "2025-02": generateProductSalesData([
-          241.5, 199.5, 100.5, 220.5, 262.5, 121.5,
-        ]),
-        "2025-03": generateProductSalesData([252, 210, 105, 231, 273, 126]),
-        "2025-04": generateProductSalesData([
-          262.5, 220.5, 109.5, 241.5, 283.5, 130.5,
-        ]),
-        "2025-05": generateProductSalesData([273, 231, 115.5, 252, 294, 136.5]),
-      };
-
-      // ===================== ENHANCED AUTHENTICATION =====================
-
-      async function checkAuth(attempt = 1, maxAttempts = 3) {
-        let authToken = localStorage.getItem("token");
-        if (!authToken) {
-          console.error("❌ No auth token found. Please login again.");
-          showNotification(
-            "Phiên đăng nhập đã hết. Vui lòng đăng nhập lại.",
-            "error"
-          );
+      // Authentication check
+      async function checkAuth() {
+        if (!authToken || !authToken.includes(".")) {
+          console.log("❌ Invalid or no auth token found", {
+            localStorage: localStorage.getItem("authToken"),
+            sessionStorage: sessionStorage.getItem("authToken"),
+          });
           redirectToLogin();
           return false;
         }
-
         try {
           showLoading("Đang xác thực...");
-          console.log(
-            `🔍 Verifying authentication token (Attempt ${attempt}/${maxAttempts})`
-          );
           const response = await fetch("/api/auth/verify", {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
+            headers: { Authorization: `Bearer ${authToken}` },
           });
-          const result = await response.json();
-          if (response.ok && result.success && result.user) {
-            currentUser = result.user;
-            updateUserInfo(result.user);
-            console.log("✅ Authentication verified for:", result.user.name);
-            return true;
-          } else {
+          if (!response.ok)
             throw new Error(
-              result.error ||
-                `HTTP ${response.status}: ${
-                  result.message || "Invalid response"
-                }`
+              `HTTP ${response.status}: ${await response.text()}`
             );
+          const result = await response.json();
+          if (result.success) {
+            currentUser = result.user;
+            updateUserInfo(currentUser);
+            return true;
           }
+          throw new Error("Invalid response");
         } catch (error) {
-          console.error(
-            `❌ Auth verification failed (Attempt ${attempt}):`,
-            error.message
-          );
-          if (attempt < maxAttempts) {
-            console.log(
-              `🔄 Retrying authentication (${attempt + 1}/${maxAttempts})...`
-            );
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-            return checkAuth(attempt + 1, maxAttempts);
-          }
-          console.error(
-            "❌ Max attempts reached. Clearing token and redirecting..."
-          );
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
-          authToken = null;
-          showNotification(
-            `Phiên đăng nhập không hợp lệ: ${error.message}`,
-            "error"
-          );
-          setTimeout(() => redirectToLogin(), 500);
+          console.error("❌ Auth verification failed:", error.message);
+          localStorage.removeItem("authToken");
+          sessionStorage.removeItem("authToken");
+          showNotification("Phiên đăng nhập đã hết hạn", "error");
+          setTimeout(redirectToLogin, 1500);
           return false;
         } finally {
           hideLoading();
@@ -833,62 +797,61 @@
       function redirectToLogin() {
         console.log("🔄 Redirecting to login page");
         showNotification("Đang chuyển hướng đến trang đăng nhập...", "info");
-        setTimeout(() => {
-          window.location.href = "/login";
-        }, 1000);
+        setTimeout(() => (window.location.href = "/login"), 1000);
       }
-
-      async function logout() {
-        console.log("🚪 Logout started");
-        const dropdownMenu = document.getElementById("dropdownMenu");
-        if (dropdownMenu) {
-          dropdownMenu.classList.remove("show");
-        }
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        authToken = null;
-        currentUser = null;
-        console.log("🚪 Redirecting now...");
-        window.location.href = "/login";
-      }
-
-      // ===================== USER INTERFACE UPDATES =====================
 
       function updateUserInfo(user) {
         const userName = document.getElementById("userName");
         const userAvatar = document.getElementById("userAvatar");
-        let displayName = user.fullName || user.name || user.username || "User";
-        userName.textContent = displayName;
-        userAvatar.textContent = displayName.charAt(0).toUpperCase();
-        userAvatar.title = displayName;
-      }
-
-      function capitalize(str) {
-        return str.charAt(0).toUpperCase() + str.slice(1);
-      }
-
-      // ===================== APPLICATION INITIALIZATION =====================
-
-      async function initApp() {
-        console.log("🚀 Initializing Statistics Page...");
-        try {
-          const isAuthenticated = await checkAuth();
-          if (isAuthenticated) {
-            console.log("✅ Authentication successful");
-            await loadStatisticsData();
-            console.log("✅ Statistics page initialized successfully!");
-          } else {
-            console.log("❌ Authentication failed - redirecting to login");
-          }
-        } catch (error) {
-          console.error("❌ App initialization error:", error);
-          showNotification("Lỗi khởi tạo ứng dụng", "error");
-          setTimeout(() => redirectToLogin(), 2000);
+        let displayName =
+          user.full_name || user.name || user.username || "User";
+        if (user.role === "admin" && !displayName) {
+          displayName = "Admin";
+        }
+        console.log("👤 Updating user info:", {
+          displayName,
+          role: user.role,
+          username: user.username,
+        });
+        if (userName) userName.textContent = displayName;
+        if (userAvatar) {
+          userAvatar.textContent = displayName.charAt(0).toUpperCase();
+          userAvatar.title = `${
+            user.role === "admin" ? "Admin" : "User"
+          }: ${displayName}`;
         }
       }
 
-      // ===================== STATISTICS DATA LOADING =====================
+      async function logout() {
+        console.log("🚪 Logging out...");
+        document.getElementById("dropdownMenu").classList.remove("show");
+        try {
+          showLoading("Đang đăng xuất...");
+          const response = await fetch("/api/auth/logout", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+              "Content-Type": "application/json",
+            },
+          });
+          localStorage.removeItem("authToken");
+          sessionStorage.removeItem("authToken");
+          authToken = null;
+          currentUser = null;
+          console.log("🧹 Cleared auth data");
+          window.location.href = "/login";
+        } catch (error) {
+          console.error("❌ Logout error:", error);
+          localStorage.removeItem("authToken");
+          sessionStorage.removeItem("authToken");
+          authToken = null;
+          window.location.href = "/login";
+        } finally {
+          hideLoading();
+        }
+      }
 
+      // Statistics data loading
       async function loadStatisticsData() {
         try {
           showLoading("Đang tải dữ liệu thống kê...");
@@ -909,104 +872,128 @@
       }
 
       async function loadMonthlyRevenue() {
-        const key = `${currentSelectedYear}-${currentSelectedMonth}`;
-        renderMonthlyRevenueChart(mockMonthlyData[key] || []);
+        try {
+          const response = await fetch(
+            `${API_BASE_URL}/statistics/revenue/monthly?year=${currentSelectedYear}`,
+            {
+              headers: {
+                Authorization: `Bearer ${authToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          if (response.status === 401 || response.status === 403) {
+            showNotification("Phiên đăng nhập hết hạn", "error");
+            redirectToLogin();
+            return;
+          }
+          const result = await response.json();
+          console.log("📊 Monthly Revenue API Response:", result); // Thêm dòng này
+          if (response.ok && result.success && Array.isArray(result.data)) {
+            const data = result.data.map((item) => ({
+              month: item.month,
+              revenue: parseFloat(item.revenue) || 0,
+            }));
+            renderMonthlyRevenueChart(data);
+            renderSummaryTable(data);
+          } else {
+            throw new Error(result.error || "Không có dữ liệu doanh thu tháng");
+          }
+        } catch (error) {
+          console.error("❌ Monthly revenue error:", error.message);
+          showNotification(
+            `Lỗi tải doanh thu tháng: ${error.message}`,
+            "error"
+          );
+          renderMonthlyRevenueChart([]);
+          renderSummaryTable([]);
+        }
       }
 
       async function loadYearlyRevenue() {
-        renderYearlyRevenueChart(mockYearlyData[currentSelectedYear] || []);
-        renderSummaryTable(mockYearlyData[currentSelectedYear] || []);
+        try {
+          const response = await fetch(
+            `${API_BASE_URL}/statistics/revenue/yearly`,
+            {
+              headers: {
+                Authorization: `Bearer ${authToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          if (response.status === 401 || response.status === 403) {
+            showNotification("Phiên đăng nhập hết hạn", "error");
+            redirectToLogin();
+            return;
+          }
+          const result = await response.json();
+          if (response.ok && result.success && Array.isArray(result.data)) {
+            const data = result.data.map((item) => ({
+              year: item.year,
+              revenue: parseFloat(item.revenue) || 0,
+            }));
+            renderYearlyRevenueChart(data);
+          } else {
+            throw new Error(
+              result.error || "Không thể tải dữ liệu doanh thu năm"
+            );
+          }
+        } catch (error) {
+          console.error("❌ Yearly revenue error:", error.message);
+          showNotification(`Lỗi tải doanh thu năm: ${error.message}`, "error");
+          renderYearlyRevenueChart([]);
+        }
       }
 
       async function loadProductSales() {
-        const key = `${currentSelectedYear}-${currentSelectedMonth}`;
-        renderProductSalesChart(mockProductSalesData[key] || []);
+        try {
+          const month = `${currentSelectedYear}-${currentSelectedMonth}`;
+          const response = await fetch(
+            `${API_BASE_URL}/statistics/products/sold?year=${currentSelectedYear}&month=${month}`,
+            {
+              headers: {
+                Authorization: `Bearer ${authToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          if (response.status === 401 || response.status === 403) {
+            showNotification("Phiên đăng nhập hết hạn", "error");
+            redirectToLogin();
+            return;
+          }
+          const result = await response.json();
+          if (response.ok && result.success) {
+            const data = result.data.map((item) => ({
+              category: item.category,
+              quantity: parseInt(item.quantity) || 0,
+            }));
+            renderProductSalesChart(data);
+          } else {
+            throw new Error(result.error || "Không thể tải dữ liệu bán hàng");
+          }
+        } catch (error) {
+          console.error("❌ Product sales error:", error.message);
+          showNotification(
+            `Lỗi tải số lượng bán ra: ${error.message}`,
+            "error"
+          );
+          renderProductSalesChart([]);
+        }
       }
 
-      // ===================== CHART RENDERING =====================
-
+      // Chart rendering
       function renderMonthlyRevenueChart(data) {
+        if (typeof Chart === "undefined") {
+          console.error("❌ Chart.js not loaded");
+          showNotification("Lỗi tải thư viện biểu đồ", "error");
+          return;
+        }
         const ctx = document
           .getElementById("monthlyRevenueChart")
           .getContext("2d");
         if (monthlyRevenueChart) {
           monthlyRevenueChart.destroy();
-        }
-
-        const labels = Array.from({ length: 31 }, (_, i) => i + 1); // Tối đa 31 ngày
-        const revenues = labels.map((day) => {
-          const item = data.find((d) => new Date(d.day).getDate() === day);
-          return item ? item.revenue : 0;
-        });
-
-        monthlyRevenueChart = new Chart(ctx, {
-          type: "line",
-          data: {
-            labels: labels,
-            datasets: [
-              {
-                label: "Doanh Thu (VNĐ)",
-                data: revenues,
-                borderColor: "#4a90e2",
-                backgroundColor: "rgba(74, 144, 226, 0.2)",
-                fill: true,
-                tension: 0.3,
-                pointRadius: 4,
-                pointHoverRadius: 6,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            scales: {
-              x: {
-                title: {
-                  display: true,
-                  text: "Ngày trong tháng",
-                },
-                ticks: { stepSize: 5 },
-              },
-              y: {
-                title: {
-                  display: true,
-                  text: "Doanh Thu (VNĐ)",
-                },
-                beginAtZero: true,
-                ticks: {
-                  callback: function (value) {
-                    if (value >= 1000000) return value / 1000000 + "M";
-                    if (value >= 1000) return value / 1000 + "k";
-                    return value;
-                  },
-                },
-              },
-            },
-            plugins: {
-              legend: { display: true, position: "top" },
-              tooltip: {
-                callbacks: {
-                  label: function (context) {
-                    let label = context.dataset.label || "";
-                    if (label) label += ": ";
-                    const value = context.parsed.y;
-                    if (value >= 1000000)
-                      return label + value / 1000000 + "M đ";
-                    if (value >= 1000) return label + value / 1000 + "k đ";
-                    return label + value + " đ";
-                  },
-                },
-              },
-            },
-          },
-        });
-      }
-
-      function renderYearlyRevenueChart(data) {
-        const ctx = document
-          .getElementById("yearlyRevenueChart")
-          .getContext("2d");
-        if (yearlyRevenueChart) {
-          yearlyRevenueChart.destroy();
         }
 
         const labels = Array.from({ length: 12 }, (_, i) => `Tháng ${i + 1}`);
@@ -1015,7 +1002,7 @@
           return item ? item.revenue : 0;
         });
 
-        yearlyRevenueChart = new Chart(ctx, {
+        monthlyRevenueChart = new Chart(ctx, {
           type: "bar",
           data: {
             labels: labels,
@@ -1023,10 +1010,9 @@
               {
                 label: "Doanh Thu (VNĐ)",
                 data: revenues,
-                backgroundColor: "#6a5acd",
-                borderColor: "#5a4ac5",
+                backgroundColor: "#4a90e2",
+                borderColor: "#357ab8",
                 borderWidth: 1,
-                barThickness: 20,
               },
             ],
           },
@@ -1069,7 +1055,80 @@
         });
       }
 
+      function renderYearlyRevenueChart(data) {
+        if (typeof Chart === "undefined") {
+          console.error("❌ Chart.js not loaded");
+          showNotification("Lỗi tải thư viện biểu đồ", "error");
+          return;
+        }
+        const ctx = document
+          .getElementById("yearlyRevenueChart")
+          .getContext("2d");
+        if (yearlyRevenueChart) {
+          yearlyRevenueChart.destroy();
+        }
+
+        const labels = data.map((item) => item.year);
+        const revenues = data.map((item) => item.revenue);
+
+        yearlyRevenueChart = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: "Doanh Thu (VNĐ)",
+                data: revenues,
+                backgroundColor: "#6a5acd",
+                borderColor: "#5a4ac5",
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            scales: {
+              x: {
+                title: { display: true, text: "Năm" },
+              },
+              y: {
+                title: { display: true, text: "Doanh Thu (VNĐ)" },
+                beginAtZero: true,
+                ticks: {
+                  callback: function (value) {
+                    if (value >= 1000000) return value / 1000000 + "M";
+                    if (value >= 1000) return value / 1000 + "k";
+                    return value;
+                  },
+                },
+              },
+            },
+            plugins: {
+              legend: { display: true, position: "top" },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    let label = context.dataset.label || "";
+                    if (label) label += ": ";
+                    const value = context.parsed.y;
+                    if (value >= 1000000)
+                      return label + value / 1000000 + "M đ";
+                    if (value >= 1000) return label + value / 1000 + "k đ";
+                    return label + value + " đ";
+                  },
+                },
+              },
+            },
+          },
+        });
+      }
+
       function renderProductSalesChart(data) {
+        if (typeof Chart === "undefined") {
+          console.error("❌ Chart.js not loaded");
+          showNotification("Lỗi tải thư viện biểu đồ", "error");
+          return;
+        }
         const ctx = document
           .getElementById("productSalesChart")
           .getContext("2d");
@@ -1077,27 +1136,18 @@
           productSalesChart.destroy();
         }
 
-        const categories = [
-          "Rau củ",
-          "Đồ uống",
-          "Gia vị",
-          "Vệ sinh",
-          "Trái cây",
-          "Đồ ăn vặt",
-        ];
-        const quantities = categories.map((cat) => {
-          const item = data.find((d) => d.category === cat);
-          return item ? item.quantity : 0;
-        });
+        const categories = data.map((item) => item.category);
+        const quantities = data.map((item) => item.quantity);
         const total = quantities.reduce((sum, qty) => sum + qty, 0);
         const colors = [
-          "#ff6384",
-          "#36a2eb",
-          "#ffcd56",
-          "#4bc0c0",
-          "#9966ff",
-          "#ff9f40",
-        ];
+          "#e91e63",
+          "#2196f3",
+          "#ffeb3b",
+          "#4caf50",
+          "#9c27b0",
+          "#ff9800",
+          "#00bcd4",
+        ].slice(0, categories.length);
 
         productSalesChart = new Chart(ctx, {
           type: "pie",
@@ -1119,9 +1169,6 @@
               legend: {
                 position: "right",
                 labels: {
-                  font: {
-                    size: 14,
-                  },
                   padding: 15,
                   generateLabels: function (chart) {
                     const data = chart.data;
@@ -1153,7 +1200,7 @@
                   label: function (context) {
                     let label = context.label || "";
                     if (label) label += ": ";
-                    const value = context.parsed;
+                    const value = context.raw;
                     const percentage =
                       total > 0
                         ? ((value / total) * 100).toFixed(1) + "%"
@@ -1171,36 +1218,58 @@
         const tbody = document.getElementById("summaryTableBody");
         tbody.innerHTML = "";
 
-        if (!Array.isArray(data) || data.length === 0) {
-          tbody.innerHTML = `
-            <tr>
-              <td colspan="3" class="empty-state">
-                <i class="fas fa-database"></i>
-                <h3>Không có dữ liệu</h3>
-                <p>Hiện tại chưa có dữ liệu để hiển thị.</p>
-              </td>
-            </tr>`;
-          return;
+        // Hiển thị tất cả tháng, kể cả những tháng không có dữ liệu
+        const labels = Array.from({ length: 12 }, (_, i) => `Tháng ${i + 1}`);
+        const revenues = labels.map((_, i) => {
+          const item = data.find((d) => new Date(d.month).getMonth() === i);
+          return item ? item.revenue : 0;
+        });
+
+        const currentMonthIndex = parseInt(currentSelectedMonth) - 1;
+        const prevMonthIndex =
+          currentMonthIndex === 0 ? 11 : currentMonthIndex - 1;
+        const currentRevenue = revenues[currentMonthIndex] || 0;
+        const prevRevenue = revenues[prevMonthIndex] || 0;
+
+        let changePercent = "-";
+        if (prevRevenue > 0 && currentRevenue > 0) {
+          changePercent = (
+            ((currentRevenue - prevRevenue) / prevRevenue) *
+            100
+          ).toFixed(1);
+          changePercent =
+            changePercent >= 0 ? `+${changePercent}%` : `${changePercent}%`;
+        } else if (currentRevenue > 0 && prevRevenue === 0) {
+          changePercent = "+100%";
+        } else if (currentRevenue === 0 && prevRevenue > 0) {
+          changePercent = "-100%";
         }
 
-        const totalRevenue = data.reduce((sum, item) => sum + item.revenue, 0);
-        data.forEach((item) => {
-          const month = new Date(item.month).getMonth() + 1;
-          const revenue = item.revenue;
-          const percentage =
-            totalRevenue > 0 ? ((revenue / totalRevenue) * 100).toFixed(1) : 0;
+        labels.forEach((label, i) => {
+          const revenue = revenues[i];
+          const isCurrentMonth = i === currentMonthIndex;
+          const displayChange = isCurrentMonth ? changePercent : "-";
 
           const row = document.createElement("tr");
           row.innerHTML = `
-            <td>Tháng ${month}</td>
-            <td class="revenue-amount">${formatCurrency(revenue)}</td>
-            <td>${percentage}%</td>
-          `;
+      <td>${label}</td>
+      <td class="revenue-amount">${formatCurrency(revenue)}</td>
+      <td style="color: ${
+        isCurrentMonth
+          ? changePercent.includes("+")
+            ? "#28a745"
+            : changePercent.includes("-")
+            ? "#dc3545"
+            : "#666"
+          : "#666"
+      }">${displayChange}</td>
+    `;
           tbody.appendChild(row);
         });
       }
 
       function formatCurrency(amount) {
+        if (!amount && amount !== 0) return "0 đ";
         if (amount >= 1000000) {
           return (amount / 1000000).toFixed(1) + "M đ";
         } else if (amount >= 1000) {
@@ -1210,13 +1279,13 @@
         }
       }
 
-      // ===================== NOTIFICATION AND LOADING =====================
-
+      // Notification and loading
       function showNotification(message, type = "success", duration = 4000) {
         const existingNotifications =
           document.querySelectorAll(".notification");
         existingNotifications.forEach((notification) => notification.remove());
 
+        const sanitizedMessage = message.replace(/<[^>]+>/g, "");
         const notification = document.createElement("div");
         notification.className = `notification ${type}`;
         const icons = {
@@ -1225,10 +1294,7 @@
           warning: "exclamation-circle",
           info: "info-circle",
         };
-        notification.innerHTML = `
-          <i class="fas fa-${icons[type] || icons.info}"></i>
-          ${message}
-        `;
+        notification.innerHTML = `<i class="fas fa-${icons[type]}"></i> ${sanitizedMessage}`;
         document.body.appendChild(notification);
 
         setTimeout(() => {
@@ -1245,37 +1311,43 @@
       }
 
       function hideLoading() {
-        const overlay = document.getElementById("loadingOverlay");
-        overlay.classList.remove("show");
+        document.getElementById("loadingOverlay").classList.remove("show");
       }
 
-      // ===================== EVENT HANDLERS =====================
-
-      document.querySelectorAll(".nav-item").forEach((item) => {
-        item.addEventListener("click", (e) => {
-          e.preventDefault();
-          document
-            .querySelectorAll(".nav-item")
-            .forEach((nav) => nav.classList.remove("active"));
-          item.classList.add("active");
-          const page = item.getAttribute("data-page");
-          if (page && page !== "statistics") {
-            window.location.href = item.href;
-          }
-        });
-      });
-
+      // Event handlers
       document.addEventListener("DOMContentLoaded", () => {
         console.log("📅 DOM fully loaded and parsed");
 
-        const logoutBtn = document.getElementById("logoutBtn");
-        if (logoutBtn) {
-          logoutBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            console.log("🚪 Logout button clicked");
-            logout();
+        const settingsBtn = document.getElementById("settingsBtn");
+        const dropdownMenu = document.getElementById("dropdownMenu");
+        if (settingsBtn && dropdownMenu) {
+          settingsBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            dropdownMenu.classList.toggle("show");
           });
         }
+
+        document.addEventListener("click", (e) => {
+          if (
+            settingsBtn &&
+            dropdownMenu &&
+            !settingsBtn.contains(e.target) &&
+            !dropdownMenu.contains(e.target)
+          ) {
+            dropdownMenu.classList.remove("show");
+          }
+        });
+
+        const profileBtn = document.getElementById("profileBtn");
+        const logoutBtn = document.getElementById("logoutBtn");
+        if (profileBtn)
+          profileBtn.addEventListener("click", () =>
+            showNotification(
+              "Chức năng thông tin cá nhân đang phát triển",
+              "info"
+            )
+          );
+        if (logoutBtn) logoutBtn.addEventListener("click", logout);
 
         const yearSelect = document.getElementById("yearSelect");
         const monthSelect = document.getElementById("monthSelect");
@@ -1291,75 +1363,56 @@
             console.log("📅 Month selected:", currentSelectedMonth);
           });
         }
-      });
 
-      const settingsBtn = document.getElementById("settingsBtn");
-      const dropdownMenu = document.getElementById("dropdownMenu");
-      if (settingsBtn && dropdownMenu) {
-        settingsBtn.addEventListener("click", (e) => {
-          e.stopPropagation();
-          dropdownMenu.classList.toggle("show");
-          console.log("⚙️ Settings dropdown toggled");
+        // Navigation
+        document.querySelectorAll(".nav-item").forEach((item) => {
+          item.addEventListener("click", (e) => {
+            e.preventDefault();
+            document
+              .querySelectorAll(".nav-item")
+              .forEach((nav) => nav.classList.remove("active"));
+            item.classList.add("active");
+            const href = item.getAttribute("href");
+            console.log(`🔗 Navigating to: ${href}`);
+            window.location.href = href;
+          });
         });
-      }
 
-      document.addEventListener("click", (e) => {
-        if (
-          settingsBtn &&
-          dropdownMenu &&
-          !settingsBtn.contains(e.target) &&
-          !dropdownMenu.contains(e.target)
-        ) {
-          dropdownMenu.classList.remove("show");
+        // Initialize app
+        async function initApp() {
+          console.log("🚀 Initializing Statistics Page...");
+          try {
+            const isAuthenticated = await checkAuth();
+            if (isAuthenticated) {
+              console.log("✅ Authentication successful");
+              await loadStatisticsData();
+              console.log("✅ Statistics page initialized successfully!");
+            }
+          } catch (error) {
+            console.error("❌ App initialization error:", error);
+            showNotification("Lỗi khởi tạo ứng dụng", "error");
+            setTimeout(() => redirectToLogin(), 2000);
+          }
         }
+
+        initApp();
       });
 
-      // ===================== SECURITY & LIFECYCLE MANAGEMENT =====================
-
+      // Security & lifecycle management
       document.addEventListener("visibilitychange", () => {
         if (!document.hidden && authToken) {
           checkAuth();
         }
       });
 
-      setInterval(() => {
-        if (authToken && !document.hidden) {
-          checkAuth();
-        }
-      }, 5 * 60 * 1000);
-
-      window.addEventListener("popstate", (e) => {
-        if (!authToken) {
-          window.location.href = "/login";
-        }
-      });
-
-      window.addEventListener("pageshow", (e) => {
-        if (e.persisted && !authToken) {
-          window.location.href = "/login";
-        }
-      });
-
       document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") {
           const dropdownMenu = document.getElementById("dropdownMenu");
-          if (dropdownMenu) {
-            dropdownMenu.classList.remove("show");
-          }
+          if (dropdownMenu) dropdownMenu.classList.remove("show");
         }
       });
 
-      // ===================== APPLICATION STARTUP =====================
-
-      document.addEventListener("DOMContentLoaded", initApp);
-
-      setInterval(() => {
-        if (authToken && !document.hidden) {
-          loadStatisticsData();
-        }
-      }, 5 * 60 * 1000);
-
-      console.log("✅ Statistics Page loaded");
+      console.log("✅ Statistics Page Script Loaded");
     </script>
   </body>
 </html>

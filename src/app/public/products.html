@@ -24,6 +24,7 @@
         line-height: 1.6;
       }
 
+      /* Header */
       .header {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
@@ -62,12 +63,12 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        cursor: pointer;
-        padding: 10px 15px;
-        border-radius: 8px;
-        transition: all 0.3s ease;
+        cursor: 8px;
+        padding: 8px;
+        border-radius: 5px;
+        transition: 0.3s ease;
         text-decoration: none;
-        color: white;
+        color: #fff;
         font-weight: 500;
         position: relative;
       }
@@ -79,7 +80,7 @@
 
       .nav-item.active {
         background: rgba(255, 255, 255, 0.25);
-        font-weight: 600;
+        font-weight: bold 600;
       }
 
       .nav-item.active::after {
@@ -102,7 +103,7 @@
       }
 
       .user-name {
-        font-weight: 600;
+        font-weight: 18px;
         font-size: 15px;
       }
 
@@ -124,14 +125,14 @@
 
       .user-avatar:hover {
         transform: scale(1.05);
-        border-color: rgba(255, 255, 255, 0.5);
+        border-color: rgba(255, 0, 255, 0.5);
       }
 
       .settings-btn {
         background: rgba(255, 255, 255, 0.1);
         border: none;
-        color: white;
-        font-size: 18px;
+        color: #fff;
+        font-size: 16px;
         cursor: pointer;
         padding: 10px;
         border-radius: 8px;
@@ -156,8 +157,8 @@
         transform: translateY(-15px);
         transition: all 0.4s ease;
         z-index: 1000;
-        overflow: hidden;
-        border: 1px solid rgba(0, 0, 0, 0.1);
+        overflow: 0px;
+        border: 1px solid rgba(0, 0, 0.1);
       }
 
       .dropdown-menu.show {
@@ -170,7 +171,7 @@
         display: flex;
         align-items: center;
         gap: 15px;
-        padding: 15px 20px;
+        padding: 10px;
         color: #333;
         text-decoration: none;
         transition: all 0.2s ease;
@@ -316,6 +317,7 @@
         border-color: #667eea;
       }
 
+      /* Products Grid */
       .products-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -327,9 +329,12 @@
         background: white;
         border-radius: 12px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
         overflow: hidden;
         border: 1px solid #f0f0f0;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        transition: all 0.3s ease;
       }
 
       .product-card:hover {
@@ -338,18 +343,38 @@
       }
 
       .product-image {
+        width: 100%;
         height: 200px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 48px;
-        color: white;
+        overflow: hidden;
         position: relative;
       }
 
-      .product-details {
+      .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+
+      .product-image:hover img {
+        transform: scale(1.05);
+      }
+
+      .hot-label {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #e74c3c;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+
+      .product-info {
         padding: 20px;
+        flex-grow: 1;
       }
 
       .product-name {
@@ -401,9 +426,23 @@
         color: #721c24;
       }
 
+      .product-description {
+        color: #7f8c8d;
+        font-size: 14px;
+        line-height: 1.5;
+        margin-bottom: 12px;
+      }
+
+      .product-meta {
+        color: #95a5a6;
+        font-size: 12px;
+      }
+
       .product-actions {
+        padding: 15px 20px;
         display: flex;
         gap: 10px;
+        border-top: 1px solid #f0f0f0;
       }
 
       .action-btn {
@@ -438,6 +477,7 @@
         background: #c82333;
       }
 
+      /* Empty State */
       .empty-state {
         text-align: center;
         padding: 60px 40px;
@@ -460,7 +500,7 @@
         font-size: 16px;
       }
 
-      /* Loading and notification styles */
+      /* Loading Overlay */
       .loading-overlay {
         position: fixed;
         top: 0;
@@ -509,6 +549,7 @@
         }
       }
 
+      /* Notification */
       .notification {
         position: fixed;
         top: 25px;
@@ -540,6 +581,12 @@
         border-left: 4px solid #ffc107;
       }
 
+      .notification.info {
+        background: #d1ecf1;
+        color: #0c5460;
+        border-left: 4px solid #17a2b8;
+      }
+
       @keyframes slideInRight {
         from {
           transform: translateX(100%);
@@ -551,7 +598,7 @@
         }
       }
 
-      /* Modal styles */
+      /* Modal */
       .modal-overlay {
         position: fixed;
         top: 0;
@@ -750,7 +797,7 @@
         box-shadow: 0 6px 20px rgba(220, 53, 69, 0.3);
       }
 
-      /* Delete confirmation modal */
+      /* Delete Confirmation Modal */
       .delete-modal .modal-content {
         max-width: 400px;
         text-align: center;
@@ -803,13 +850,31 @@
           width: 100%;
         }
 
-        .search-input {
+        .search-input,
+        .filter-select {
           width: 100%;
         }
 
         .products-grid {
           grid-template-columns: 1fr;
           padding: 20px;
+        }
+
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+
+        .modal-content {
+          padding: 25px 20px;
+          margin: 20px;
+        }
+
+        .product-description {
+          font-size: 13px;
+        }
+
+        .product-meta {
+          font-size: 11px;
         }
       }
     </style>
@@ -824,29 +889,45 @@
     <header class="header">
       <div class="logo">
         <i class="fas fa-chart-line"></i>
-        <span>Sales Management System</span>
+        <span>MeTroMini Store</span>
       </div>
 
       <nav class="nav-menu">
-        <a href="/dashboard" class="nav-item" data-page="dashboard">
+        <a
+          href="/dashboard"
+          class="nav-item nav-dashboard"
+          data-page="dashboard"
+        >
           <i class="fas fa-home"></i>
           Tổng quan
         </a>
-        <a href="/products-page" class="nav-item active" data-page="products">
+        <a
+          href="/products-page"
+          class="nav-item nav-products"
+          data-page="products"
+        >
           <i class="fas fa-box"></i>
           Sản phẩm
         </a>
-        <a href="/customers-page" class="nav-item" data-page="customers">
+        <a
+          href="/customers-page"
+          class="nav-item nav-customers"
+          data-page="customers"
+        >
           <i class="fas fa-users"></i>
           Khách hàng
         </a>
-        <a href="/orders-page" class="nav-item" data-page="orders">
+        <a href="/orders-page" class="nav-item nav-orders" data-page="orders">
           <i class="fas fa-shopping-cart"></i>
           Đơn hàng
         </a>
-        <a href="/statistics-page" class="nav-item" data-page="statistics">
+        <a
+          href="/statistics-page"
+          class="nav-item nav-statistics"
+          data-page="statistics"
+        >
           <i class="fas fa-chart-bar"></i>
-          Thống Kê
+          Thống kê
         </a>
       </nav>
 
@@ -894,7 +975,9 @@
               type="text"
               class="search-input"
               id="searchInput"
-              placeholder="Tìm kiếm sản phẩm..."
+              placeholder="Tìm kiếm theo tên sản phẩm..."
+              autocomplete="new-text"
+              name="search_random"
             />
             <select class="filter-select" id="categoryFilter">
               <option value="">Tất cả danh mục</option>
@@ -920,6 +1003,114 @@
         </div>
       </div>
     </main>
+
+    <!-- Profile Modal -->
+    <div class="modal-overlay profile-modal" id="profileModal">
+      <div class="modal-content">
+        <button class="close-modal" id="closeProfileModalBtn" title="Đóng">
+          ×
+        </button>
+
+        <div class="modal-header">
+          <div class="modal-icon">
+            <i class="fas fa-user"></i>
+          </div>
+          <h2 class="modal-title">Thông tin cá nhân</h2>
+        </div>
+
+        <div class="profile-section">
+          <div class="section-title">
+            <i class="fas fa-id-card"></i>
+            Thông tin tài khoản
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Tên đăng nhập</label>
+              <input
+                type="text"
+                class="form-input"
+                id="profileUsername"
+                readonly
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Vai trò</label>
+              <input
+                type="text"
+                class="form-input"
+                id="profileUserRole"
+                readonly
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-input" id="profileEmail" readonly />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Họ và tên</label>
+            <input type="text" class="form-input" id="profileFullName" />
+          </div>
+        </div>
+
+        <div class="profile-section password-section">
+          <div class="section-title">
+            <i class="fas fa-lock"></i>
+            Đổi mật khẩu
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Mật khẩu hiện tại</label>
+            <input
+              type="password"
+              class="form-input"
+              id="profileOldPassword"
+              placeholder="Nhập mật khẩu hiện tại"
+            />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Mật khẩu mới</label>
+              <input
+                type="password"
+                class="form-input"
+                id="profileNewPassword"
+                placeholder="Nhập mật khẩu mới"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Xác nhận mật khẩu</label>
+              <input
+                type="password"
+                class="form-input"
+                id="profileConfirmPassword"
+                placeholder="Xác nhận mật khẩu"
+              />
+            </div>
+          </div>
+
+          <div class="checkbox-item">
+            <input type="checkbox" id="profileShowPassword" />
+            <label for="profileShowPassword">Hiển thị mật khẩu</label>
+          </div>
+        </div>
+
+        <div class="modal-buttons">
+          <button class="btn btn-secondary" id="profileCancelBtn">
+            <i class="fas fa-times"></i>
+            Hủy
+          </button>
+          <button class="btn btn-primary" id="profileSaveBtn">
+            <i class="fas fa-save"></i>
+            Cập nhật
+          </button>
+        </div>
+      </div>
+    </div>
 
     <!-- Add/Edit Product Modal -->
     <div class="modal-overlay" id="productModal">
@@ -959,6 +1150,10 @@
                 min="0"
                 required
               />
+            </div>
+            <div class="form-group">
+              <input type="checkbox" id="isHot" name="form-checkbox" />
+              <label for="isHot">Sản phẩm nổi bật</label>
             </div>
             <div class="form-group">
               <label class="form-label">Số lượng *</label>
@@ -1078,6 +1273,33 @@
           return false;
         }
 
+        // Kiểm tra token có hợp lệ về định dạng không
+        try {
+          const tokenParts = authToken.split(".");
+          if (tokenParts.length !== 3) {
+            throw new Error("Invalid token format");
+          }
+          const payload = JSON.parse(atob(tokenParts[1]));
+          const expiry = payload.exp * 1000; // Chuyển sang milliseconds
+          if (Date.now() > expiry) {
+            console.log("❌ Token expired locally");
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("user");
+            authToken = null;
+            showNotification("Phiên đăng nhập đã hết hạn", "error");
+            redirectToLogin();
+            return false;
+          }
+        } catch (error) {
+          console.error("❌ Invalid token:", error.message);
+          localStorage.removeItem("authToken");
+          localStorage.removeItem("user");
+          authToken = null;
+          showNotification("Phiên đăng nhập không hợp lệ", "error");
+          redirectToLogin();
+          return false;
+        }
+
         try {
           showLoading("Đang xác thực...");
           console.log("🔍 Verifying authentication token");
@@ -1093,27 +1315,40 @@
 
           if (response.ok) {
             const result = await response.json();
+            console.log("🔍 Auth response:", result);
+
             if (result.success && result.user) {
               currentUser = result.user;
-              updateUserInfo(result.user);
-              console.log("✅ Authentication verified for:", result.user.name);
+
+              if (
+                !currentUser.name &&
+                !currentUser.fullName &&
+                !currentUser.full_name
+              ) {
+                currentUser.name = currentUser.username || "User";
+              }
+
+              updateUserInfo(currentUser);
+              console.log(
+                "✅ Authentication verified for:",
+                currentUser.username || currentUser.name || currentUser.role
+              );
               return true;
             } else {
               throw new Error("Invalid response format");
             }
           } else {
             const errorData = await response.json().catch(() => ({}));
+            console.error("❌ Auth response error:", errorData);
             throw new Error(errorData.error || `HTTP ${response.status}`);
           }
         } catch (error) {
-          console.error("❌ Auth verification failed:", error);
+          console.error("❌ Auth verification failed:", error.message);
           localStorage.removeItem("authToken");
           localStorage.removeItem("user");
           authToken = null;
           showNotification("Phiên đăng nhập đã hết hạn", "error");
-          setTimeout(() => {
-            redirectToLogin();
-          }, 1500);
+          redirectToLogin();
           return false;
         } finally {
           hideLoading();
@@ -1129,17 +1364,66 @@
         const userName = document.getElementById("userName");
         const userAvatar = document.getElementById("userAvatar");
 
-        let displayName = user.fullName || user.name || user.username || "User";
+        // Xử lý tên hiển thị cho admin user
+        let displayName =
+          user.fullName ||
+          user.full_name ||
+          user.name ||
+          user.username ||
+          "User";
 
-        userName.textContent = displayName;
-        userAvatar.textContent = displayName.charAt(0).toUpperCase();
-        userAvatar.title = displayName;
+        // Đảm bảo có tên hiển thị cho admin
+        if (user.role === "admin" && !displayName) {
+          displayName = "Admin";
+        }
+
+        console.log("👤 Updating user info:", {
+          displayName,
+          role: user.role,
+          username: user.username,
+          fullName: user.fullName,
+          full_name: user.full_name,
+          name: user.name,
+        });
+
+        if (userName) {
+          userName.textContent = displayName;
+        }
+
+        if (userAvatar) {
+          userAvatar.textContent = displayName.charAt(0).toUpperCase();
+          userAvatar.title = `${
+            user.role === "admin" ? "Admin" : "User"
+          }: ${displayName}`;
+        }
+
+        // Update profile modal fields
+        const profileUsername = document.getElementById("profileUsername");
+        const profileUserRole = document.getElementById("profileUserRole");
+        const profileEmail = document.getElementById("profileEmail");
+        const profileFullName = document.getElementById("profileFullName");
+
+        if (profileUsername) {
+          profileUsername.value =
+            user.username || (user.role === "admin" ? "admin" : "");
+        }
+        if (profileUserRole) {
+          profileUserRole.value =
+            user.role === "admin" ? "Admin" : user.role || "User";
+        }
+        if (profileEmail) {
+          profileEmail.value = user.email || "";
+        }
+        if (profileFullName) {
+          profileFullName.value =
+            user.fullName || user.full_name || user.name || "";
+        }
       }
-
       // ===================== PRODUCTS DATA =====================
       async function loadProducts() {
         try {
           showLoading("Đang tải sản phẩm...");
+          console.log("📦 Loading products...");
 
           const response = await fetch("/api/products", {
             headers: {
@@ -1150,86 +1434,130 @@
 
           if (response.ok) {
             const result = await response.json();
-            products = result.products || [];
-            filteredProducts = [...products];
-            displayProducts(filteredProducts);
-            console.log("✅ Products loaded:", products.length);
+            console.log("🔍 API /api/products response:", result);
+            if (result.success && Array.isArray(result.products)) {
+              products = result.products;
+              filteredProducts = [...products];
+              displayProducts(filteredProducts);
+            } else {
+              throw new Error(result.error || "Invalid response format");
+            }
           } else {
-            throw new Error("Failed to load products");
+            throw new Error(`HTTP ${response.status}`);
           }
         } catch (error) {
           console.error("❌ Load products error:", error);
-          showNotification("Không thể tải danh sách sản phẩm", "error");
+          products = [];
+          filteredProducts = [];
+          showNotification(
+            `Không thể tải danh sách sản phẩm: ${error.message}`,
+            "error"
+          );
           displayEmptyState();
         } finally {
           hideLoading();
         }
       }
-
       // ===================== DISPLAY FUNCTIONS =====================
       function displayProducts(productsToShow) {
         const productsGrid = document.getElementById("productsGrid");
+        if (!productsGrid) {
+          console.error("❌ Không tìm thấy phần tử productsGrid");
+          return;
+        }
 
         if (productsToShow.length === 0) {
+          console.warn("⚠️ Không có sản phẩm để hiển thị");
+          console.log("🔍 Debug mất sản phẩm:", {
+            productsLength: products.length,
+            filteredProductsLength: filteredProducts.length,
+            searchInput: document.getElementById("searchInput")?.value,
+            categoryFilter: document.getElementById("categoryFilter")?.value,
+            stockFilter: document.getElementById("stockFilter")?.value,
+          });
           displayEmptyState();
           return;
         }
 
+        console.log("🔍 Rendering products:", productsToShow);
         productsGrid.innerHTML = productsToShow
           .map((product) => createProductCard(product))
           .join("");
 
-        console.log(`✅ Displayed ${productsToShow.length} products`);
+        console.log(`✅ Hiển thị ${productsToShow.length} sản phẩm`);
+      }
+
+      function formatVNDCurrency(amount) {
+        if (!amount) return "0đ";
+        if (amount >= 1000000) {
+          return (amount / 1000000).toFixed(1) + "M đ";
+        } else if (amount >= 1000) {
+          return Math.round(amount / 1000) + "k đ";
+        } else {
+          return new Intl.NumberFormat("vi-VN").format(amount) + " đ";
+        }
       }
 
       function createProductCard(product) {
-        const stockStatus = getStockStatus(product.stock);
-        const productImage =
-          product.image_url ||
-          "https://via.placeholder.com/300x200?text=No+Image";
-        const categoryIcon = getCategoryIcon(
-          product.category_id || product.category
-        );
+        if (!product.id) {
+          console.error("❌ Product missing ID:", product);
+          return "";
+        }
+        if (!product.name || !product.price || product.stock === undefined) {
+          console.warn("⚠️ Product missing required fields:", product);
+        }
+
+        // Đảm bảo các trường tồn tại
+        const name = product.name || "Sản phẩm không xác định";
+        const category_name = product.category_name || "Chưa phân loại";
+        const price_vnd =
+          product.price_vnd || formatVNDCurrency(product.price || 0);
+        const stock = product.stock || 0;
+        const image_url = product.image_url || "/images/placeholder.jpg";
+        const stock_status = product.stock_status || getStockStatus(stock);
+        const short_description = product.short_description || "Không có mô tả";
+        const is_hot = product.is_hot || false;
+        const created_at = product.created_at
+          ? new Date(product.created_at).toLocaleDateString("vi-VN")
+          : "N/A";
+        const updated_at = product.updated_at
+          ? new Date(product.updated_at).toLocaleDateString("vi-VN")
+          : "N/A";
 
         return `
-          <div class="product-card" data-id="${product.id}">
-            <div class="product-image" style="background: none; padding: 0;">
-              <img src="${productImage}" alt="${product.name}" 
-                   style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px 12px 0 0;"
-                   onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
-              <div style="display: none; width: 100%; height: 100%; background: linear-gradient(135deg, #667eea, #764ba2); align-items: center; justify-content: center; font-size: 48px; color: white;">
-                <i class="${categoryIcon}"></i>
-              </div>
-            </div>
-            <div class="product-details">
-              <h3 class="product-name">${product.name}</h3>
-              <p class="product-category">${
-                product.category_name || product.category
-              }</p>
-              <div class="product-price">${formatVNDPrice(product.price)}</div>
-              <div class="product-stock">
-                <span class="stock-badge ${stockStatus.class}">
-                  ${stockStatus.text}
-                </span>
-                <span>${product.stock} trong kho</span>
-              </div>
-              <div class="product-actions">
-                <button class="action-btn btn-edit" data-product-id="${
-                  product.id
-                }" data-action="edit">
-                  <i class="fas fa-edit"></i>
-                  Sửa
-                </button>
-                <button class="action-btn btn-delete" data-product-id="${
-                  product.id
-                }" data-action="delete">
-                  <i class="fas fa-trash"></i>
-                  Xóa
-                </button>
-              </div>
-            </div>
-          </div>
-        `;
+    <div class="product-card" data-product-id="${product.id}">
+      <div class="product-image">
+        <img src="${image_url}" 
+             alt="${name}" 
+             onerror="this.src='/images/placeholder.jpg'">
+        ${is_hot ? '<span class="hot-label">Hot</span>' : ""}
+      </div>
+      <div class="product-info">
+        <h3 class="product-name">${name}</h3>
+        <p class="product-category">Danh mục: ${category_name}</p>
+        <p class="product-price">Giá: ${price_vnd}</p>
+        <p class="product-stock ${stock_status.class}">
+          Tồn kho: ${stock} (${stock_status.text})
+        </p>
+        <p class="product-description">${short_description}</p>
+        <p class="product-meta">
+          Tạo: ${created_at} | Cập nhật: ${updated_at}
+        </p>
+      </div>
+      <div class="product-actions">
+        <button class="action-btn btn-edit" data-action="edit" data-product-id="${
+          product.id
+        }">
+          <i class="fas fa-edit"></i> Sửa
+        </button>
+        <button class="action-btn btn-delete" data-action="delete" data-product-id="${
+          product.id
+        }">
+          <i class="fas fa-trash"></i> Xóa
+        </button>
+      </div>
+    </div>
+  `;
       }
 
       function getCategoryIcon(categoryId) {
@@ -1270,43 +1598,147 @@
 
       function displayEmptyState() {
         const productsGrid = document.getElementById("productsGrid");
+        const searchTerm =
+          document.getElementById("searchInput")?.value.trim() || "";
+
+        let message = "Chưa có sản phẩm trong danh sách.";
+        if (searchTerm) {
+          message = `Không tìm thấy sản phẩm nào khớp với "${searchTerm}".`;
+        }
+
         productsGrid.innerHTML = `
-          <div class="empty-state" style="grid-column: 1 / -1;">
-            <i class="fas fa-box-open"></i>
-            <h3>Không có sản phẩm nào</h3>
-            <p>Chưa có sản phẩm trong danh sách hoặc không tìm thấy sản phẩm phù hợp với bộ lọc.</p>
-          </div>
-        `;
+    <div class="empty-state" style="grid-column: 1 / -1;">
+      <i class="fas fa-box-open"></i>
+      <h3>Không có sản phẩm nào</h3>
+      <p>${message}</p>
+    </div>
+  `;
       }
 
       // ===================== SEARCH AND FILTER =====================
+      function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+          const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+          };
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+        };
+      }
+
+      // Update setupFilters to use debounced applyFilters
       function setupFilters() {
         const searchInput = document.getElementById("searchInput");
         const categoryFilter = document.getElementById("categoryFilter");
         const stockFilter = document.getElementById("stockFilter");
 
-        searchInput.addEventListener("input", applyFilters);
-        categoryFilter.addEventListener("change", applyFilters);
-        stockFilter.addEventListener("change", applyFilters);
+        if (!searchInput || !categoryFilter || !stockFilter) {
+          console.warn("⚠️ Filter inputs not found");
+          return;
+        }
+
+        // Prevent browser autofill
+        searchInput.setAttribute("autocomplete", "new-text");
+        searchInput.setAttribute("type", "text");
+        searchInput.setAttribute("name", `search_${Date.now()}`); // Randomize name to block autofill
+
+        // Clear input on page load
+        searchInput.value = "";
+        console.log("✅ Search input cleared on load");
+
+        // Clear email-like input on focus or input
+        searchInput.addEventListener("focus", () => {
+          if (searchInput.value.includes("@")) {
+            console.warn(
+              "⚠️ Detected email in searchInput:",
+              searchInput.value
+            );
+            searchInput.value = "";
+          }
+        });
+        searchInput.addEventListener("input", () => {
+          if (searchInput.value.includes("@")) {
+            console.warn(
+              "⚠️ Detected email in searchInput:",
+              searchInput.value
+            );
+            searchInput.value = "";
+          }
+        });
+
+        const debouncedApplyFilters = debounce(applyFilters, 300);
+        searchInput.addEventListener("input", debouncedApplyFilters);
+        categoryFilter.addEventListener("change", debouncedApplyFilters);
+        stockFilter.addEventListener("change", debouncedApplyFilters);
+
+        console.log("✅ Filters setup with enhanced autofill prevention");
       }
 
       function applyFilters() {
-        const searchTerm = document
-          .getElementById("searchInput")
-          .value.toLowerCase();
-        const categoryFilter = document.getElementById("categoryFilter").value;
-        const stockFilter = document.getElementById("stockFilter").value;
+        const searchInput = document.getElementById("searchInput");
+        const categoryFilter = document.getElementById("categoryFilter");
+        const stockFilter = document.getElementById("stockFilter");
+
+        if (
+          !searchInput ||
+          !categoryFilter ||
+          !stockFilter ||
+          !products ||
+          products.length === 0
+        ) {
+          console.warn("⚠️ Bộ lọc hoặc danh sách sản phẩm không hợp lệ");
+          displayProducts(products || []);
+          showNotification("Không có sản phẩm để lọc", "warning");
+          return;
+        }
+
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        const categoryFilterValue = categoryFilter.value;
+        const stockFilterValue = stockFilter.value;
+
+        console.log("🔍 Áp dụng bộ lọc:", {
+          searchTerm,
+          categoryFilterValue,
+          stockFilterValue,
+        });
+
+        if (!searchTerm && !categoryFilterValue && !stockFilterValue) {
+          filteredProducts = [...products];
+          displayProducts(filteredProducts);
+          console.log("🔍 Không có bộ lọc, hiển thị tất cả sản phẩm");
+          return;
+        }
 
         filteredProducts = products.filter((product) => {
-          const matchesSearch = product.name.toLowerCase().includes(searchTerm);
+          if (
+            !product ||
+            !product.name ||
+            !product.category_id ||
+            product.stock === undefined
+          ) {
+            console.warn("⚠️ Sản phẩm không hợp lệ:", product);
+            return false;
+          }
+
+          const matchesSearch =
+            !searchTerm || product.name.toLowerCase().includes(searchTerm);
           const matchesCategory =
-            !categoryFilter ||
-            product.category_id === categoryFilter ||
-            product.category === categoryFilter;
-          const matchesStock = filterByStock(product, stockFilter);
+            !categoryFilterValue || product.category_id === categoryFilterValue;
+          const matchesStock = filterByStock(product, stockFilterValue);
 
           return matchesSearch && matchesCategory && matchesStock;
         });
+
+        console.log(`🔍 Đã lọc được ${filteredProducts.length} sản phẩm`);
+
+        if (filteredProducts.length === 0 && searchTerm) {
+          showNotification(
+            `Không tìm thấy sản phẩm nào khớp với "${searchTerm}"`,
+            "info"
+          );
+        }
 
         displayProducts(filteredProducts);
       }
@@ -1344,13 +1776,11 @@
           showNotification("Không tìm thấy sản phẩm", "error");
           return;
         }
-
-        editingProductId = id;
+        editingProductId = id; // Keep as string (e.g., 'pr22')
+        console.log("🖱️ Hành động edit cho sản phẩm ID:", editingProductId);
         document.getElementById("modalTitle").textContent = "Sửa sản phẩm";
         document.getElementById("modalIcon").className = "fas fa-edit";
         document.getElementById("saveButtonText").textContent = "Lưu thay đổi";
-
-        // Fill form with product data
         document.getElementById("productName").value = product.name;
         document.getElementById("productPrice").value = product.price;
         document.getElementById("productStock").value = product.stock;
@@ -1360,19 +1790,17 @@
           product.description || "";
         document.getElementById("productImageUrl").value =
           product.image_url || "";
-
-        // Show modal
         document.getElementById("productModal").classList.add("show");
       }
 
+      // In deleteProduct, use string ID directly
       function deleteProduct(id) {
         const product = products.find((p) => p.id === id);
         if (!product) {
           showNotification("Không tìm thấy sản phẩm", "error");
           return;
         }
-
-        productToDelete = product;
+        productToDelete = { ...product, id: id }; // Keep as string
         document.getElementById("deleteProductName").textContent = product.name;
         document.getElementById("deleteModal").classList.add("show");
       }
@@ -1393,6 +1821,12 @@
 
       async function saveProduct(event) {
         event.preventDefault();
+        const saveButton = document.getElementById("saveProductBtn");
+        if (saveButton.disabled) {
+          console.log("🔄 Yêu cầu lưu đang xử lý, bỏ qua...");
+          return;
+        }
+        saveButton.disabled = true;
 
         const name = document.getElementById("productName").value.trim();
         const price = parseFloat(document.getElementById("productPrice").value);
@@ -1404,20 +1838,21 @@
         const image_url = document
           .getElementById("productImageUrl")
           .value.trim();
+        const is_hot = document.getElementById("isHot")?.checked || false; // Thêm trường hot
 
-        // Validation
         if (!name || !price || isNaN(stock) || !category_id) {
           showNotification("Vui lòng điền đầy đủ thông tin bắt buộc", "error");
+          saveButton.disabled = false;
           return;
         }
-
         if (price <= 0) {
           showNotification("Giá sản phẩm phải lớn hơn 0", "error");
+          saveButton.disabled = false;
           return;
         }
-
         if (stock < 0) {
           showNotification("Số lượng không được âm", "error");
+          saveButton.disabled = false;
           return;
         }
 
@@ -1428,37 +1863,40 @@
           category_id,
           description: description || undefined,
           image_url: image_url || undefined,
+          hot: is_hot,
         };
 
         try {
           showLoading(
             editingProductId ? "Đang cập nhật..." : "Đang thêm sản phẩm..."
           );
+          console.log("💾 Sending product update:", {
+            editingProductId,
+            productData,
+            url: editingProductId
+              ? `/api/products/${editingProductId}`
+              : "/api/products",
+          });
 
-          let response;
-          if (editingProductId) {
-            // Update existing product
-            response = await fetch(`/api/products/${editingProductId}`, {
-              method: "PUT",
+          const response = await fetch(
+            editingProductId
+              ? `/api/products/${editingProductId}`
+              : "/api/products",
+            {
+              method: editingProductId ? "PUT" : "POST",
               headers: {
                 Authorization: `Bearer ${authToken}`,
                 "Content-Type": "application/json",
               },
               body: JSON.stringify(productData),
-            });
-          } else {
-            // Create new product
-            response = await fetch("/api/products", {
-              method: "POST",
-              headers: {
-                Authorization: `Bearer ${authToken}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(productData),
-            });
-          }
+            }
+          );
 
           const result = await response.json();
+          console.log("🔍 Save product response:", {
+            status: response.status,
+            result,
+          });
 
           if (response.ok && result.success) {
             showNotification(
@@ -1468,26 +1906,30 @@
               "success"
             );
             closeProductModal();
-            await loadProducts(); // Reload products list
+            await loadProducts();
+            filteredProducts = [...products];
+            displayProducts(filteredProducts);
           } else {
-            throw new Error(result.error || "Operation failed");
+            throw new Error(result.error || `HTTP ${response.status}`);
           }
         } catch (error) {
           console.error("❌ Save product error:", error);
-          showNotification(
-            error.message || "Có lỗi xảy ra. Vui lòng thử lại!",
-            "error"
-          );
+          showNotification(`Lỗi khi lưu sản phẩm: ${error.message}`, "error");
         } finally {
           hideLoading();
+          saveButton.disabled = false;
         }
       }
 
       async function confirmDelete() {
         if (!productToDelete) return;
 
+        const confirmButton = document.getElementById("confirmDeleteBtn");
+        confirmButton.disabled = true; // Disable button to prevent multiple clicks
+
         try {
           showLoading("Đang xóa sản phẩm...");
+          console.log("🗑️ Deleting product:", productToDelete.id);
 
           const response = await fetch(`/api/products/${productToDelete.id}`, {
             method: "DELETE",
@@ -1497,23 +1939,234 @@
             },
           });
 
+          console.log("🗑️ Delete response:", {
+            status: response.status,
+            statusText: response.statusText,
+          });
+
           const result = await response.json();
+          console.log("🗑️ Delete result:", result);
 
           if (response.ok && result.success) {
             showNotification("Xóa sản phẩm thành công!", "success");
             closeDeleteModal();
-            await loadProducts(); // Reload products list
+            await loadProducts();
+            filteredProducts = [...products];
+            displayProducts(filteredProducts);
           } else {
-            throw new Error(result.error || "Delete failed");
+            throw new Error(result.error || `HTTP ${response.status}`);
           }
         } catch (error) {
           console.error("❌ Delete product error:", error);
+          showNotification(`Không thể xóa sản phẩm: ${error.message}`, "error");
+        } finally {
+          hideLoading();
+          confirmButton.disabled = false; // Re-enable button
+        }
+      }
+
+      // ===================== PROFILE FUNCTIONS =====================
+      function viewProfile() {
+        document.getElementById("dropdownMenu").classList.remove("show");
+        document.getElementById("profileModal").classList.add("show");
+      }
+
+      function debugProducts() {
+        console.log("🔍 Products Debug Info:");
+        console.log("- Current products count:", products.length);
+        console.log("- Filtered products count:", filteredProducts.length);
+        console.log("- Auth token:", authToken ? "Present" : "Missing");
+        console.log("- Current user:", currentUser);
+        console.log(
+          "- Products grid element:",
+          document.getElementById("productsGrid")
+        );
+
+        // Test API directly
+        fetch("/api/products", {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("🔍 Direct API test result:", data);
+          })
+          .catch((error) => {
+            console.error("🔍 Direct API test error:", error);
+          });
+      }
+
+      // Expose debug function
+      window.debugProducts = debugProducts;
+
+      console.log("✅ Products system fixes applied successfully");
+
+      function closeProfileModal() {
+        document.getElementById("profileModal").classList.remove("show");
+        // Clear password fields
+        document.getElementById("profileOldPassword").value = "";
+        document.getElementById("profileNewPassword").value = "";
+        document.getElementById("profileConfirmPassword").value = "";
+        document.getElementById("profileShowPassword").checked = false;
+      }
+
+      async function saveProfile() {
+        const oldPassword = document
+          .getElementById("profileOldPassword")
+          .value.trim();
+        const newPassword = document
+          .getElementById("profileNewPassword")
+          .value.trim();
+        const confirmPassword = document
+          .getElementById("profileConfirmPassword")
+          .value.trim();
+        const fullName = document
+          .getElementById("profileFullName")
+          .value.trim();
+
+        // Kiểm tra họ và tên
+        if (!fullName) {
+          showNotification("Vui lòng điền họ và tên", "warning");
+          return;
+        }
+
+        // Kiểm tra mật khẩu nếu người dùng muốn đổi
+        let passwordValid = true;
+        let includePassword = false;
+
+        if (oldPassword || newPassword || confirmPassword) {
+          // Nếu bất kỳ trường mật khẩu nào được điền, yêu cầu cả ba
+          if (!oldPassword || !newPassword || !confirmPassword) {
+            showNotification(
+              "Vui lòng điền đầy đủ thông tin mật khẩu",
+              "warning"
+            );
+            passwordValid = false;
+          } else if (newPassword !== confirmPassword) {
+            showNotification("Mật khẩu mới không khớp", "error");
+            passwordValid = false;
+          } else if (newPassword.length < 6) {
+            showNotification("Mật khẩu mới phải có ít nhất 6 ký tự", "error");
+            passwordValid = false;
+          } else {
+            includePassword = true;
+          }
+        }
+
+        if (!passwordValid) {
+          return; // Dừng nếu mật khẩu không hợp lệ
+        }
+
+        try {
+          showLoading("Đang cập nhật thông tin...");
+
+          const endpoint =
+            currentUser.role === "admin"
+              ? "/api/admin/update"
+              : "/api/auth/update-profile";
+          const updateData =
+            currentUser.role === "admin"
+              ? {
+                  full_name: fullName,
+                  ...(includePassword && {
+                    old_password: oldPassword,
+                    new_password: newPassword,
+                  }),
+                }
+              : {
+                  fullName: fullName,
+                  ...(includePassword && {
+                    oldPassword: oldPassword,
+                    newPassword: newPassword,
+                  }),
+                };
+
+          console.log("📤 Updating profile via:", endpoint, updateData);
+
+          const response = await fetch(endpoint, {
+            method: currentUser.role === "admin" ? "POST" : "PUT",
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updateData),
+          });
+
+          const result = await response.json();
+
+          if (response.ok && result.success) {
+            showNotification("Cập nhật thông tin thành công!", "success");
+
+            // Làm mới thông tin người dùng từ server
+            try {
+              const verifyResponse = await fetch("/api/auth/verify", {
+                headers: { Authorization: `Bearer ${authToken}` },
+              });
+              const verifyResult = await verifyResponse.json();
+              if (verifyResult.success && verifyResult.user) {
+                currentUser = verifyResult.user;
+                updateUserInfo(currentUser);
+                console.log("🔄 Đã làm mới thông tin người dùng:", currentUser);
+              } else {
+                console.warn(
+                  "⚠️ Không thể làm mới thông tin người dùng:",
+                  verifyResult.error
+                );
+              }
+            } catch (verifyError) {
+              console.error(
+                "❌ Lỗi khi làm mới thông tin người dùng:",
+                verifyError.message
+              );
+            }
+
+            closeProfileModal();
+          } else {
+            throw new Error(result.error || `HTTP ${response.status}`);
+          }
+        } catch (error) {
+          console.error("❌ Profile update error:", error);
           showNotification(
-            error.message || "Không thể xóa sản phẩm. Vui lòng thử lại!",
+            error.message || "Lỗi khi cập nhật thông tin",
             "error"
           );
         } finally {
           hideLoading();
+        }
+      }
+
+      function updateNavigationForAdmin() {
+        if (currentUser && currentUser.role === "admin") {
+          console.log("🔧 Updating navigation for admin user");
+
+          const navItems = document.querySelectorAll(".nav-item");
+          navItems.forEach((item) => {
+            const href = item.getAttribute("href");
+            const page = item.getAttribute("data-page");
+
+            // Redirect admin users to admin routes
+            if (href && !href.startsWith("/admin") && href !== "#") {
+              switch (page) {
+                case "dashboard":
+                  item.setAttribute("href", "/admin/dashboard");
+                  break;
+                case "products":
+                  item.setAttribute("href", "/products-page");
+                  break;
+                case "customers":
+                  item.setAttribute("href", "/customers-page");
+                  break;
+                case "orders":
+                  item.setAttribute("href", "/orders-page");
+                  break;
+                case "statistics":
+                  item.setAttribute("href", "/statistics-page");
+                  break;
+              }
+            }
+          });
         }
       }
 
@@ -1568,6 +2221,9 @@
           }
         });
 
+        // Sanitize message to remove HTML tags
+        const sanitizedMessage = message.replace(/<[^>]+>/g, "");
+
         const notification = document.createElement("div");
         notification.className = `notification ${type}`;
 
@@ -1575,12 +2231,13 @@
           success: "check-circle",
           error: "exclamation-triangle",
           info: "info-circle",
+          warning: "exclamation-triangle",
         };
 
         notification.innerHTML = `
-          <i class="fas fa-${icons[type] || icons.info}"></i>
-          ${message}
-        `;
+    <i class="fas fa-${icons[type] || icons.info}"></i>
+    ${sanitizedMessage}
+  `;
 
         document.body.appendChild(notification);
 
@@ -1623,14 +2280,66 @@
           }
         });
 
-        // Logout button
+        // Profile and logout buttons
+        const profileBtn = document.getElementById("profileBtn");
         const logoutBtn = document.getElementById("logoutBtn");
+
+        if (profileBtn) {
+          profileBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log("👤 Profile button clicked");
+            viewProfile();
+          });
+        }
+
         if (logoutBtn) {
           logoutBtn.addEventListener("click", function (e) {
             e.preventDefault();
             e.stopPropagation();
             console.log("🚪 Logout button clicked");
             logout();
+          });
+        }
+
+        // Profile modal events
+        const profileModal = document.getElementById("profileModal");
+        const closeProfileModalBtn = document.getElementById(
+          "closeProfileModalBtn"
+        );
+        const profileCancelBtn = document.getElementById("profileCancelBtn");
+        const profileSaveBtn = document.getElementById("profileSaveBtn");
+        const profileShowPassword = document.getElementById(
+          "profileShowPassword"
+        );
+
+        if (closeProfileModalBtn) {
+          closeProfileModalBtn.addEventListener("click", closeProfileModal);
+        }
+
+        if (profileCancelBtn) {
+          profileCancelBtn.addEventListener("click", closeProfileModal);
+        }
+
+        if (profileSaveBtn) {
+          profileSaveBtn.addEventListener("click", saveProfile);
+        }
+
+        if (profileShowPassword) {
+          profileShowPassword.addEventListener("change", function () {
+            const type = this.checked ? "text" : "password";
+            document.getElementById("profileOldPassword").type = type;
+            document.getElementById("profileNewPassword").type = type;
+            document.getElementById("profileConfirmPassword").type = type;
+          });
+        }
+
+        // Close profile modal when clicking overlay
+        if (profileModal) {
+          profileModal.addEventListener("click", (e) => {
+            if (e.target.classList.contains("modal-overlay")) {
+              closeProfileModal();
+            }
           });
         }
 
@@ -1700,6 +2409,7 @@
           if (e.key === "Escape") {
             closeProductModal();
             closeDeleteModal();
+            closeProfileModal();
           }
         });
 
@@ -1718,16 +2428,34 @@
 
         if (productsGrid) {
           productsGrid.addEventListener("click", function (e) {
-            const target = e.target.closest("button[data-action]");
-            if (!target) return;
+            const productCard = e.target.closest(".product-card");
+            const actionButton = e.target.closest("button[data-action]");
+
+            if (productCard) {
+              e.stopPropagation();
+              console.log("🖱️ Click trên product-card, ngăn lan truyền");
+            }
+
+            if (!actionButton) {
+              console.log("🖱️ Click ngoài nút edit/delete, bỏ qua:", e.target);
+              return;
+            }
 
             e.preventDefault();
-            e.stopPropagation();
 
-            const productId = parseInt(target.getAttribute("data-product-id"));
-            const action = target.getAttribute("data-action");
+            const productId = actionButton.getAttribute("data-product-id"); // Keep as string (e.g., 'pr22')
+            const action = actionButton.getAttribute("data-action");
 
-            console.log(`🖱️ Product ${action} clicked for ID:`, productId);
+            console.log(`🖱️ Hành động ${action} cho sản phẩm ID: ${productId}`);
+
+            if (!productId) {
+              console.error(
+                "❌ ID sản phẩm không hợp lệ:",
+                actionButton.getAttribute("data-product-id")
+              );
+              showNotification("ID sản phẩm không hợp lệ", "error");
+              return;
+            }
 
             if (action === "edit") {
               editProduct(productId);
@@ -1736,37 +2464,50 @@
             }
           });
 
-          console.log("✅ Product actions event delegation setup complete");
+          console.log("✅ Đã thiết lập xử lý hành động sản phẩm");
         }
       }
 
       // ===================== NAVIGATION =====================
       document.querySelectorAll(".nav-item").forEach((item) => {
         item.addEventListener("click", (e) => {
-          e.preventDefault();
+          const href = item.getAttribute("href");
+          const page = item.getAttribute("data-page");
 
+          // Nếu là admin user, cho phép điều hướng trực tiếp
+          if (currentUser && currentUser.role === "admin") {
+            console.log(`🔗 Admin navigation to: ${href}`);
+            return;
+          }
+
+          // Với regular users, xử lý điều hướng
+          e.preventDefault();
           document
             .querySelectorAll(".nav-item")
             .forEach((nav) => nav.classList.remove("active"));
           item.classList.add("active");
 
-          const page = item.getAttribute("data-page");
-          if (page && page !== "products") {
-            window.location.href = item.href;
-          }
+          // Cho phép điều hướng đến bất kỳ trang nào
+          window.location.href = href;
         });
       });
 
       // ===================== INITIALIZATION =====================
       async function initApp() {
         console.log("🚀 Initializing Products Page...");
-
         try {
           const isAuthenticated = await checkAuth();
-
           if (isAuthenticated) {
             console.log("✅ Authentication successful");
+            updateNavigationForAdmin();
+            const searchInput = document.getElementById("searchInput");
+            if (searchInput) {
+              searchInput.value = "";
+              console.log("✅ Cleared search input default value");
+            }
             await loadProducts();
+            filteredProducts = [...products];
+            displayProducts(filteredProducts);
             console.log("✅ Products page initialized successfully!");
           } else {
             console.log("❌ Authentication failed - redirecting to login");
@@ -1774,11 +2515,52 @@
         } catch (error) {
           console.error("❌ App initialization error:", error);
           showNotification("Lỗi khởi tạo ứng dụng", "error");
-          setTimeout(() => {
-            redirectToLogin();
-          }, 2000);
+          setTimeout(() => redirectToLogin(), 2000);
         }
       }
+
+      function debugUserInfo() {
+        console.log("🔍 Current User Debug:", {
+          currentUser: currentUser,
+          authToken: authToken ? "Present" : "Missing",
+          userNameElement: document.getElementById("userName")?.textContent,
+          userAvatarElement: document.getElementById("userAvatar")?.textContent,
+        });
+      }
+
+      // Expose debug function
+      window.debugUserInfo = debugUserInfo;
+
+      // ===================== NAVIGATION UPDATE =====================
+      // Thêm vào phần navigation event listeners:
+
+      document.querySelectorAll(".nav-item").forEach((item) => {
+        item.addEventListener("click", (e) => {
+          const href = item.getAttribute("href");
+          const page = item.getAttribute("data-page");
+
+          // Nếu là admin user và đang ở trang products, cho phép navigation bình thường
+          if (currentUser && currentUser.role === "admin") {
+            // Không prevent default cho admin users
+            console.log(`🔗 Admin navigation to: ${href}`);
+            return;
+          }
+
+          // Với regular users, handle như bình thường
+          e.preventDefault();
+
+          document
+            .querySelectorAll(".nav-item")
+            .forEach((nav) => nav.classList.remove("active"));
+          item.classList.add("active");
+
+          if (page && page !== "products") {
+            window.location.href = href;
+          }
+        });
+      });
+
+      console.log("✅ Frontend admin fixes applied successfully");
 
       // Start the application
       document.addEventListener("DOMContentLoaded", initApp);

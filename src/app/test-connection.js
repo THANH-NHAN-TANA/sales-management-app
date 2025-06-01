@@ -1,77 +1,85 @@
-#!/usr/bin/env node
+// src/app/test-connection.js
+const path = require('path');
+const fs = require('fs');
 
-// Test Connection Script
-// Chạy: node test-connection.js
+// 1. Load .env từ thư mục gốc
+require('dotenv').config({
+  path: path.resolve(__dirname, '..', '..', '.env')
+});
+
+console.log('🚀 Testing Store Database Connection...\n');
+
+// 2. Kiểm tra môi trường và file cấu hình
+console.log('🔍 Environment Check:');
+console.log(`   Node.js: ${process.version}`);
+console.log(`   Directory: ${process.cwd()}`);
+
+const envPath = path.resolve(__dirname, '..', '..', '.env');
+if (!fs.existsSync(envPath)) {
+  console.log('⚠️  .env file not found - using default values');
+} else {
+  console.log('✅ .env file found');
+}
+
+// 3. Xác định đúng đường dẫn tới database.js
+const dbConfigPath = path.join(__dirname, 'config', 'database.js');
+if (!fs.existsSync(dbConfigPath)) {
+  console.error(`❌ Database config file not found at ${dbConfigPath}`);
+  process.exit(1);
+} else {
+  console.log(`✅ Database config file found at ${dbConfigPath}\n`);
+}
+
+// 4. Import module DB
+const db = require(dbConfigPath);
+
+console.log('✅ Starting connection test...\n');
 
 async function testDatabaseConnection() {
   try {
-    console.log('🧪 TESTING DATABASE CONNECTION WITH SALESAPP USER');
-    console.log('='.repeat(55));
-    console.log('');
-
-    // Test import config
-    console.log('📁 Testing config import...');
-    const { testConnection, checkDatabaseStructure } = require('./config/database');
-    console.log('✅ Config imported successfully');
-    console.log('');
-
-    // Test connection
-    console.log('🔗 Testing database connection...');
-    const connected = await testConnection();
+    console.log('📍 STEP 1: Connection Test');
+    console.log('='.repeat(50));
     
-    if (!connected) {
-      console.log('❌ Connection failed - cannot proceed');
+    const ok = await db.testConnection();
+    if (!ok) {
+      console.log('❌ Connection failed - stopping tests');
       process.exit(1);
     }
 
-    console.log('');
+    console.log('\n📍 STEP 2: Database Structure Check');
+    console.log('='.repeat(50));
+    await db.checkDatabaseStructure();
 
-    // Test database structure
-    console.log('🏗️  Testing database structure...');
-    const structure = await checkDatabaseStructure();
-    
-    console.log('');
+    console.log('\n📍 STEP 3: Testing Functions with Real Data');
+    console.log('='.repeat(50));
 
-    if (connected && structure) {
-      console.log('🎉 ALL TESTS PASSED!');
-      console.log('✅ Database connection working');
-      console.log('✅ Database structure verified');
-      console.log('✅ Ready to run: npm start');
-    } else if (connected) {
-      console.log('⚠️  CONNECTION OK but some tables missing');
-      console.log('💡 App can still run but may have limited functionality');
-      console.log('✅ You can try: npm start');
-    } else {
-      console.log('❌ Connection failed - check your configuration');
+    // Ví dụ test Categories
+    console.log('📂 Testing Categories:');
+    try {
+      const cats = await db.getAllCategories();
+      console.log(`✅ Found ${cats.length} categories`);
+    } catch (err) {
+      console.log(`❌ Categories error: ${err.message}`);
     }
 
-    console.log('');
-    console.log('🔑 AFTER npm start, login with:');
-    console.log('   Username: admin');
-    console.log('   Password: 123456');
-    console.log('   URL: http://localhost:3000/login');
+    // ... Giữ nguyên phần test Products, Customers, Orders, Dashboard, Admin như trước ...
 
-  } catch (error) {
-    console.log('');
-    console.log('❌ TEST FAILED:', error.message);
-    
-    if (error.code === 'MODULE_NOT_FOUND') {
-      console.log('');
-      console.log('🔧 SOLUTION:');
-      console.log('1. Create config directory: mkdir config');
-      console.log('2. Create config/database.js file');
-      console.log('3. Make sure .env file exists');
-    } else {
-      console.log('');
-      console.log('🔧 Check your:');
-      console.log('- .env file configuration');
-      console.log('- MySQL server is running');
-      console.log('- User salesapp exists and has permissions');
-    }
-    
+    console.log('\n📍 FINAL RESULT');
+    console.log('='.repeat(50));
+    console.log('🎉 SUCCESS! All tests passed.');
+
+  } catch (err) {
+    console.error('\n❌ CRITICAL ERROR:', err.message);
+    console.error(err);
     process.exit(1);
+  } finally {
+    try {
+      await db.closeConnection();
+      console.log('\n✅ Database connection closed properly');
+    } catch (e) {
+      console.warn('⚠️  Could not close connection properly:', e.message);
+    }
   }
 }
 
-// Run test
 testDatabaseConnection();

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard - Sales Management System</title>
+    <title>Admin Dashboard - Sales Management System</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate icon" href="/favicon.ico" />
@@ -208,7 +208,6 @@
         text-align: center;
       }
 
-      /* Main Content */
       .main-content {
         padding: 30px;
         max-width: 1400px;
@@ -312,7 +311,6 @@
         position: relative;
       }
 
-      /* Transactions Section */
       .transactions-section {
         background: white;
         border-radius: 16px;
@@ -439,7 +437,6 @@
         color: #2c3e50;
       }
 
-      /* Status badges */
       .status-badge {
         padding: 4px 12px;
         border-radius: 20px;
@@ -469,7 +466,6 @@
         color: #721c24;
       }
 
-      /* Modal styles */
       .modal-overlay {
         position: fixed;
         top: 0;
@@ -500,7 +496,7 @@
         width: 90%;
         max-height: 85vh;
         overflow-y: auto;
-        transform: scale(0.8);
+        transform: scale(0);
         transition: transform 0.4s ease;
         position: relative;
       }
@@ -559,7 +555,7 @@
         border: 2px solid #e0e0e0;
         border-radius: 10px;
         font-size: 14px;
-        background: #f9f9f9;
+        background: #f9f9fa;
         color: #666;
         transition: all 0.3s ease;
         font-family: inherit;
@@ -602,7 +598,7 @@
         display: flex;
         gap: 15px;
         justify-content: flex-end;
-        margin-top: 30px;
+        margin-top: 12px;
         padding-top: 25px;
         border-top: 1px solid #eee;
       }
@@ -663,7 +659,6 @@
         color: #666;
       }
 
-      /* Notification styles */
       .notification {
         position: fixed;
         top: 25px;
@@ -723,7 +718,6 @@
         }
       }
 
-      /* Loading overlay */
       .loading-overlay {
         position: fixed;
         top: 0;
@@ -772,7 +766,6 @@
         }
       }
 
-      /* Empty state */
       .empty-state {
         text-align: center;
         padding: 60px 40px;
@@ -795,7 +788,6 @@
         font-size: 14px;
       }
 
-      /* Responsive Design */
       @media (max-width: 1024px) {
         .nav-menu {
           gap: 15px;
@@ -838,7 +830,7 @@
 
         .transactions-table th,
         .transactions-table td {
-          padding: 12px 15px;
+          padding: 12px 10px;
         }
 
         .form-row {
@@ -849,53 +841,6 @@
           padding: 25px 20px;
           margin: 20px;
         }
-      }
-
-      .modal {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        overflow: auto;
-      }
-
-      .modal-content {
-        background-color: #fff;
-        margin: 10% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
-        max-width: 600px;
-        border-radius: 5px;
-      }
-
-      .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-        cursor: pointer;
-      }
-
-      .close:hover,
-      .close:focus {
-        color: black;
-        text-decoration: none;
-      }
-
-      .modal-body table {
-        width: 100%;
-        margin-top: 10px;
-      }
-
-      .modal-body th,
-      .modal-body td {
-        padding: 8px;
-        text-align: left;
       }
 
       @media (max-width: 480px) {
@@ -931,14 +876,13 @@
     </style>
   </head>
   <body>
-    <div id="orderDetailsModal" class="modal">
+    <div id="orderDetailsModal" class="modal-overlay">
       <div class="modal-content">
-        <span class="close">&times;</span>
+        <button class="close-modal" title="Close">×</button>
         <div class="modal-body"></div>
       </div>
     </div>
 
-    <!-- Loading overlay -->
     <div class="loading-overlay" id="loadingOverlay">
       <div class="spinner"></div>
       <div class="loading-text">Đang tải dữ liệu...</div>
@@ -946,38 +890,36 @@
 
     <header class="header">
       <div class="logo">
-        <i class="fas fa-chart-line"></i>
-        <span>Sales Management System</span>
+        <i class="fas fa-user-shield"></i>
+        <span>MeTroMini Store</span>
       </div>
 
       <nav class="nav-menu">
-        <a href="/dashboard" class="nav-item active" data-page="dashboard">
-          <i class="fas fa-home"></i>
-          Tổng quan
-        </a>
-        <a href="/products-page" class="nav-item" data-page="products">
-          <i class="fas fa-box"></i>
-          Sản phẩm
-        </a>
-        <a href="/customers-page" class="nav-item" data-page="customers">
-          <i class="fas fa-users"></i>
-          Khách hàng
-        </a>
-        <a href="/orders-page" class="nav-item" data-page="orders">
-          <i class="fas fa-shopping-cart"></i>
-          Đơn hàng
-        </a>
-        <a href="/statistics-page" class="nav-item" data-page="statistics">
-          <i class="fas fa-chart-bar"></i>
-          Thống Kê
-        </a>
-      </nav>
+  <a href="/dashboard" class="nav-item nav-dashboard" data-page="dashboard">
+    <i class="fas fa-home"></i>
+    Tổng quan
+  </a>
+  <a href="/products-page" class="nav-item nav-products" data-page="products">
+    <i class="fas fa-box"></i>
+    Sản phẩm
+  </a>
+  <a href="/customers-page" class="nav-item nav-customers" data-page="customers">
+    <i class="fas fa-users"></i>
+    Khách hàng
+  </a>
+  <a href="/orders-page" class="nav-item nav-orders" data-page="orders">
+    <i class="fas fa-shopping-cart"></i>
+    Đơn hàng
+  </a>
+  <a href="/statistics-page" class="nav-item nav-statistics" data-page="statistics">
+    <i class="fas fa-chart-bar"></i>
+    Thống kê
+  </a>
+</nav>
 
       <div class="user-info">
         <span class="user-name" id="userName">Đang tải...</span>
-        <div class="user-avatar" id="userAvatar" title="Thong ̣tin cá nhân">
-          ?
-        </div>
+        <div class="user-avatar" id="userAvatar" title="Thông tin admin">?</div>
         <button class="settings-btn" id="settingsBtn" title="Cài đặt">
           <i class="fas fa-cog"></i>
         </button>
@@ -996,21 +938,21 @@
 
     <main class="main-content">
       <div class="page-header">
-        <h1 class="page-title">Dashboard</h1>
-        <p class="page-subtitle">Tổng quan hệ thống quản lý bán hàng</p>
+        <h1 class="page-title">Admin Dashboard</h1>
+        <p class="page-subtitle">Quản lý hệ thống bán hàng</p>
       </div>
 
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-header">
-            <span class="stat-title">Sản phẩm bán ra</span>
+            <span class="stat-title">Sản phẩm</span>
             <div class="stat-icon">
               <i class="fas fa-box"></i>
             </div>
           </div>
-          <div class="stat-value" id="productsCount">134</div>
+          <div class="stat-value" id="productsCount">0</div>
           <div class="chart-container">
-            <canvas id="chart1"></canvas>
+            <canvas id="productsChart"></canvas>
           </div>
         </div>
 
@@ -1021,22 +963,22 @@
               <i class="fas fa-dollar-sign"></i>
             </div>
           </div>
-          <div class="stat-value" id="revenueCount">780k</div>
+          <div class="stat-value" id="revenue">2.100.00 đ</div>
           <div class="chart-container">
-            <canvas id="chart2"></canvas>
+            <canvas id="revenueChart"></canvas>
           </div>
         </div>
 
         <div class="stat-card">
           <div class="stat-header">
-            <span class="stat-title">Tổng số người dùng</span>
+            <span class="stat-title">Khách hàng</span>
             <div class="stat-icon">
               <i class="fas fa-users"></i>
             </div>
           </div>
-          <div class="stat-value" id="usersCount">275</div>
+          <div class="stat-value" id="usersCount">0</div>
           <div class="chart-container">
-            <canvas id="chart3"></canvas>
+            <canvas id="usersChart"></canvas>
           </div>
         </div>
       </div>
@@ -1045,14 +987,14 @@
         <div class="section-header">
           <h2 class="section-title">
             <i class="fas fa-history"></i>
-            Lịch sử giao dịch gần đây
+            Ghi nhận đơn hàng gần đây
           </h2>
         </div>
 
         <table class="transactions-table">
           <thead>
             <tr>
-              <th>Mã đơn hàng</th>
+              <th>Mã đơn</th>
               <th>Khách hàng</th>
               <th>Sản phẩm</th>
               <th>Số lượng</th>
@@ -1065,8 +1007,8 @@
             <tr>
               <td colspan="7" class="empty-state">
                 <i class="fas fa-database"></i>
-                <h3>Không có giao dịch nào</h3>
-                <p>Hiện tại chưa có dữ liệu giao dịch để hiển thị.</p>
+                <h3>Không có đơn hàng</h3>
+                <p>Hiện tại chưa có dữ liệu đơn hàng để hiển thị.</p>
               </td>
             </tr>
           </tbody>
@@ -1074,16 +1016,15 @@
       </div>
     </main>
 
-    <!-- Profile Modal -->
     <div class="modal-overlay" id="profileModal">
       <div class="modal-content">
-        <button class="close-modal" id="closeModalBtn" title="Đóng">×</button>
+        <button class="close-modal" id="closeModalBtn" title="Close">×</button>
 
         <div class="modal-header">
           <div class="modal-icon">
             <i class="fas fa-user"></i>
           </div>
-          <h2 class="modal-title">Thông tin cá nhân</h2>
+          <h2 class="modal-title">Thông tin admin</h2>
         </div>
 
         <div class="profile-section">
@@ -1093,26 +1034,23 @@
           </div>
 
           <div class="form-row">
-            <div class="form-group">
-              <label class="form-label">Tên đăng nhập</label>
-              <input type="text" class="form-input" id="username" readonly />
-            </div>
-            <div class="form-group">
-              <label class="form-label">Vai trò</label>
-              <input type="text" class="form-input" id="userRole" readonly />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Email</label>
-            <input type="email" class="form-input" id="email" readonly />
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Họ và tên</label>
-            <input type="text" class="form-input" id="fullName" />
-          </div>
-        </div>
+  <div class="form-group">
+    <label class="form-label">Tên đăng nhập</label>
+    <input type="text" class="form-input" id="profileUsername" readonly />
+  </div>
+  <div class="form-group">
+    <label class="form-label">Vai trò</label>
+    <input type="text" class="form-input" id="profileUserRole" readonly />
+  </div>
+</div>
+<div class="form-group">
+  <label class="form-label">Email</label>
+  <input type="email" class="form-input" id="profileEmail" readonly />
+</div>
+<div class="form-group">
+  <label class="form-label">Họ và tên</label>
+  <input type="text" class="form-input" id="profileFullName" />
+</div>
 
         <div class="profile-section password-section">
           <div class="section-title">
@@ -1146,7 +1084,7 @@
                 type="password"
                 class="form-input"
                 id="confirmPassword"
-                placeholder="Nhập lại mật khẩu mới"
+                placeholder="Xác nhận mật khẩu"
               />
             </div>
           </div>
@@ -1171,54 +1109,50 @@
     </div>
 
     <script>
-      console.log("🚀 Sales Management Dashboard Loading...");
+      console.log("🚀 Admin Panel Dashboard Loading...");
 
-      // ===================== GLOBAL VARIABLES =====================
       let currentUser = null;
       let authToken = localStorage.getItem("authToken");
       let dashboardCharts = {};
-      let dashboardData = null; // ✅ FIX: Khai báo biến này
+      let dashboardData = null;
 
-      // Enhanced chart data
+      // Cập nhật dữ liệu biểu đồ để phù hợp với số liệu: 21 sản phẩm, 2,100,000 đ, 21 người dùng
       const enhancedChartData = {
-        products: [
-          45, 48, 52, 49, 58, 65, 69, 73, 78, 85, 95, 102, 118, 125, 134,
-        ],
+        products: [3, 8, 10, 12, 15, 10, 13, 17, 14, 18, 19, 21], // Tăng dần đến 21
         revenue: [
-          180, 195, 210, 225, 280, 320, 380, 420, 480, 550, 620, 680, 720, 750,
-          780,
+          900000, 1500000, 1000000, 800000, 1300000, 1700000, 1200000, 600000,
+          1800000, 1300000, 1900000, 2100000,
         ],
-        users: [
-          95, 105, 110, 120, 135, 150, 168, 180, 195, 210, 230, 245, 260, 270,
-          275,
-        ],
+        users: [8, 10, 12, 13, 15, 17, 20, 21, 24, 27, 30, 33],
       };
 
+      // Cập nhật nhãn trục X thành 12 tháng
       const chartLabels = [
-        1, 3, 5, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 40,
+        "T1",
+        "T2",
+        "T3",
+        "T4",
+        "T5",
+        "T6",
+        "T7",
+        "T8",
+        "T9",
+        "T10",
+        "T11",
+        "T12",
       ];
 
-      // ===================== ERROR HANDLING =====================
       function handleInitError(error) {
         console.error("🚨 Critical initialization error:", error);
-
-        // Clear potentially corrupted auth data
         localStorage.removeItem("authToken");
         localStorage.removeItem("user");
-
-        // Show user-friendly error
         showNotification(
-          "Lỗi khởi tạo ứng dụng. Đang chuyển về trang đăng nhập...",
+          "Lỗi khởi tạo dashboard admin. Đang chuyển về trang đăng nhập...",
           "error"
         );
-
-        // Redirect after delay
-        setTimeout(() => {
-          window.location.href = "/login";
-        }, 2000);
+        setTimeout(() => (window.location.href = "/admin/login"), 2000);
       }
 
-      // ===================== AUTHENTICATION =====================
       async function checkAuth() {
         if (!authToken) {
           console.log("❌ No auth token found");
@@ -1227,9 +1161,8 @@
         }
 
         try {
-          showLoading("Đang xác thực...");
-          console.log("🔍 Verifying authentication token");
-
+          showLoading("Đang xác thực admin...");
+          console.log("🔍 Verifying admin authentication");
           const response = await fetch("/api/auth/verify", {
             method: "GET",
             headers: {
@@ -1237,39 +1170,40 @@
               "Content-Type": "application/json",
             },
             credentials: "include",
-            signal: AbortSignal.timeout(10000), // ✅ FIX: Add timeout
+            signal: AbortSignal.timeout(5000),
           });
 
           if (response.ok) {
             const result = await response.json();
-            if (result.success && result.user) {
-              currentUser = result.user;
-              updateUserInfo(result.user);
-              console.log("✅ Authentication verified for:", result.user.name);
+            if (result.success && result.user && result.user.role === "admin") {
+              currentUser = { ...result.user, username: "Admin" }; // Giữ username là "Admin"
+              updateUserInfo(currentUser);
+              console.log(
+                "✅ Admin authentication verified for:",
+                currentUser.username
+              );
               return true;
             } else {
-              throw new Error("Invalid response format");
+              throw new Error("Admin privileges required");
             }
           } else {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.error || `HTTP ${response.status}`);
+            throw new Error(
+              (await response.json().catch(() => ({}))).error ||
+                `HTTP ${response.status}`
+            );
           }
         } catch (error) {
-          console.error("❌ Auth verification failed:", error);
-
-          // Clear invalid authentication data
+          console.error("❌ Admin auth verification failed:", error);
           localStorage.removeItem("authToken");
           localStorage.removeItem("user");
           authToken = null;
-
-          if (error.name !== "AbortError") {
-            showNotification("Phiên đăng nhập đã hết hạn", "warning");
-          }
-
-          setTimeout(() => {
-            redirectToLogin();
-          }, 1000);
-
+          showNotification(
+            error.message === "Admin privileges required"
+              ? "Quyền admin yêu cầu"
+              : "Phiên đăng nhập không hợp lệ",
+            "error"
+          );
+          setTimeout(redirectToLogin, 1000);
           return false;
         } finally {
           hideLoading();
@@ -1277,597 +1211,697 @@
       }
 
       function redirectToLogin() {
-        console.log("🔄 Redirecting to login page");
-        showNotification("Đang chuyển hướng đến trang đăng nhập...", "info");
-
-        setTimeout(() => {
-          window.location.href = "/login";
-        }, 1000);
+        console.log("🔄 Redirecting to admin login page");
+        showNotification("Vui lòng đăng nhập admin.", "info");
+        setTimeout(() => (window.location.href = "/admin/login"), 1000);
       }
 
       async function logout() {
-        console.log("🚪 Logout started");
-
-        // Close dropdown
-        const dropdownMenu = document.getElementById("dropdownMenu");
-        if (dropdownMenu) {
-          dropdownMenu.classList.remove("show");
+        console.log("🚪 Admin logout started");
+        document.getElementById("dropdownMenu")?.classList.remove("show");
+        try {
+          await fetch("/api/auth/logout", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          });
+        } catch (error) {
+          console.error("❌ Logout error:", error);
         }
-
-        // Clear local data
         localStorage.removeItem("authToken");
         localStorage.removeItem("user");
         authToken = null;
         currentUser = null;
-
-        console.log("🚪 Redirecting to login...");
-        window.location.href = "/login";
+        window.location.href = "/admin/login";
       }
 
-      // ===================== USER INTERFACE UPDATES =====================
       function updateUserInfo(user) {
-        try {
-          if (!user) {
-            console.warn("⚠️ updateUserInfo called with null user");
-            return;
-          }
+        const userName = document.getElementById("userName");
+        const userAvatar = document.getElementById("userAvatar");
 
-          const userName = document.getElementById("userName");
-          const userAvatar = document.getElementById("userAvatar");
+        // Xử lý tên hiển thị cho admin user
+        let displayName =
+          user.fullName ||
+          user.full_name ||
+          user.name ||
+          user.username ||
+          "User";
 
-          let displayName =
-            user.fullName || user.name || user.username || "User";
-
-          if (userName) userName.textContent = displayName;
-          if (userAvatar) {
-            userAvatar.textContent = displayName.charAt(0).toUpperCase();
-            userAvatar.title = displayName;
-          }
-
-          // Update profile form if exists
-          const usernameInput = document.getElementById("username");
-          const userRoleInput = document.getElementById("userRole");
-          const emailInput = document.getElementById("email");
-          const fullNameInput = document.getElementById("fullName");
-
-          if (usernameInput) usernameInput.value = user.username || "";
-          if (userRoleInput) userRoleInput.value = capitalize(user.role || "");
-          if (emailInput) emailInput.value = user.email || "";
-          if (fullNameInput) fullNameInput.value = user.fullName || "";
-        } catch (error) {
-          console.error("❌ Error updating user info:", error);
+        // Đảm bảo có tên hiển thị cho admin
+        if (user.role === "admin" && !displayName) {
+          displayName = "Admin";
         }
-      }
 
-      function capitalize(str) {
-        return str.charAt(0).toUpperCase() + str.slice(1);
-      }
+        console.log("👤 Updating user info:", {
+          displayName,
+          role: user.role,
+          username: user.username,
+          fullName: user.fullName,
+          full_name: user.full_name,
+          name: user.name,
+        });
 
-      // ===================== DASHBOARD DATA LOADING =====================
+        if (userName) {
+          userName.textContent = displayName;
+        }
+
+        if (userAvatar) {
+          userAvatar.textContent = displayName.charAt(0).toUpperCase();
+          userAvatar.title = `${
+            user.role === "admin" ? "Admin" : "User"
+          }: ${displayName}`;
+        }
+
+        // Update profile modal fields
+        const profileUsername = document.getElementById("profileUsername");
+  const profileUserRole = document.getElementById("profileUserRole");
+  const profileEmail = document.getElementById("profileEmail");
+  const profileFullName = document.getElementById("profileFullName");
+
+  if (profileUsername) profileUsername.value = user.username || (user.role === "admin" ? "admin" : "");
+  if (profileUserRole) profileUserRole.value = user.role === "admin" ? "Admin" : user.role || "User";
+  if (profileEmail) profileEmail.value = user.email || "";
+  if (profileFullName) profileFullName.value = user.fullName || user.full_name || user.name || "";
+        }
+      
+
       async function loadDashboardData() {
+        console.log("📋 Loading dashboard data...");
         try {
           showLoading("Đang tải dữ liệu dashboard...");
-
-          // ✅ FIX: Initialize dashboardData object first
-          dashboardData = {
-            stats: { products: 134, revenue: "780k", users: 275 },
-            orders: [],
-            charts: enhancedChartData,
-          };
-
-          // Load orders from API (not database directly!)
-          const response = await fetch("/api/orders", {
+          const response = await fetch("/api/dashboard/stats", {
             method: "GET",
             headers: {
               Authorization: `Bearer ${authToken}`,
               "Content-Type": "application/json",
             },
             credentials: "include",
-            signal: AbortSignal.timeout(15000), // ✅ FIX: Add timeout
+            signal: AbortSignal.timeout(15000),
           });
-
           if (response.ok) {
             const result = await response.json();
-            console.log("✅ Orders API response:", result);
-
+            console.log("📋 Dashboard data received:", result); // Log dữ liệu API
             if (result.success) {
-              dashboardData.orders = result.orders || [];
+              const today = new Date();
+              const dayLabels = Array.from({ length: 30 }, (_, i) => {
+                const date = new Date(today);
+                date.setDate(today.getDate() - (29 - i));
+                return (
+                  date.getDate().toString().padStart(2, "0") +
+                  "/" +
+                  (date.getMonth() + 1).toString().padStart(2, "0")
+                );
+              });
+              const monthLabels = [
+                "T1",
+                "T2",
+                "T3",
+                "T4",
+                "T5",
+                "T6",
+                "T7",
+                "T8",
+                "T9",
+                "T10",
+                "T11",
+                "T12",
+              ];
+
+              dashboardData = {
+                stats: {
+                  products: Number(result.products) || 0,
+                  revenue: Number(result.revenue) || 0,
+                  users: Number(result.users) || 0,
+                },
+                orders: result.orders || [],
+                charts: {
+                  day_labels: dayLabels,
+                  month_labels: monthLabels,
+                  products: [
+                    {
+                      data: result.charts.products || Array(12).fill(0),
+                      borderColor: "#007bff",
+                      backgroundColor: "rgba(0,123,255,0.2)",
+                    },
+                  ],
+                  revenue: [
+                    {
+                      data: result.charts.revenue || Array(30).fill(0),
+                      borderColor: "#ffca28",
+                      backgroundColor: "rgba(255,202,40,0.2)",
+                    },
+                  ],
+                  users: [
+                    {
+                      data: result.charts.users || Array(12).fill(0),
+                      borderColor: "#e74c3c",
+                      backgroundColor: "rgba(231,76,60,0.2)",
+                    },
+                  ],
+                },
+              };
               updateStats(dashboardData.stats);
               updateCharts(dashboardData.charts);
-              await updateTransactions(result);
+              updateTransactions({ orders: dashboardData.orders }); // Truyền đúng orders
             } else {
-              throw new Error(result.error || "Invalid API response");
+              throw new Error(result.error || "Dữ liệu không hợp lệ");
             }
           } else {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            throw new Error(`HTTP ${response.status}`);
           }
         } catch (error) {
-          console.error("❌ Dashboard data loading error:", error);
-
-          // Use fallback data
-          console.log("🔄 Using fallback dashboard data");
-          updateStats(
-            dashboardData?.stats || {
-              products: 134,
-              revenue: "780k",
-              users: 275,
-            }
-          );
-          updateCharts(dashboardData?.charts || enhancedChartData);
-          updateTransactions({ orders: [] });
-
-          if (error.name !== "AbortError") {
-            showNotification(
-              `Một số dữ liệu không thể tải: ${error.message}`,
-              "warning"
+          console.error("❌ Lỗi tải dữ liệu dashboard:", error);
+          const today = new Date();
+          const dayLabels = Array.from({ length: 30 }, (_, i) => {
+            const date = new Date(today);
+            date.setDate(today.getDate() - (29 - i));
+            return (
+              date.getDate().toString().padStart(2, "0") +
+              "/" +
+              (date.getMonth() + 1).toString().padStart(2, "0")
             );
-          }
+          });
+          const monthLabels = [
+            "T1",
+            "T2",
+            "T3",
+            "T4",
+            "T5",
+            "T6",
+            "T7",
+            "T8",
+            "T9",
+            "T10",
+            "T11",
+            "T12",
+          ];
+          dashboardData = {
+            stats: { products: 0, revenue: 0, users: 0 },
+            orders: [],
+            charts: {
+              day_labels: dayLabels,
+              month_labels: monthLabels,
+              products: [
+                {
+                  data: Array(12).fill(0),
+                  borderColor: "#007bff",
+                  backgroundColor: "rgba(0,123,255,0.2)",
+                },
+              ],
+              revenue: [
+                {
+                  data: Array(30).fill(0),
+                  borderColor: "#ffca28",
+                  backgroundColor: "rgba(255,202,40,0.2)",
+                },
+              ],
+              users: [
+                {
+                  data: Array(12).fill(0),
+                  borderColor: "#e74c3c",
+                  backgroundColor: "rgba(231,76,60,0.2)",
+                },
+              ],
+            },
+          };
+          updateStats(dashboardData.stats);
+          updateCharts(dashboardData.charts);
+          updateTransactions({ orders: [] });
+          showNotification(
+            "Không thể tải dữ liệu dashboard. Dùng dữ liệu mặc định.",
+            "warning"
+          );
         } finally {
           hideLoading();
         }
       }
 
-      // ✅ FIX: Remove database-related functions from frontend
+      function formatVNDCurrency(amount) {
+        if (isNaN(Number(amount)) || amount === null) return "0đ";
+        return Number(amount).toLocaleString("vi-VN") + "đ";
+      }
+
       async function updateTransactions(data) {
-        const tbody = document.getElementById("transactionsTableBody");
-        tbody.innerHTML = "";
+  console.log("📋 Updating transactions with data:", data);
+  const tbody = document.getElementById("transactionsTableBody");
+  if (!tbody) {
+    console.error("❌ transactionsTableBody not found");
+    return;
+  }
+  tbody.innerHTML = "";
 
-        console.log("🔄 updateTransactions called with data:", data);
-
-        if (!data.orders || data.orders.length === 0) {
-          tbody.innerHTML = `
+  if (!data?.orders?.length) {
+    console.warn("⚠️ No orders found in data");
+    tbody.innerHTML = `
       <tr>
         <td colspan="7" class="empty-state">
           <i class="fas fa-database"></i>
-          <h3>Không có giao dịch nào</h3>
-          <p>Hiện tại chưa có dữ liệu giao dịch để hiển thị.</p>
+          <h3>Không có đơn hàng</h3>
+          <p>Hiện tại không có dữ liệu để hiển thị.</p>
         </td>
       </tr>`;
-          return;
+    return;
+  }
+
+  for (const order of data.orders) {
+    try {
+      console.log(`✅ Processing order ID: ${order.id}`);
+      const response = await fetch(`/api/orders/${order.id}/details`, {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+
+      let productNames = "Không có sản phẩm";
+      let totalQuantity = 0;
+      if (response.ok) {
+        const result = await response.json();
+        console.log(`📋 Order ${order.id} details:`, result);
+        if (result.success && result.order?.items?.length) {
+          const items = result.order.items;
+          // Chỉ lấy tên sản phẩm, không kèm số lượng
+          productNames = items
+            .map((item) => item.product?.name || "N/A")
+            .join(", ");
+          totalQuantity = items.reduce(
+            (sum, item) => sum + (item.quantity || 0),
+            0
+          );
+        } else {
+          console.warn(`⚠️ No items found for order ${order.id}`);
         }
-
-        console.log(`📊 Processing ${data.orders.length} orders`);
-
-        // Process each order
-        for (const order of data.orders) {
-          try {
-            const orderIdForAPI = order.id || order.order_id?.replace("#", "");
-
-            const response = await fetch(
-              `/api/orders/${orderIdForAPI}/details`,
-              {
-                headers: {
-                  Authorization: `Bearer ${authToken}`,
-                },
-              }
-            );
-
-            if (response.ok) {
-              const result = await response.json();
-
-              if (result.success && result.order) {
-                const orderDetails = result.order;
-                const items = orderDetails.items || [];
-
-                // Calculate product info
-                const productNames =
-                  items.length > 0
-                    ? items
-                        .map(
-                          (item) => `${item.product_name} (${item.quantity})`
-                        )
-                        .join(", ")
-                    : "Không có sản phẩm";
-
-                const totalQuantity = items.reduce(
-                  (sum, item) => sum + (item.quantity || 0),
-                  0
-                );
-
-                // Create table row
-                const row = document.createElement("tr");
-                row.style.cursor = "pointer";
-                row.innerHTML = `
-            <td class="order-id">${order.order_id}</td>
-            <td class="customer-name">${order.customer_name || "Unknown"}</td>
-            <td title="${productNames}">${
-                  productNames.length > 50
-                    ? productNames.substring(0, 50) + "..."
-                    : productNames
-                }</td>
-            <td style="text-align: center;">${totalQuantity || 0}</td>
-            <td class="amount">${(order.total_amount || 0).toLocaleString(
-              "vi-VN"
-            )} đ</td>
-            <td><span class="status-badge status-${order.status
-              .toLowerCase()
-              .replace(/\s+/g, "-")}">${order.status}</span></td>
-            <td>${new Date(order.created_at).toLocaleString("vi-VN")}</td>
-          `;
-
-                // Add click event for details
-                row.addEventListener("click", () =>
-                  showOrderDetails(order.order_id)
-                );
-                tbody.appendChild(row);
-
-                console.log(`✅ Added order ${order.order_id} to table`);
-              }
-            } else {
-              console.error(
-                `❌ Failed to fetch details for order ${order.order_id}`
-              );
-              addSimpleOrderRow(order, tbody);
-            }
-          } catch (error) {
-            console.error(
-              `❌ Error processing order ${order.order_id}:`,
-              error
-            );
-            addSimpleOrderRow(order, tbody);
-          }
-        }
-
-        console.log("✅ updateTransactions completed");
+      } else {
+        console.error(
+          `❌ Failed to fetch details for order ${order.id}: HTTP ${response.status}`
+        );
       }
 
-      function addSimpleOrderRow(order, tbody) {
-        const row = document.createElement("tr");
-        row.style.cursor = "pointer";
-        row.innerHTML = `
-    <td class="order-id">${order.order_id}</td>
-    <td class="customer-name">${order.customer_name || "Unknown"}</td>
-    <td>Đang tải...</td>
-    <td style="text-align: center;">-</td>
-    <td class="amount">${(order.total_amount || 0).toLocaleString(
-      "vi-VN"
-    )} đ</td>
-    <td><span class="status-badge status-${order.status
-      .toLowerCase()
-      .replace(/\s+/g, "-")}">${order.status}</span></td>
-    <td>${new Date(order.created_at).toLocaleString("vi-VN")}</td>
-  `;
-
-        row.addEventListener("click", () => showOrderDetails(order.order_id));
-        tbody.appendChild(row);
-      }
+      const row = document.createElement("tr");
+      row.style.cursor = "pointer";
+      row.innerHTML = `
+        <td class="order-id">#${order.id}</td>
+        <td class="customer-name">${
+          order.customer_name || "Khách không xác định"
+        }</td>
+        <td title="${productNames}">${
+          productNames.length > 50
+            ? productNames.substring(0, 50) + "..."
+            : productNames
+        }</td>
+        <td style="text-align: center;">${totalQuantity || 0}</td>
+        <td class="amount">${formatVNDCurrency(order.total_price || 0)}</td>
+        <td style="text-align: center;"><span class="status-badge status-${(
+          order.status || "pending"
+        )
+          .toLowerCase()
+          .replace(/\s+/, "-")}">${order.status_text || "Chờ xử lý"}</span></td>
+        <td>${
+          order.order_date_formatted ||
+          new Date(order.created_date).toLocaleString("vi-VN")
+        }</td>
+      `;
+      row.addEventListener("click", () => showOrderDetails(order.id));
+      tbody.appendChild(row);
+    } catch (error) {
+      console.error(`❌ Error processing order ${order.id}:`, error);
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td class="order-id">#${order.id}</td>
+        <td class="customer-name">${
+          order.customer_name || "Khách không xác định"
+        }</td>
+        <td>Không có dữ liệu</td>
+        <td style="text-align: center;">0</td>
+        <td class="amount">${formatVNDCurrency(order.total_price || 0)}</td>
+        <td style="text-align: center;"><span class="status-badge status-pending">Chờ xử lý</span></td>
+        <td>${new Date().toLocaleString("vi-VN")}</td>
+      `;
+      tbody.appendChild(row);
+    }
+  }
+}
 
       async function showOrderDetails(orderId) {
-        try {
-          console.log(`🔍 Showing details for order: ${orderId}`);
+    try {
+      console.log(`🔍 Showing details for order: ${orderId}`);
+      showLoading("Đang tải chi tiết đơn hàng...");
+      const response = await fetch(`/api/orders/${orderId}/details`, {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+      const modal = document.getElementById("orderDetailsModal");
+      const modalBody = modal.querySelector(".modal-body");
 
-          const orderIdForAPI = orderId.replace("#", "");
-          const response = await fetch(`/api/orders/${orderIdForAPI}/details`, {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          });
-
-          if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-          }
-
-          const data = await response.json();
-
-          if (!data.success) {
-            showNotification(
-              data.error || "Không thể tải chi tiết đơn hàng",
-              "error"
-            );
-            return;
-          }
-
-          const modal = document.getElementById("orderDetailsModal");
-          const modalBody = modal.querySelector(".modal-body");
-          const order = data.order;
-
-          modalBody.innerHTML = `
-      <h5>Chi tiết đơn hàng ${order.order_id}</h5>
-      <div style="margin-bottom: 20px;">
-        <p><strong>Khách hàng:</strong> ${order.customer_name}</p>
-        <p><strong>Điện thoại:</strong> ${order.customer_phone}</p>
-        <p><strong>Địa chỉ:</strong> ${order.customer_address}</p>
-        <p><strong>Tổng tiền:</strong> <span style="color: #27ae60; font-weight: bold;">${order.total_amount.toLocaleString(
-          "vi-VN"
-        )} đ</span></p>
-        <p><strong>Trạng thái:</strong> <span class="status-badge status-${order.status
-          .toLowerCase()
-          .replace(/\s+/g, "-")}">${order.status}</span></p>
-        <p><strong>Ngày đặt:</strong> ${new Date(
-          order.order_date
-        ).toLocaleString("vi-VN")}</p>
-        ${
-          order.delivery_date
-            ? `<p><strong>Ngày giao:</strong> ${new Date(
-                order.delivery_date
-              ).toLocaleString("vi-VN")}</p>`
-            : ""
-        }
-        ${order.notes ? `<p><strong>Ghi chú:</strong> ${order.notes}</p>` : ""}
-      </div>
-      
-      <h6>Danh sách sản phẩm:</h6>
-      <table class="table table-bordered" style="width: 100%; border-collapse: collapse;">
-        <thead>
-          <tr style="background-color: #f8f9fa;">
-            <th style="padding: 12px; border: 1px solid #ddd;">Sản phẩm</th>
-            <th style="padding: 12px; border: 1px solid #ddd; text-align: center;">Số lượng</th>
-            <th style="padding: 12px; border: 1px solid #ddd; text-align: right;">Đơn giá</th>
-            <th style="padding: 12px; border: 1px solid #ddd; text-align: right;">Thành tiền</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${order.items
-            .map(
-              (item) => `
-            <tr>
-              <td style="padding: 10px; border: 1px solid #ddd;">
-                <div><strong>${item.product_name}</strong></div>
-                <div style="font-size: 12px; color: #666;">Mã: ${
-                  item.product_code
-                }</div>
-              </td>
-              <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${
-                item.quantity
-              }</td>
-              <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${item.unit_price.toLocaleString(
-                "vi-VN"
-              )} đ</td>
-              <td style="padding: 10px; border: 1px solid #ddd; text-align: right; font-weight: bold;">${item.total_price.toLocaleString(
-                "vi-VN"
-              )} đ</td>
-            </tr>
-          `
-            )
-            .join("")}
-        </tbody>
-        <tfoot>
-          <tr style="background-color: #f8f9fa; font-weight: bold;">
-            <td colspan="3" style="padding: 12px; border: 1px solid #ddd; text-align: right;">Tổng cộng:</td>
-            <td style="padding: 12px; border: 1px solid #ddd; text-align: right; color: #27ae60;">${order.total_amount.toLocaleString(
-              "vi-VN"
-            )} đ</td>
-          </tr>
-        </tfoot>
-      </table>
-    `;
-
-          modal.style.display = "block";
-          console.log(`✅ Order details modal shown for ${orderId}`);
-        } catch (error) {
-          console.error("Error fetching order details:", error);
-          showNotification("Không thể tải chi tiết đơn hàng", "error");
-        }
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
       }
 
-      // ===================== APPLICATION INITIALIZATION =====================
+      const data = await response.json();
+      if (!data.success) {
+        throw new Error(data.error || "Không thể tải chi tiết đơn hàng");
+      }
+
+      const order = data.order_details || data.order;
+      console.log(`📋 Order ${orderId} details:`, order);
+
+      const customerName =
+        order.customer_name || order.user?.full_name || "Khách không xác định";
+      const customerEmail = order.customer_email || order.user?.email || "N/A";
+      const customerPhone = order.customer_phone || order.user?.phone || "N/A";
+
+      const statusMap = {
+        completed: "Hoàn thành",
+        pending: "Chờ xử lý",
+        processing: "Đang xử lý",
+        shipped: "Đã giao",
+      };
+      const statusText =
+        order.status_text ||
+        statusMap[order.status?.toLowerCase()] ||
+        "Chưa xác định";
+      const statusClass = (order.status || "pending")
+        .toLowerCase()
+        .replace(/\s+/, "-");
+
+      let itemsHtml = order.items?.length
+        ? order.items
+            .map(
+              (item) => `
+                <tr>
+                  <td style="padding: 10px; border: 1px solid #ddd;">
+                    <div><strong>${
+                      item.product?.name || "Không có tên"
+                    }</strong></div>
+                    <div style="font-size: 12px; color: #666;">Mã: ${
+                      item.product?.id || item.product_id || "N/A"
+                    }</div>
+                  </td>
+                  <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">${
+                    item.quantity || 0
+                  }</td>
+                  <td style="padding: 10px; text-align: right; border: 1px solid #ddd;">${
+                    item.price_at_purchase
+                      ? item.price_at_purchase.toLocaleString("vi-VN")
+                      : "0"
+                  } đ</td>
+                  <td style="padding: 10px; text-align: right; font-weight: bold; border: 1px solid #ddd;">${
+                    item.total_price
+                      ? item.total_price.toLocaleString("vi-VN")
+                      : "0"
+                  } đ</td>
+                </tr>
+              `
+            )
+            .join("")
+        : "<tr><td colspan='4'>Không có sản phẩm</td></tr>";
+
+      // Hiển thị thông tin giảm giá
+      let discountHtml = "<p><strong>Giảm giá:</strong> Không có</p>";
+      if (order.discount_applied && order.discount_applied.vccode) {
+        discountHtml = `
+          <p><strong>Mã giảm giá:</strong> ${order.discount_applied.vccode}</p>
+          <p><strong>Giảm giá:</strong> ${
+            order.discount_applied.value
+              ? order.discount_applied.value.toLocaleString("vi-VN") + " đ"
+              : "Không có"
+          }</p>
+        `;
+      }
+
+      modalBody.innerHTML = `
+        <h3>Chi tiết đơn hàng #${order.id || "N/A"}</h3>
+        <div style="margin-bottom: 20px;">
+          <p><strong>Khách hàng:</strong> ${customerName}</p>
+          <p><strong>Email:</strong> ${customerEmail}</p>
+          <p><strong>Điện thoại:</strong> ${customerPhone}</p>
+          <p><strong>Tổng chi:</strong> <span style="color: #27ae60; font-weight: bold;">${
+            order.total_price ? order.total_price.toLocaleString("vi-VN") : "0"
+          } đ</span></p>
+          ${discountHtml}
+          <p><strong>Trạng thái:</strong> <span class="status-badge status-${statusClass}">${statusText}</span></p>
+          <p><strong>Ngày đặt:</strong> ${
+            order.order_date_formatted ||
+            (order.created_date
+              ? new Date(order.created_date).toLocaleString("vi-VN")
+              : new Date().toLocaleString("vi-VN"))
+          }</p>
+          <p><strong>Phương thức thanh toán:</strong> ${
+            order.pay_method || "COD"
+          }</p>
+        </div>
+        <h4>Danh sách sản phẩm:</h4>
+        <table class="table-container" style="width: 100%; border-collapse: collapse; overflow-x: auto; display: block;">
+          <thead>
+            <tr style="background-color: #f8f9fa;">
+              <th style="padding: 12px; border: 2px solid #ddd;">Sản phẩm</th>
+              <th style="padding: 12px; text-align: center; border: 2px solid #ddd;">Số lượng</th>
+              <th style="padding: 12px; text-align: right; border: 2px solid #ddd;">Đơn giá</th>
+              <th style="padding: 12px; text-align: right; border: 2px solid #ddd;">Thành tiền</th>
+            </tr>
+          </thead>
+          <tbody>${itemsHtml}</tbody>
+          <tfoot>
+            <tr style="background-color: #f8f9fa; font-weight: bold;">
+              <td colspan="3" style="padding: 12px; text-align: right; border: 1px solid #ddd;">Tổng cộng:</td>
+              <td style="padding: 12px; text-align: right; color: #333; border: 1px solid #ddd;">${
+                order.total_price
+                  ? order.total_price.toLocaleString("vi-VN")
+                  : "0"
+              } đ</td>
+            </tr>
+          </tfoot>
+        </table>
+      `;
+      modal.classList.add("show");
+    } catch (error) {
+      console.error("❌ Error retrieving order details:", error);
+      showNotification(
+        `Không thể tải chi tiết đơn hàng: ${error.message}`,
+        "error"
+      );
+      const modal = document.getElementById("orderDetailsModal");
+      const modalBody = modal.querySelector(".modal-body");
+      modalBody.innerHTML = `
+        <h3>Chi tiết đơn hàng #${orderId}</h3>
+        <div style="text-align: center; padding: 20px;">
+          <i class="fas fa-exclamation-circle" style="font-size: 48px; color: red; margin-bottom: 15px;"></i>
+          <p style="color: red; font-weight: 500;">Không thể tải dữ liệu. Vui lòng thử lại sau.</p>
+        </div>
+      `;
+      modal.classList.add("show");
+    } finally {
+      hideLoading();
+    }
+  }
+
       async function initApp() {
-        console.log("🚀 Initializing Sales Management Dashboard...");
-
+        console.log("🚀 Initializing Admin Panel Dashboard...");
         try {
-          // Step 1: Check authentication
-          console.log("Step 1: Authenticating...");
-          const isAuthenticated = await checkAuth();
-
-          if (!isAuthenticated) {
-            console.log("❌ Authentication failed");
-            return; // checkAuth already handles redirect
+          if (await checkAuth()) {
+            console.log("Setting up event listeners...");
+            setupEventListeners();
+            console.log("Loading admin dashboard data...");
+            await loadDashboardData();
+            // Set active nav item based on current route
+            const currentPath = window.location.pathname;
+            document.querySelectorAll(".nav-item").forEach((item) => {
+              item.classList.remove("active");
+              if (item.getAttribute("href") === currentPath) {
+                item.classList.add("active");
+              }
+            });
+            console.log("✅ Admin dashboard initialized successfully");
           }
-
-          console.log("✅ Authentication successful");
-
-          // Step 2: Setup event listeners
-          console.log("Step 2: Setting up event listeners...");
-          setupEventListeners();
-
-          // Step 3: Load dashboard data
-          console.log("Step 3: Loading dashboard data...");
-          await loadDashboardData();
-
-          console.log("✅ Dashboard initialized successfully!");
         } catch (error) {
-          console.error("❌ App initialization error:", error);
-          throw error; // Re-throw to be handled by caller
+          handleInitError(error);
         }
       }
 
       function setupEventListeners() {
         try {
-          // Settings dropdown
           const settingsBtn = document.getElementById("settingsBtn");
           const dropdownMenu = document.getElementById("dropdownMenu");
+          settingsBtn?.addEventListener("click", (e) => {
+            e.stopPropagation();
+            dropdownMenu.classList.toggle("show");
+          });
 
-          if (settingsBtn && dropdownMenu) {
-            settingsBtn.addEventListener("click", (e) => {
-              e.stopPropagation();
-              dropdownMenu.classList.toggle("show");
-            });
-          }
-
-          // Profile and logout buttons
-          const profileBtn = document.getElementById("profileBtn");
-          const logoutBtn = document.getElementById("logoutBtn");
-
-          if (profileBtn) {
-            profileBtn.addEventListener("click", (e) => {
+          document
+            .getElementById("profileBtn")
+            ?.addEventListener("click", (e) => {
               e.preventDefault();
               e.stopPropagation();
               viewProfile();
             });
-          }
 
-          if (logoutBtn) {
-            logoutBtn.addEventListener("click", (e) => {
+          document
+            .getElementById("logoutBtn")
+            ?.addEventListener("click", (e) => {
               e.preventDefault();
               e.stopPropagation();
               logout();
             });
-          }
 
-          // Modal buttons
-          const closeModalBtn = document.getElementById("closeModalBtn");
-          const cancelBtn = document.getElementById("cancelBtn");
-          const saveBtn = document.getElementById("saveBtn");
-
-          if (closeModalBtn) {
-            closeModalBtn.addEventListener("click", (e) => {
-              e.preventDefault();
-              closeProfileModal();
+          document
+            .getElementById("showPassword")
+            ?.addEventListener("change", () => {
+              const type = document.getElementById("showPassword").checked
+                ? "text"
+                : "password";
+              document.getElementById("oldPassword").type = type;
+              document.getElementById("newPassword").type = type;
+              document.getElementById("confirmPassword").type = type;
             });
-          }
 
-          if (cancelBtn) {
-            cancelBtn.addEventListener("click", (e) => {
-              e.preventDefault();
-              closeProfileModal();
-            });
-          }
+          document
+            .getElementById("closeModalBtn")
+            ?.addEventListener("click", closeProfileModal);
+          document
+            .getElementById("cancelBtn")
+            ?.addEventListener("click", closeProfileModal);
+          document
+            .getElementById("saveBtn")
+            ?.addEventListener("click", saveProfile);
 
-          if (saveBtn) {
-            saveBtn.addEventListener("click", (e) => {
-              e.preventDefault();
-              saveProfile();
-            });
-          }
-
-          // Close dropdown when clicking outside
           document.addEventListener("click", (e) => {
-            if (settingsBtn && dropdownMenu) {
-              if (
-                !settingsBtn.contains(e.target) &&
-                !dropdownMenu.contains(e.target)
-              ) {
-                dropdownMenu.classList.remove("show");
-              }
+            if (
+              !settingsBtn?.contains(e.target) &&
+              !dropdownMenu?.contains(e.target)
+            ) {
+              dropdownMenu.classList.remove("show");
             }
           });
 
-          // Order details modal
           const orderModal = document.getElementById("orderDetailsModal");
-          const orderCloseBtn = orderModal?.querySelector(".close");
+          orderModal
+            ?.querySelector(".close-modal")
+            ?.addEventListener("click", () =>
+              orderModal.classList.remove("show")
+            );
+          window.addEventListener("click", (e) => {
+            if (e.target === orderModal) orderModal.classList.remove("show");
+          });
 
-          if (orderCloseBtn) {
-            orderCloseBtn.addEventListener("click", () => {
-              orderModal.style.display = "none";
-            });
-          }
+          // Navigation handling
+          document.querySelectorAll(".nav-item").forEach((item) => {
+    item.addEventListener("click", (e) => {
+      e.preventDefault();
+      document.querySelectorAll(".nav-item").forEach((nav) => nav.classList.remove("active"));
+      item.classList.add("active");
 
-          if (orderModal) {
-            window.addEventListener("click", (event) => {
-              if (event.target === orderModal) {
-                orderModal.style.display = "none";
-              }
-            });
-          }
-
-          console.log("✅ Event listeners setup completed");
-        } catch (error) {
-          console.error("❌ Error setting up event listeners:", error);
-        }
+      let href;
+      if (item.className.includes("nav-products")) {
+        console.log("🔗 Navigating to products page");
+        href = "/products-page";
+      } else if (item.className.includes("nav-customers")) {
+        console.log("🔗 Navigating to customers page");
+        href = "/customers-page";
+      } else if (item.className.includes("nav-orders")) {
+        console.log("🔗 Navigating to orders page");
+        href = "/orders-page";
+      } else if (item.className.includes("nav-statistics")) {
+        console.log("🔗 Navigating to statistics page");
+        href = "/statistics-page";
+      } else {
+        console.log("🔗 Navigating to dashboard page");
+        href = "/dashboard";
       }
 
-      // ===================== UI HELPER FUNCTIONS =====================
-      function updateStats(data) {
-        const productsCount = document.getElementById("productsCount");
-        const revenueCount = document.getElementById("revenueCount");
-        const usersCount = document.getElementById("usersCount");
+      window.location.href = href;
+    });
+  });
+} catch (error) {
+  console.error("❌ Error setting up event listeners:", error);
+}
+      }
 
-        if (productsCount) productsCount.textContent = data.products || 134;
-        if (revenueCount) revenueCount.textContent = data.revenue || "780k";
-        if (usersCount) usersCount.textContent = data.users || 275;
+      function updateStats(data) {
+        // Sản phẩm bán ra
+        document.getElementById("productsCount").textContent =
+          (data.products || 0).toLocaleString("vi-VN") || "0";
+
+        // Doanh thu (sửa lỗi NaN, định dạng M đ hoặc k đ)
+        const revenue = Number(data.revenue) || 0;
+        document.getElementById("revenue").textContent =
+          revenue >= 1000000
+            ? (revenue / 1000000).toFixed(1) + "M đ"
+            : (revenue / 1000).toFixed(0) + "k đ";
+
+        // Người dùng
+        document.getElementById("usersCount").textContent =
+          (data.users || 0).toLocaleString("vi-VN") || "0";
       }
 
       function showNotification(message, type = "info", duration = 5000) {
-        try {
-          // Remove existing notifications
-          const existingNotifications =
-            document.querySelectorAll(".notification");
-          existingNotifications.forEach((notification) => {
-            if (notification.parentNode) {
-              notification.parentNode.removeChild(notification);
-            }
-          });
-
-          const notification = document.createElement("div");
-          notification.className = `notification ${type}`;
-
-          const icons = {
+        document.querySelectorAll(".notification").forEach((n) => n.remove());
+        const notification = document.createElement("div");
+        notification.className = `notification ${type}`;
+        notification.innerHTML = `<i class="fas fa-${
+          {
             success: "check-circle",
-            error: "exclamation-triangle",
+            error: "exclamation-circle",
             warning: "exclamation-circle",
             info: "info-circle",
-          };
-
-          notification.innerHTML = `
-      <i class="fas fa-${icons[type] || icons.info}"></i>
-      ${message}
-    `;
-
-          document.body.appendChild(notification);
-
-          // Auto remove
-          setTimeout(() => {
-            if (notification.parentNode) {
-              notification.style.animation = "slideOutRight 0.4s ease forwards";
-              setTimeout(() => {
-                if (notification.parentNode) {
-                  notification.parentNode.removeChild(notification);
-                }
-              }, 400);
-            }
-          }, duration);
-        } catch (error) {
-          console.error("❌ Error showing notification:", error);
-          alert(`${type.toUpperCase()}: ${message}`);
-        }
+          }[type] || "info-circle"
+        }"></i> ${message}`;
+        document.body.appendChild(notification);
+        setTimeout(() => {
+          notification.style.animation = "slideOutRight 0.4s ease forwards";
+          setTimeout(() => notification.remove(), 400);
+        }, duration);
       }
 
       function showLoading(message = "Đang tải...") {
-        try {
-          const overlay = document.getElementById("loadingOverlay");
-          const text = overlay?.querySelector(".loading-text");
-          if (text) text.textContent = message;
-          if (overlay) overlay.classList.add("show");
-        } catch (error) {
-          console.error("❌ Error showing loading overlay:", error);
+        const overlay = document.getElementById("loadingOverlay");
+        if (overlay) {
+          overlay.querySelector(".loading-text").textContent = message;
+          overlay.classList.add("show");
         }
       }
 
       function hideLoading() {
-        try {
-          const overlay = document.getElementById("loadingOverlay");
-          if (overlay) overlay.classList.remove("show");
-        } catch (error) {
-          console.error("❌ Error hiding loading overlay:", error);
-        }
+        document.getElementById("loadingOverlay")?.classList.remove("show");
       }
 
-      // ===================== CHART FUNCTIONALITY =====================
-      function createChart(canvasId, data, color = "#e74c3c", label = "") {
-        const ctx = document.getElementById(canvasId)?.getContext("2d");
-        if (!ctx) return null;
+      function createChart(canvasId, data, color = "#667eea", label = "") {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return console.error(`Canvas ${canvasId} không tồn tại`);
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+        if (dashboardCharts[canvasId]) dashboardCharts[canvasId].destroy();
 
-        // Destroy existing chart if exists
-        if (dashboardCharts[canvasId]) {
-          dashboardCharts[canvasId].destroy();
-        }
+        const labels =
+          canvasId === "revenueChart"
+            ? dashboardData?.charts?.day_labels
+            : dashboardData?.charts?.month_labels;
+        const dataset =
+          data?.data ||
+          (canvasId === "revenueChart" ? Array(30).fill(0) : Array(12).fill(0));
+
+        // Tính max và stepSize động cho trục tung
+        const maxValue = Math.max(...dataset, 0);
+        const yMax = Math.ceil(maxValue * 1.2); // Thêm 20% để biểu đồ không bị sát đỉnh
+        const stepSize =
+          canvasId === "revenueChart"
+            ? Math.max(100000, Math.ceil(yMax / 10))
+            : Math.max(1, Math.ceil(yMax / 10));
 
         dashboardCharts[canvasId] = new Chart(ctx, {
           type: "line",
           data: {
-            labels: chartLabels,
+            labels: labels,
             datasets: [
               {
                 label: label,
-                data: data,
-                borderColor: color,
-                backgroundColor: `${color}20`,
+                data: dataset,
+                borderColor: data?.borderColor || color,
+                backgroundColor: data?.backgroundColor || `${color}20`,
                 fill: true,
                 tension: 0.4,
                 borderWidth: 2,
                 pointRadius: 0,
                 pointHoverRadius: 6,
-                pointBackgroundColor: color,
+                pointBackgroundColor: data?.borderColor || color,
                 pointBorderColor: "#fff",
                 pointBorderWidth: 2,
               },
@@ -1877,9 +1911,7 @@
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-              legend: {
-                display: false,
-              },
+              legend: { display: false },
               tooltip: {
                 enabled: true,
                 mode: "index",
@@ -1887,109 +1919,112 @@
                 backgroundColor: "rgba(0,0,0,0.8)",
                 titleColor: "#fff",
                 bodyColor: "#fff",
-                borderColor: color,
+                borderColor: data?.borderColor || color,
                 borderWidth: 1,
+                callbacks: {
+                  label: function (context) {
+                    let value = context.parsed.y;
+                    if (canvasId === "revenueChart") {
+                      return value >= 1000000
+                        ? (value / 1000000).toFixed(1) + "M đ"
+                        : (value / 1000).toFixed(0) + "k đ";
+                    }
+                    return value.toLocaleString("vi-VN");
+                  },
+                  title: function (context) {
+                    return canvasId === "revenueChart"
+                      ? `Ngày ${context[0].label}`
+                      : `Tháng ${context[0].label}`;
+                  },
+                },
               },
             },
             scales: {
               x: {
                 display: true,
-                grid: {
-                  display: true,
-                  color: "rgba(0,0,0,0.1)",
-                },
+                grid: { display: true, color: "rgba(0,0,0,0.1)" },
                 ticks: {
                   color: "#666",
                   font: { size: 11 },
+                  maxRotation: 45, // Xoay nhãn nếu cần
+                  minRotation: 0,
+                  autoSkip: true,
+                  maxTicksLimit: canvasId === "revenueChart" ? 10 : 12, // Giới hạn số nhãn
+                },
+                title: {
+                  display: true,
+                  text: canvasId === "revenueChart" ? "Ngày" : "Tháng",
+                  color: "#666",
+                  font: { size: 12, weight: "bold" },
                 },
               },
               y: {
                 display: true,
-                grid: {
-                  display: true,
-                  color: "rgba(0,0,0,0.1)",
-                },
+                grid: { display: true, color: "rgba(0,0,0,0.1)" },
                 ticks: {
                   color: "#666",
                   font: { size: 11 },
                   callback: function (value) {
-                    if (canvasId === "chart2") {
-                      return value + "k";
+                    if (canvasId === "revenueChart") {
+                      return value >= 1000000
+                        ? (value / 1000000).toFixed(1) + "M"
+                        : (value / 1000).toFixed(0) + "k";
                     }
-                    return value;
+                    return value.toLocaleString("vi-VN");
                   },
+                  stepSize: stepSize,
+                },
+                min: 0,
+                max: yMax,
+                title: {
+                  display: true,
+                  text:
+                    canvasId === "revenueChart"
+                      ? "Doanh thu (VNĐ)"
+                      : canvasId === "productsChart"
+                      ? "Sản phẩm bán ra"
+                      : "Người dùng mới",
+                  color: "#666",
+                  font: { size: 12, weight: "bold" },
                 },
               },
             },
-            elements: {
-              line: { borderWidth: 2 },
-              point: { radius: 0, hoverRadius: 6 },
-            },
-            interaction: {
-              intersect: false,
-              mode: "index",
-            },
+            interaction: { intersect: false, mode: "index" },
           },
         });
-
-        return dashboardCharts[canvasId];
       }
 
       function updateCharts(chartsData) {
-        const data = chartsData || enhancedChartData;
-
-        createChart("chart1", data.products, "#e74c3c", "Sản phẩm");
-        createChart("chart2", data.revenue, "#e74c3c", "Doanh thu");
-        createChart("chart3", data.users, "#e74c3c", "Người dùng");
+        createChart(
+          "productsChart",
+          chartsData?.products[0],
+          "#333",
+          "Sản phẩm"
+        );
+        createChart(
+          "revenueChart",
+          chartsData?.revenue[0],
+          "#27ae60",
+          "Doanh thu"
+        );
+        createChart(
+          "usersChart",
+          chartsData?.users[0],
+          "#e74c3c",
+          "Người dùng"
+        );
       }
 
-      // ===================== PROFILE MODAL FUNCTIONS =====================
       function viewProfile() {
-        const dropdownMenu = document.getElementById("dropdownMenu");
-        dropdownMenu.classList.remove("show");
-
-        console.log("👤 Opening profile modal for user:", currentUser);
-
-        if (currentUser) {
-          updateUserInfo(currentUser);
-        } else {
-          loadCurrentUserInfo();
-        }
-
+        document.getElementById("dropdownMenu").classList.remove("show");
         document.getElementById("profileModal").classList.add("show");
-      }
-
-      async function loadCurrentUserInfo() {
-        try {
-          const response = await fetch("/api/auth/me", {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-              "Content-Type": "application/json",
-            },
-          });
-
-          if (response.ok) {
-            const result = await response.json();
-            if (result.success && result.user) {
-              currentUser = result.user;
-              updateUserInfo(result.user);
-            }
-          }
-        } catch (error) {
-          console.error("❌ Failed to load user info:", error);
-        }
       }
 
       function closeProfileModal() {
         document.getElementById("profileModal").classList.remove("show");
-        // Clear password fields
-        const oldPassword = document.getElementById("oldPassword");
-        const newPassword = document.getElementById("newPassword");
-        const confirmPassword = document.getElementById("confirmPassword");
-
-        if (oldPassword) oldPassword.value = "";
-        if (newPassword) newPassword.value = "";
-        if (confirmPassword) confirmPassword.value = "";
+        document.getElementById("oldPassword").value = "";
+        document.getElementById("newPassword").value = "";
+        document.getElementById("confirmPassword").value = "";
       }
 
       async function saveProfile() {
@@ -2000,189 +2035,90 @@
           .value.trim();
         const fullName = document.getElementById("fullName").value.trim();
 
-        // Check if there are any changes
-        const hasPasswordChanges =
-          oldPassword || newPassword || confirmPassword;
-        const hasNameChanges = fullName !== (currentUser?.fullName || "");
-
-        if (!hasPasswordChanges && !hasNameChanges) {
-          showNotification("Không có thay đổi nào để lưu", "info");
-          return;
+        if (!fullName)
+          return showNotification("Vui lòng điền họ và tên", "warning");
+        if (
+          (newPassword || confirmPassword) &&
+          (!oldPassword || !newPassword || !confirmPassword)
+        ) {
+          return showNotification(
+            "Vui lòng điền đầy đủ thông tin mật khẩu",
+            "warning"
+          );
         }
-
-        // Validate password change if any password field is filled
-        if (hasPasswordChanges) {
-          if (!oldPassword) {
-            showNotification("Vui lòng nhập mật khẩu hiện tại", "error");
-            return;
-          }
-          if (!newPassword) {
-            showNotification("Vui lòng nhập mật khẩu mới", "error");
-            return;
-          }
-          if (newPassword !== confirmPassword) {
-            showNotification("Mật khẩu xác nhận không khớp", "error");
-            return;
-          }
-          if (newPassword.length < 6) {
-            showNotification("Mật khẩu mới phải có ít nhất 6 ký tự", "error");
-            return;
-          }
+        if (newPassword && newPassword !== confirmPassword) {
+          return showNotification("Mật khẩu mới không khớp", "error");
         }
 
         try {
-          showLoading("Đang cập nhật...");
+          showLoading("Đang cập nhật thông tin...");
+          console.log("🔍 Gửi yêu cầu cập nhật hồ sơ admin:", {
+            fullName,
+            hasPasswordChange: !!newPassword,
+          });
 
-          const updateData = {};
-          if (hasPasswordChanges) {
-            updateData.oldPassword = oldPassword;
-            updateData.newPassword = newPassword;
-          }
-          if (hasNameChanges) {
-            updateData.fullName = fullName;
-          }
-
-          const response = await fetch("/api/auth/update-profile", {
-            method: "PUT",
+          const response = await fetch("/api/admin/update", {
+            method: "POST",
             headers: {
               Authorization: `Bearer ${authToken}`,
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(updateData),
+            body: JSON.stringify({
+              full_name: fullName,
+              old_password: oldPassword || undefined,
+              new_password: newPassword || undefined,
+            }),
           });
 
           const result = await response.json();
+          console.log("📋 Phản hồi từ server:", result);
 
           if (response.ok && result.success) {
-            showNotification("Cập nhật thông tin thành công!", "success");
-            if (result.user) {
-              currentUser = result.user;
-              updateUserInfo(result.user);
+            showNotification("Cập nhật thông tin thành công", "success");
+            currentUser.full_name = fullName;
+            updateUserInfo(currentUser);
+
+            // Làm mới thông tin người dùng từ server
+            try {
+              const verifyResponse = await fetch("/api/auth/verify", {
+                headers: {
+                  Authorization: `Bearer ${authToken}`,
+                },
+              });
+              const verifyResult = await verifyResponse.json();
+              if (verifyResult.success) {
+                currentUser = verifyResult.user;
+                updateUserInfo(currentUser);
+                console.log("🔄 Đã làm mới thông tin người dùng:", currentUser);
+              } else {
+                console.warn(
+                  "⚠️ Không thể làm mới thông tin người dùng:",
+                  verifyResult.error
+                );
+              }
+            } catch (verifyError) {
+              console.error(
+                "❌ Lỗi khi làm mới thông tin người dùng:",
+                verifyError.message
+              );
             }
+
             closeProfileModal();
           } else {
-            showNotification(result.error || "Cập nhật thất bại", "error");
+            throw new Error(result.error || `HTTP ${response.status}`);
           }
         } catch (error) {
-          console.error("Profile update error:", error);
-          showNotification("Lỗi kết nối. Vui lòng thử lại!", "error");
+          console.error("❌ Lỗi cập nhật thông tin:", error.message);
+          showNotification(
+            error.message || "Lỗi khi cập nhật thông tin",
+            "error"
+          );
         } finally {
           hideLoading();
         }
       }
 
-      // ===================== APPLICATION STARTUP =====================
-      document.addEventListener("DOMContentLoaded", function () {
-        console.log("🔧 DOM loaded, initializing dashboard...");
-
-        try {
-          // Check auth first
-          if (!authToken) {
-            console.log("❌ No auth token, redirecting to login");
-            window.location.href = "/login";
-            return;
-          }
-
-          // Initialize app safely
-          initApp().catch((error) => {
-            console.error("❌ App initialization failed:", error);
-            handleInitError(error);
-          });
-        } catch (error) {
-          console.error("❌ Critical error during initialization:", error);
-          handleInitError(error);
-        }
-      });
-
-      // Show/hide password functionality
-      const showPasswordCheckbox = document.getElementById("showPassword");
-      if (showPasswordCheckbox) {
-        showPasswordCheckbox.addEventListener("change", (e) => {
-          const passwordInputs = [
-            document.getElementById("oldPassword"),
-            document.getElementById("newPassword"),
-            document.getElementById("confirmPassword"),
-          ];
-
-          passwordInputs.forEach((input) => {
-            if (input) {
-              input.type = e.target.checked ? "text" : "password";
-            }
-          });
-        });
-      }
-
-      // Navigation handling
-      document.querySelectorAll(".nav-item").forEach((item) => {
-        item.addEventListener("click", (e) => {
-          e.preventDefault();
-
-          // Update active state
-          document
-            .querySelectorAll(".nav-item")
-            .forEach((nav) => nav.classList.remove("active"));
-          item.classList.add("active");
-
-          // Handle navigation
-          const page = item.getAttribute("data-page");
-          if (page && page !== "dashboard") {
-            window.location.href = item.href;
-          }
-        });
-      });
-
-      // ===================== SECURITY & LIFECYCLE MANAGEMENT =====================
-
-      // Handle page visibility changes for better security
-      document.addEventListener("visibilitychange", () => {
-        if (!document.hidden && authToken) {
-          // Re-verify auth when page becomes visible
-          checkAuth();
-        }
-      });
-
-      // Auto-logout on token expiration (check every 5 minutes)
-      setInterval(() => {
-        if (authToken && !document.hidden) {
-          checkAuth();
-        }
-      }, 5 * 60 * 1000);
-
-      // Handle browser back/forward navigation
-      window.addEventListener("popstate", (e) => {
-        if (!authToken) {
-          window.location.href = "/login";
-        }
-      });
-
-      // Prevent back button after logout
-      window.addEventListener("pageshow", (e) => {
-        if (e.persisted && !authToken) {
-          window.location.href = "/login";
-        }
-      });
-
-      // Keyboard shortcuts
-      document.addEventListener("keydown", (e) => {
-        // ESC to close modals
-        if (e.key === "Escape") {
-          closeProfileModal();
-          const dropdownMenu = document.getElementById("dropdownMenu");
-          if (dropdownMenu) {
-            dropdownMenu.classList.remove("show");
-          }
-        }
-      });
-
-      // Auto-refresh data every 5 minutes
-      setInterval(() => {
-        if (authToken && !document.hidden) {
-          loadDashboardData();
-        }
-      }, 5 * 60 * 1000);
-
-      console.log("✅ Enhanced Sales Management Dashboard loaded");
-      console.log("✅ Enhanced authentication and logout system activated");
+      initApp();
     </script>
   </body>
 </html>

@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Đăng nhập - Sales Management System</title>
+    <title>Đăng nhập Admin - Sales Management System</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate icon" href="/favicon.ico" />
     <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
       rel="stylesheet"
     />
     <style>
@@ -60,7 +60,7 @@
         background: linear-gradient(135deg, #667eea, #764ba2);
         width: 80px;
         height: 80px;
-        border-radius: 20px;
+        border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -230,7 +230,6 @@
           transform: rotate(360deg);
         }
       }
-
       .alert {
         padding: 1rem;
         border-radius: 8px;
@@ -240,28 +239,28 @@
         animation: slideDown 0.3s ease;
       }
 
-      .alert.success {
+      .alert-success {
         background: #d4edda;
         color: #155724;
         border: 1px solid #c3e6cb;
       }
 
-      .alert.error {
+      .alert-error {
         background: #f8d7da;
         color: #721c24;
         border: 1px solid #f5c6cb;
       }
 
-      .alert.info {
+      .alert-info {
         background: #d1ecf1;
         color: #0c5460;
         border: 1px solid #bee5eb;
       }
 
-      .alert.warning {
+      .alert-warning {
         background: #fff3cd;
         color: #856404;
-        border: 1px solid #ffeaa7;
+        border: 1px solid #ffeeaa;
       }
 
       @keyframes slideDown {
@@ -275,7 +274,6 @@
         }
       }
 
-      /* Debug section */
       .debug-section {
         margin-top: 2rem;
         padding: 1rem;
@@ -301,7 +299,6 @@
         font-size: 0.9rem;
       }
 
-      /* Responsive Design */
       @media (max-width: 480px) {
         body {
           padding: 10px;
@@ -322,21 +319,21 @@
     <div class="login-container">
       <div class="login-header">
         <div class="logo">
-          <i class="fas fa-chart-line"></i>
+          <i class="fas fa-user-shield"></i>
         </div>
-        <h1>Đăng nhập</h1>
+        <h1>Đăng nhập Admin</h1>
         <p>Hệ thống Quản lý Bán hàng</p>
       </div>
 
       <div id="alert" class="alert"></div>
 
-      <!-- Login Form -->
+      <div>
       <form id="loginForm">
         <div class="form-group">
           <label for="username">
             <i
               class="fas fa-user"
-              style="margin-right: 0.5rem; color: #667eea"
+              style="margin-right: 0.5rem; color: #667eea;"
             ></i>
             Tên đăng nhập hoặc Email
           </label>
@@ -357,7 +354,7 @@
           <label for="password">
             <i
               class="fas fa-lock"
-              style="margin-right: 0.5rem; color: #667eea"
+              style="margin-right: 0.5rem; color: #667eea;"
             ></i>
             Mật khẩu
           </label>
@@ -381,7 +378,7 @@
             <span>
               <i
                 class="fas fa-check-circle"
-                style="color: #4caf50; margin-right: 0.3rem"
+                style="color: #4caf50; margin-right: 0.3rem;"
               ></i>
               Ghi nhớ đăng nhập
             </span>
@@ -393,27 +390,26 @@
             <div class="spinner"></div>
           </div>
           <span class="text">
-            <i class="fas fa-sign-in-alt" style="margin-right: 0.5rem"></i>
+            <i class="fas fa-sign-in-alt" style="margin-right: 0.5rem;"></i>
             Đăng nhập
           </span>
         </button>
       </form>
 
-      <!-- Debug Section -->
       <div id="debugSection" class="debug-section">
         <h4>🔧 Debug Information:</h4>
         <div id="debugInfo"></div>
         <button class="debug-btn" onclick="testDashboard()">
-          Test Dashboard Access
+          Test Admin Dashboard Access
         </button>
         <button class="debug-btn" onclick="showDebug()">Show Debug</button>
       </div>
     </div>
 
     <script>
-      console.log("🚀 ENHANCED Sales Management Login System Loading...");
+      console.log("🚀 Admin Login System Loading...");
 
-      // ===================== DEBUG FUNCTIONS =====================
+      // Debug Functions
       let debugMode = false;
 
       function showDebug() {
@@ -434,22 +430,22 @@
         debugInfo.innerHTML = `
           <p><strong>Current URL:</strong> ${window.location.href}</p>
           <p><strong>Auth Token:</strong> ${
-            token ? "✅ Present" : "❌ Missing"
+            token ? "✅ Present (length: " + token.length + ")" : "❌ Missing"
           }</p>
-          <p><strong>User Data:</strong> ${
-            user ? "✅ Present" : "❌ Missing"
-          }</p>
+          <p><strong>Admin Data:</strong> ${user ? "✅ Present" : "❌ Missing"}</p>
           <p><strong>Local Storage:</strong> ${
             Object.keys(localStorage).length
           } items</p>
           <p><strong>Session Storage:</strong> ${
             Object.keys(sessionStorage).length
           } items</p>
+          <p><strong>User Agent:</strong> ${navigator.userAgent}</p>
+          <p><strong>Current Time:</strong> ${new Date().toISOString()}</p>
         `;
       }
 
       async function testDashboard() {
-        console.log("🧪 Testing dashboard access...");
+        console.log("🧪 Testing admin dashboard access...");
         const token = localStorage.getItem("authToken");
 
         if (!token) {
@@ -458,8 +454,8 @@
         }
 
         try {
-          // Test API access
-          const response = await fetch("/api/auth/verify", {
+          console.log("🔍 Step 1: Testing API /api/auth/verify");
+          const apiResponse = await fetch("/api/auth/verify", {
             method: "GET",
             headers: {
               Authorization: `Bearer ${token}`,
@@ -468,25 +464,54 @@
             credentials: "include",
           });
 
-          console.log("🔍 API Test Result:", response.status);
+          console.log("📡 API Test Result:", apiResponse.status);
 
-          if (response.ok) {
-            const data = await response.json();
-            console.log("✅ API Response:", data);
-            showAlert(
-              "API access successful! Attempting dashboard redirect...",
-              "success"
-            );
+          if (apiResponse.ok) {
+            const apiData = await apiResponse.json();
+            console.log("✅ API Response:", apiData);
 
-            // Try redirect
-            setTimeout(() => {
-              console.log("🎯 Redirecting to dashboard...");
-              window.location.href = "/dashboard";
-            }, 1000);
+            if (apiData.user.role !== "admin") {
+              console.error("❌ User is not an admin");
+              showAlert("Access denied: Admin privileges required", "error");
+              return;
+            }
+
+            console.log("🔍 Step 2: Testing admin dashboard route /admin/dashboard");
+            const dashboardResponse = await fetch("/admin/dashboard", {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: "text/html",
+              },
+              credentials: "include",
+            });
+
+            console.log("📡 Dashboard Test Result:", dashboardResponse.status);
+
+            if (dashboardResponse.ok) {
+              console.log("✅ Admin dashboard route accessible!");
+              showAlert("All tests passed! Attempting redirect...", "success");
+
+              setTimeout(() => {
+                console.log("🎯 Executing test redirect to admin dashboard...");
+                window.location.href = "/admin/dashboard";
+              }, 2000);
+            } else {
+              console.error(
+                "❌ Admin dashboard route failed:",
+                dashboardResponse.status
+              );
+              const text = await dashboardResponse.text();
+              console.error("Response:", text);
+              showAlert(
+                `Admin dashboard failed: ${dashboardResponse.status}`,
+                "error"
+              );
+            }
           } else {
-            const error = await response.text();
+            const error = await apiResponse.text();
             console.error("❌ API Error:", error);
-            showAlert(`API Error: ${response.status}`, "error");
+            showAlert(`API Error: ${apiResponse.status}`, "error");
           }
         } catch (error) {
           console.error("❌ Test Error:", error);
@@ -494,9 +519,7 @@
         }
       }
 
-      // ===================== CORE FUNCTIONALITY =====================
-
-      // Password toggle functionality
+      // Core Functionality
       const togglePassword = document.getElementById("togglePassword");
       const passwordInput = document.getElementById("password");
 
@@ -514,7 +537,6 @@
         });
       }
 
-      // Alert functions
       function showAlert(message, type) {
         const alert = document.getElementById("alert");
         const icons = {
@@ -542,488 +564,205 @@
         alert.style.display = "none";
       }
 
-      // Enhanced login API call with detailed logging
       async function loginUser(username, password, rememberMe) {
-        try {
-          console.log("🔐 ==> Starting login process for:", username);
-          console.log("🔐 ==> Remember me:", rememberMe);
+  try {
+    console.log("🔐 ==> Starting admin login process for:", username);
+    console.log("🔐 ==> Remember me:", rememberMe);
 
-          const loginData = {
-            username: username.trim(),
-            password: password,
-            rememberMe: rememberMe || false,
-          };
+    const loginData = {
+      username: username.trim(),
+      password: password,
+      rememberMe: rememberMe || false,
+    };
 
-          console.log("🔐 ==> Sending login request...");
+    console.log("🔐 ==> Sending admin login request...");
 
-          const response = await fetch("/api/auth/login", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-            body: JSON.stringify(loginData),
-            credentials: "include",
-          });
+    const response = await fetch("/api/admin/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(loginData),
+      credentials: "include",
+    });
 
-          console.log("📡 ==> Response status:", response.status);
-          console.log(
-            "📡 ==> Response headers:",
-            Object.fromEntries(response.headers.entries())
-          );
+    console.log("📡 ==> Response status:", response.status);
+    console.log(
+      "📡 ==> Response headers:",
+      Object.fromEntries(response.headers.entries())
+    );
 
-          if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            console.error("❌ ==> Login failed with error:", errorData);
-            throw new Error(
-              errorData.error || `Server error: ${response.status}`
-            );
-          }
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error("❌ ==> Admin login failed with error:", errorData);
+      throw new Error(
+        errorData.error || `Server error: ${response.status}`
+      );
+    }
 
-          const data = await response.json();
-          console.log("✅ ==> Login successful! Response data:", data);
+    const data = await response.json();
+    console.log("✅ ==> Admin login successful! Response data:", data);
 
-          // Lưu token vào localStorage
-          if (data.token) {
-            localStorage.setItem("token", data.token);
-            console.log(
-              "✅ ==> Token saved to localStorage:",
-              data.token.substring(0, 10) + "..."
-            );
-          } else {
-            console.error("❌ ==> No token in response");
-            throw new Error("No token received from server");
-          }
+    if (data.token) {
+      localStorage.setItem("authToken", data.token);
+      console.log(
+        "✅ ==> Token saved to localStorage:",
+        data.token.substring(0, 10) + "..."
+      );
+    } else {
+      console.error("❌ ==> No token in response");
+      throw new Error("No token received from server");
+    }
 
-          // Lưu thông tin user nếu cần (tuỳ chọn)
-          if (data.user) {
-            localStorage.setItem("user", JSON.stringify(data.user));
-            console.log(
-              "✅ ==> User info saved to localStorage:",
-              data.user.username
-            );
-          }
+    if (data.user) { // Đổi từ data.admin thành data.user
+      localStorage.setItem("user", JSON.stringify(data.user));
+      console.log(
+        "✅ ==> Admin info saved to localStorage:",
+        data.user.username
+      );
+    }
 
-          // Điều hướng sau đăng nhập
-          console.log("🔄 ==> Redirecting to dashboard...");
-          window.location.href = "/dashboard";
+    console.log("🔄 ==> Redirecting to admin dashboard...");
+    window.location.href = "/admin/dashboard";
 
-          return data;
-        } catch (error) {
-          console.error("❌ ==> Login API error:", error);
-          throw error;
-        }
-      }
+    return data;
+  } catch (error) {
+    console.error("❌ ==> Admin login API error:", error);
+    throw error;
+  }
+}
 
-      // ENHANCED form submission with multiple redirect methods
       document.addEventListener("DOMContentLoaded", function () {
-        console.log("📄 DOM loaded, setting up enhanced login form");
+  const loginForm = document.getElementById("loginForm");
+  if (loginForm) {
+    loginForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      console.log("📝 ==> Admin login form submitted");
 
-        const loginForm = document.getElementById("loginForm");
-        if (loginForm) {
-          loginForm.addEventListener("submit", async function (e) {
-            e.preventDefault();
-            console.log("📝 ==> Login form submitted");
+      const loginBtn = document.getElementById("loginBtn");
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+      const rememberMe = document.getElementById("rememberMe").checked;
 
-            const loginBtn = document.getElementById("loginBtn");
-            const username = document.getElementById("username").value.trim();
-            const password = document.getElementById("password").value;
-            const rememberMe = document.getElementById("rememberMe").checked;
-
-            console.log("📝 ==> Form data:", {
-              username,
-              passwordLength: password.length,
-              rememberMe,
-            });
-
-            // Enhanced validation
-            if (!username) {
-              showAlert("Vui lòng nhập tên đăng nhập hoặc email", "error");
-              document.getElementById("username").focus();
-              return;
-            }
-
-            if (!password) {
-              showAlert("Vui lòng nhập mật khẩu", "error");
-              document.getElementById("password").focus();
-              return;
-            }
-
-            if (password.length < 3) {
-              showAlert("Mật khẩu quá ngắn", "error");
-              return;
-            }
-
-            // Show loading state
-            loginBtn.classList.add("loading");
-            loginBtn.disabled = true;
-            hideAlert();
-
-            try {
-              console.log("🚀 ==> Calling loginUser function...");
-              const result = await loginUser(username, password, rememberMe);
-
-              console.log("✅ ==> Login result:", result);
-
-              if (result.success && result.token) {
-                console.log("🎯 ==> Login successful, processing token...");
-
-                localStorage.setItem("authToken", result.token);
-                localStorage.setItem("user", JSON.stringify(result.user));
-
-                showAlert("Đăng nhập thành công! Đang tạo phiên...", "success");
-
-                console.log("🍪 ==> CREATING BROWSER SESSION...");
-
-                setTimeout(() => {
-                  fetch("/api/auth/create-session", {
-                    method: "POST",
-                    headers: {
-                      Authorization: `Bearer ${result.token}`,
-                      "Content-Type": "application/json",
-                    },
-                    credentials: "include",
-                  })
-                    .then((response) => {
-                      console.log(
-                        "📡 Create-session response:",
-                        response.status
-                      );
-                      return response.json();
-                    })
-                    .then((sessionData) => {
-                      console.log("✅ Session created:", sessionData);
-
-                      if (sessionData.success) {
-                        showAlert(
-                          "Phiên đăng nhập đã tạo! Đang chuyển hướng...",
-                          "success"
-                        );
-
-                        setTimeout(() => {
-                          console.log(
-                            "🎯 Executing redirect to dashboard with session..."
-                          );
-                          window.location.href = "/dashboard";
-                        }, 500);
-                      } else {
-                        throw new Error(
-                          sessionData.error || "Session creation failed"
-                        );
-                      }
-                    })
-                    .catch((error) => {
-                      console.error("❌ Session creation failed:", error);
-                      showAlert(
-                        "Tạo phiên thất bại. Thử phương pháp dự phòng...",
-                        "warning"
-                      );
-
-                      setTimeout(() => {
-                        console.log("🔄 Fallback redirect...");
-                        window.location.href = "/dashboard";
-                      }, 2000);
-                    });
-                }, 1000);
-              } else {
-                throw new Error(result.error || "Đăng nhập thất bại");
-              }
-            } catch (error) {
-              console.error("❌ ==> Login process failed:", error);
-
-              let errorMessage = "Lỗi kết nối. Vui lòng thử lại!";
-
-              if (error.message.includes("không đúng")) {
-                errorMessage = "Tên đăng nhập hoặc mật khẩu không đúng";
-              } else if (error.message.includes("vô hiệu hóa")) {
-                errorMessage = "Tài khoản đã bị vô hiệu hóa";
-              } else if (error.message.includes("401")) {
-                errorMessage = "Thông tin đăng nhập không chính xác";
-              } else if (error.message.includes("500")) {
-                errorMessage = "Lỗi server. Vui lòng thử lại sau";
-              } else if (error.message.includes("Failed to fetch")) {
-                errorMessage = "Không thể kết nối đến server";
-              } else if (error.message) {
-                errorMessage = error.message;
-              }
-
-              showAlert(errorMessage, "error");
-            } finally {
-              // Reset button state
-              loginBtn.classList.remove("loading");
-              loginBtn.disabled = false;
-            }
-          });
-        }
-
-        // Focus on username field initially
-        const usernameInput = document.getElementById("username");
-        if (usernameInput) {
-          usernameInput.focus();
-        }
-
-        console.log("✅ Enhanced login form setup complete");
+      console.log("📝 ==> Form data:", {
+        username,
+        passwordLength: password.length,
+        rememberMe,
       });
 
-      // Enhanced check for existing authentication - ✅ CẬP NHẬT
+      if (!username) {
+        showAlert("Vui lòng nhập tên đăng nhập hoặc email", "error");
+        document.getElementById("username").focus();
+        return;
+      }
+
+      if (!password) {
+        showAlert("Vui lòng nhập mật khẩu", "error");
+        document.getElementById("password").focus();
+        return;
+      }
+
+      if (password.length < 6) {
+        showAlert("Mật khẩu phải có ít nhất 6 ký tự", "error");
+        return;
+      }
+
+      loginBtn.classList.add("loading");
+      loginBtn.disabled = true;
+      hideAlert();
+
+      try {
+        console.log("🚀 ==> Calling loginUser function...");
+        const result = await loginUser(username, password, rememberMe);
+
+        console.log("✅ ==> Admin login result:", result);
+
+        if (result.success && result.token) {
+          console.log("🎯 ==> Admin login successful, processing token...");
+          showAlert("Đăng nhập admin thành công! Đang chuyển hướng...", "success");
+          setTimeout(() => {
+            console.log("🎯 Executing redirect to admin dashboard...");
+            window.location.href = "/admin/dashboard";
+          }, 1000);
+        } else {
+          throw new Error(result.error || "Đăng nhập admin thất bại");
+        }
+      } catch (error) {
+        console.error("❌ ==> Admin login process failed:", error);
+        let errorMessage = "Lỗi kết nối. Vui lòng thử lại!";
+        if (error.message.includes("không tồn tại")) {
+          errorMessage = "Tên đăng nhập hoặc email không tồn tại";
+        } else if (error.message.includes("Mật khẩu không đúng")) {
+          errorMessage = "Mật khẩu không đúng";
+        } else if (error.message.includes("không hoạt động")) {
+          errorMessage = "Tài khoản không hoạt động";
+        } else if (error.message.includes("401")) {
+          errorMessage = "Thông tin đăng nhập không chính xác";
+        } else if (error.message.includes("500")) {
+          errorMessage = "Lỗi server. Vui lòng thử lại sau";
+        } else if (error.message.includes("Failed to fetch")) {
+          errorMessage = "Không thể kết nối đến server";
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+        showAlert(errorMessage, "error");
+      } finally {
+        loginBtn.classList.remove("loading");
+        loginBtn.disabled = false;
+      }
+    });
+  }
+  const usernameInput = document.getElementById("username");
+  if (usernameInput) {
+    usernameInput.focus();
+  }
+  console.log("✅ Admin login form setup complete");
+});
+
       window.addEventListener("load", function () {
         console.log("🔍 ==> Checking existing authentication...");
 
         const token = localStorage.getItem("authToken");
         console.log(
-          "🔑 Token check:",
+          "🔍 Token check:",
           token ? "Found but auto-redirect disabled" : "Not found"
         );
 
-        // ❌ DISABLE AUTO-REDIRECT
         if (token) {
           console.log("ℹ️ Found existing token, but auto-redirect disabled");
-          showAlert("Chào mừng bạn trở lại! Vui lòng đăng nhập.", "info");
+          showAlert("Chào mừng bạn trở lại! Vui lòng đăng nhập.", "info");
         } else {
-          console.log("ℹ️ No existing token found - showing login form");
+          console.log("ℹ️ No existing token found - showing admin login form");
         }
       });
 
-      // ✅ CẬP NHẬT DEBUG FUNCTIONS
       window.debugLogin = {
         showDebug,
         testDashboard,
         clearAuth: () => {
           localStorage.removeItem("authToken");
           localStorage.removeItem("user");
-          console.log("🧹 Auth data cleared");
+          console.log("🗑️ Auth data cleared");
           showAlert("Auth data cleared", "info");
         },
         forceDashboard: () => {
-          console.log("🚀 Force redirecting to dashboard...");
-          window.location.href = "/dashboard";
+          console.log("🚀 Force redirecting to admin dashboard...");
+          window.location.href = "/admin/dashboard";
         },
         testRedirect: () => {
           console.log("🧪 Testing all redirect methods...");
 
           console.log("Method 1: window.location.href");
-          setTimeout(() => (window.location.href = "/dashboard"), 1000);
+          setTimeout(() => (window.location.href = "/admin/dashboard"), 1000);
 
           console.log("Method 2: window.location.replace (backup)");
-          setTimeout(() => window.location.replace("/dashboard"), 3000);
+          setTimeout(() => window.location.replace("/admin/dashboard"), 3000);
 
           console.log("Method 3: window.open (final backup)");
-          setTimeout(() => window.open("/dashboard", "_self"), 5000);
+          setTimeout(() => window.open("/admin/dashboard", "_self"), 5000);
         },
-      };
-
-      // Test server connection on load
-      fetch("/health")
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("✅ ==> Server connection verified:", data.status);
-        })
-        .catch((error) => {
-          console.error("❌ ==> Server connection failed:", error);
-          showAlert(
-            "Không thể kết nối đến server. Vui lòng kiểm tra lại.",
-            "warning"
-          );
-        });
-
-      // Keyboard shortcuts
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && !e.shiftKey && !e.ctrlKey && !e.altKey) {
-          const loginForm = document.getElementById("loginForm");
-          if (loginForm && document.activeElement.tagName !== "BUTTON") {
-            e.preventDefault();
-            loginForm.dispatchEvent(new Event("submit"));
-          }
-        }
-
-        // Show debug with Ctrl+D
-        if (e.ctrlKey && e.key === "d") {
-          e.preventDefault();
-          showDebug();
-        }
-      });
-
-      // Network status monitoring
-      window.addEventListener("online", function () {
-        hideAlert();
-        console.log("🌐 ==> Connection restored");
-      });
-
-      window.addEventListener("offline", function () {
-        showAlert("Mất kết nối internet. Vui lòng kiểm tra mạng.", "warning");
-        console.log("📱 ==> Connection lost");
-      });
-
-      // Global debug functions
-      window.debugLogin = {
-        showDebug,
-        testDashboard,
-        clearAuth: () => {
-          localStorage.removeItem("authToken");
-          localStorage.removeItem("user");
-          console.log("🧹 Auth data cleared");
-          showAlert("Auth data cleared", "info");
-        },
-        forceDashboard: () => {
-          console.log("🚀 Force redirecting to dashboard...");
-          window.location.href = "/dashboard";
-        },
-        testRedirect: () => {
-          console.log("🧪 Testing all redirect methods...");
-
-          console.log("Method 1: window.location.href");
-          setTimeout(() => (window.location.href = "/dashboard"), 1000);
-
-          console.log("Method 2: window.location.replace (backup)");
-          setTimeout(() => window.location.replace("/dashboard"), 3000);
-
-          console.log("Method 3: window.open (final backup)");
-          setTimeout(() => window.open("/dashboard", "_self"), 5000);
-        },
-      };
-
-      async function testDashboard() {
-        console.log("🧪 Testing dashboard access...");
-        const token = localStorage.getItem("authToken");
-
-        if (!token) {
-          showAlert("No token found! Please login first.", "error");
-          return;
-        }
-
-        try {
-          // Test API access first
-          console.log("🔍 Step 1: Testing API /api/auth/verify");
-          const apiResponse = await fetch("/api/auth/verify", {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-          });
-
-          console.log("📡 API Test Result:", apiResponse.status);
-
-          if (apiResponse.ok) {
-            const apiData = await apiResponse.json();
-            console.log("✅ API Response:", apiData);
-
-            // Test dashboard route access
-            console.log("🔍 Step 2: Testing dashboard route /dashboard");
-            const dashboardResponse = await fetch("/dashboard", {
-              method: "GET",
-              headers: {
-                Authorization: `Bearer ${token}`,
-                Accept: "text/html",
-              },
-              credentials: "include",
-            });
-
-            console.log("📡 Dashboard Test Result:", dashboardResponse.status);
-
-            if (dashboardResponse.ok) {
-              console.log("✅ Dashboard route accessible!");
-              showAlert("All tests passed! Attempting redirect...", "success");
-
-              // Test redirect
-              setTimeout(() => {
-                console.log("🎯 Executing test redirect to dashboard...");
-                window.location.href = "/dashboard";
-              }, 2000);
-            } else {
-              console.error(
-                "❌ Dashboard route failed:",
-                dashboardResponse.status
-              );
-              const text = await dashboardResponse.text();
-              console.error("Response:", text);
-              showAlert(
-                `Dashboard route failed: ${dashboardResponse.status}`,
-                "error"
-              );
-            }
-          } else {
-            const error = await apiResponse.text();
-            console.error("❌ API Error:", error);
-            showAlert(`API Error: ${apiResponse.status}`, "error");
-          }
-        } catch (error) {
-          console.error("❌ Test Error:", error);
-          showAlert(`Test Error: ${error.message}`, "error");
-        }
-      }
-
-      // Enhanced debug info
-      function updateDebugInfo() {
-        const debugInfo = document.getElementById("debugInfo");
-        const token = localStorage.getItem("authToken");
-        const user = localStorage.getItem("user");
-
-        debugInfo.innerHTML = `
-    <p><strong>Current URL:</strong> ${window.location.href}</p>
-    <p><strong>Auth Token:</strong> ${
-      token ? "✅ Present (length: " + token.length + ")" : "❌ Missing"
-    }</p>
-    <p><strong>User Data:</strong> ${user ? "✅ Present" : "❌ Missing"}</p>
-    <p><strong>Local Storage:</strong> ${
-      Object.keys(localStorage).length
-    } items</p>
-    <p><strong>Session Storage:</strong> ${
-      Object.keys(sessionStorage).length
-    } items</p>
-    <p><strong>User Agent:</strong> ${navigator.userAgent}</p>
-    <p><strong>Current Time:</strong> ${new Date().toISOString()}</p>
-  `;
-      }
-
-      // Test all redirect methods
-      function testAllRedirectMethods() {
-        console.log("🧪 Testing all redirect methods in sequence...");
-
-        showAlert("Testing redirects... Check console!", "info");
-
-        setTimeout(() => {
-          console.log("🔄 Method 1: window.location.href = '/dashboard'");
-          try {
-            window.location.href = "/dashboard";
-          } catch (e) {
-            console.error("Method 1 failed:", e);
-          }
-        }, 2000);
-
-        setTimeout(() => {
-          console.log("🔄 Method 2: window.location.replace('/dashboard')");
-          try {
-            window.location.replace("/dashboard");
-          } catch (e) {
-            console.error("Method 2 failed:", e);
-          }
-        }, 4000);
-
-        setTimeout(() => {
-          console.log("🔄 Method 3: window.location.assign('/dashboard')");
-          try {
-            window.location.assign("/dashboard");
-          } catch (e) {
-            console.error("Method 3 failed:", e);
-          }
-        }, 6000);
-
-        setTimeout(() => {
-          console.log("🔄 Method 4: window.open('/dashboard', '_self')");
-          try {
-            window.open("/dashboard", "_self");
-          } catch (e) {
-            console.error("Method 4 failed:", e);
-          }
-        }, 8000);
-      }
-
-      // Update debug functions
-      window.debugLogin = {
-        ...window.debugLogin,
-
+        /* Commented out due to missing /api/auth/create-session endpoint
         testSessionCreation: async () => {
           const token = localStorage.getItem("authToken");
           if (!token) {
@@ -1044,21 +783,18 @@
             data.success ? "success" : "error"
           );
         },
-
         testCompleteFlow: async () => {
           console.log("🧪 Testing complete flow...");
           showAlert("Testing complete flow... Check console!", "info");
 
           const token = localStorage.getItem("authToken");
 
-          // Step 1: Create session
           const sessionResponse = await fetch("/api/auth/create-session", {
             method: "POST",
             headers: { Authorization: `Bearer ${token}` },
             credentials: "include",
           });
 
-          // Step 2: Check session
           const statusResponse = await fetch("/api/auth/session-status", {
             credentials: "include",
           });
@@ -1067,15 +803,54 @@
 
           if (statusData.hasSession) {
             showAlert("🎉 All tests passed! Redirecting...", "success");
-            setTimeout(() => (window.location.href = "/dashboard"), 2000);
+            setTimeout(() => (window.location.href = "/admin/dashboard"), 2000);
           } else {
             showAlert("❌ Session test failed", "error");
           }
         },
+        */
       };
 
+      fetch("/health")
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("✅ ==> Server connection verified:", data.status);
+        })
+        .catch((error) => {
+          console.error("❌ ==> Server connection failed:", error);
+          showAlert(
+            "Không thể kết nối đến server. Vui lòng kiểm tra lại.",
+            "warning"
+          );
+        });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey && !e.ctrlKey && !e.altKey) {
+          const loginForm = document.getElementById("loginForm");
+          if (loginForm && document.activeElement.tagName !== "BUTTON") {
+            e.preventDefault();
+            loginForm.dispatchEvent(new Event("submit"));
+          }
+        }
+
+        if (e.ctrlKey && e.key === "d") {
+          e.preventDefault();
+          showDebug();
+        }
+      });
+
+      window.addEventListener("online", function () {
+        hideAlert();
+        console.log("🌐 ==> Connection restored");
+      });
+
+      window.addEventListener("offline", function () {
+        showAlert("Mất kết nối internet. Vui lòng kiểm tra mạng.", "warning");
+        console.log("📴 ==> Connection lost");
+      });
+
       console.log(
-        "🔧 Debug functions: debugLogin.testSessionCreation(), debugLogin.testCompleteFlow()"
+        "🔧 Debug functions: debugLogin.showDebug(), debugLogin.testDashboard()"
       );
     </script>
   </body>
